@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FincaControl - Prototipo Interactivo Completo</title>
+  <!-- Tipografía Inter de Google Fonts para máxima legibilidad -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       VARIABLES Y DESIGN TOKENS (MINIMALISTA, ALTO CONTRASTE, POCOS COLORES)
+       ========================================================================== */
+    :root {
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      /* Fondos neutros de baja fatiga visual */
+      --bg-app: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F1F5F9;
+      --bg-card-hover: #F8FAFC;
+      
+      /* Escala tipográfica neutra de alto contraste */
+      --text-main: #0F172A;      /* Contraste 14.5:1 sobre blanco */
+      --text-muted: #334155;     /* Contraste 7.0:1 sobre blanco */
+      --text-dim: #64748B;
+      
+      /* Bordes sobrios y estructurados */
+      --border-subtle: #E2E8F0;
+      --border-medium: #CBD5E1;
+      --border-strong: #94A3B8;
+      
+      /* Acento primario sobrio ganadero (Verde bosque profundo) */
+      --color-primary: #166534;
+      --color-primary-hover: #14532D;
+      --color-primary-subtle: #F0FDF4;
+      --color-primary-border: #BBF7D0;
+      
+      /* Semáforo semántico estricto */
+      --status-danger-bg: #FEF2F2;
+      --status-danger-text: #991B1B;
+      --status-danger-border: #F87171;
+      
+      --status-warning-bg: #FFFBEB;
+      --status-warning-text: #92400E;
+      --status-warning-border: #FBBF24;
+      
+      --status-success-bg: #F0FDF4;
+      --status-success-text: #166534;
+      --status-success-border: #86EFAC;
+      
+      --status-info-bg: #EFF6FF;
+      --status-info-text: #1E40AF;
+      --status-info-border: #93C5FD;
+      
+      /* Destacado de campos de entrada (INPUT HIGHLIGHT) */
+      --input-border: #94A3B8;
+      --input-bg: #FFFFFF;
+      --input-focus-border: #166534;
+      --input-focus-ring: rgba(22, 101, 52, 0.16);
+      --input-active-fill: #FAFAF9;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
+      --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+      --shadow-highlight: 0 0 0 3px var(--input-focus-ring);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      line-height: 1.5;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       ESTRUCTURA Y CONTENEDOR PRINCIPAL
+       ========================================================================== */
+    .app-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-app);
+      border-left: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    /* Barra Superior */
+    .top-bar {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background-color: var(--text-main);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #16A34A;
+    }
+
+    .role-badge {
+      font-size: 12px;
+      font-weight: 600;
+      background-color: #E2E8F0;
+      color: var(--text-main);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* PESTAÑAS DE NAVEGACIÓN MODULAR */
+    .nav-tabs {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      overflow-x: auto;
+      padding: 0 16px;
+      gap: 6px;
+      scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      padding: 14px 14px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .nav-tab-btn:hover {
+      color: var(--text-main);
+      background-color: var(--bg-subtle);
+    }
+
+    .nav-tab-btn.active {
+      color: var(--color-primary);
+      font-weight: 600;
+      border-bottom-color: var(--color-primary);
+      background-color: transparent;
+    }
+
+    /* Contenido Principal */
+    .main-content {
+      padding: 20px 20px 80px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Vistas de cada módulo */
+    .module-view {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .module-view.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       COMPONENTES VISUALES: SECCIONES, CARDS Y MÉTRICAS
+       ========================================================================== */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: -2px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+    }
+
+    .section-action {
+      font-size: 13px;
+      color: var(--color-primary);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .section-action:hover { text-decoration: underline; }
+
+    /* Grid de Métricas */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (min-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .metric-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    .metric-meta {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .metric-card.danger {
+      border-color: var(--status-danger-border);
+      background-color: #FEF8F8;
+    }
+    .metric-card.danger .metric-value {
+      color: var(--status-danger-text);
+    }
+
+    .metric-card.success {
+      border-color: var(--status-success-border);
+      background-color: #F6FCF7;
+    }
+    .metric-card.success .metric-value {
+      color: var(--status-success-text);
+    }
+
+    .metric-card.tank {
+      border-color: #93C5FD;
+      background-color: #F8FAFF;
+    }
+    .metric-card.tank .metric-value {
+      color: #1E40AF;
+    }
+
+    /* ==========================================================================
+       FORMULARIOS Y CAMPOS RESALTADOS (INPUT HIGHLIGHTING)
+       ========================================================================== */
+    .form-panel {
+      background-color: var(--bg-surface);
+      border: 2px solid var(--color-primary-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .form-panel-plain {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--color-primary-subtle);
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary-border);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .panel-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Grids de Formulario */
+    .form-grid-4 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 640px) {
+      .form-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 860px) {
+      .form-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+        align-items: flex-end;
+      }
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 640px) {
+      .form-grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+        align-items: flex-end;
+      }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .input-hint {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-primary);
+    }
+
+    /* ESTILOS RESALTADOS DE INPUTS */
+    .highlight-input {
+      width: 100%;
+      height: 48px;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-main);
+      background-color: var(--input-bg);
+      border: 2px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      transition: all 0.15s ease-in-out;
+      outline: none;
+    }
+
+    .highlight-input:focus {
+      border-color: var(--input-focus-border);
+      background-color: var(--input-active-fill);
+      box-shadow: var(--shadow-highlight);
+    }
+
+    textarea.highlight-input {
+      height: 80px;
+      resize: vertical;
+      padding-top: 10px;
+    }
+
+    .highlight-input::placeholder {
+      color: #94A3B8;
+      font-weight: 400;
+    }
+
+    /* Botones */
+    .btn-submit {
+      height: 48px;
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s ease;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+      white-space: nowrap;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-submit:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      height: 48px;
+      background-color: #FFFFFF;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 0 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-secondary:hover {
+      background-color: var(--bg-subtle);
+      border-color: var(--text-main);
+    }
+
+    .btn-danger-outline {
+      height: 34px;
+      background-color: #FFFFFF;
+      color: #991B1B;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1.5px solid #F87171;
+      border-radius: var(--radius-sm);
+      padding: 0 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-danger-outline:hover {
+      background-color: #FEF2F2;
+      border-color: #DC2626;
+    }
+
+    .btn-action-tank {
+      height: 38px;
+      background-color: #1E40AF;
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s ease;
+    }
+    .btn-action-tank:hover { background-color: #1E3A8A; }
+
+    /* ==========================================================================
+       TABLAS LIMPIAS Y MONOCROMÁTICAS
+       ========================================================================== */
+    .table-container {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .clean-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+
+    .clean-table th {
+      background-color: var(--bg-subtle);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    .clean-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .clean-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .clean-table tr:hover {
+      background-color: #F8FAFC;
+    }
+
+    .animal-id {
+      font-weight: 700;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Badges de Estado */
+    .badge-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .badge-status.normal { background-color: #F1F5F9; color: var(--text-muted); }
+    .badge-status.success { background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+    .badge-status.warning { background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+    .badge-status.danger { background-color: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+    .badge-status.info { background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+
+    /* Alertas Operativas */
+    .alerts-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .alert-card {
+      background-color: var(--bg-surface);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      border-left: 5px solid transparent;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .alert-card.danger {
+      border-color: var(--border-subtle);
+      border-left-color: #DC2626;
+      background-color: #FFFDFD;
+    }
+
+    .alert-card.warning {
+      border-color: var(--border-subtle);
+      border-left-color: #D97706;
+      background-color: #FFFFFA;
+    }
+
+    .alert-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .alert-card.danger .alert-badge { background-color: #FEE2E2; color: #991B1B; }
+    .alert-card.warning .alert-badge { background-color: #FEF3C7; color: #92400E; }
+
+    .alert-content { flex: 1; }
+    .alert-header { display: flex; justify-content: space-between; align-items: baseline; }
+    .alert-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
+    .alert-time { font-size: 11.5px; color: var(--text-dim); font-weight: 500; }
+    .alert-desc { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+
+    /* MODAL DE HOJA DE VIDA Y MODALES GENERALES */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-card {
+      background-color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-modal);
+      border: 1px solid var(--border-medium);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background-color: var(--bg-subtle);
+    }
+
+    /* Sub-pestañas en el Censo */
+    .subnav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .subnav-btn {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-medium);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .subnav-btn.active {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+
+    /* Notificación Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background-color: var(--text-main);
+      color: #FFFFFF;
+      padding: 12px 22px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      font-weight: 500;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+    
+    <!-- BARRA SUPERIOR TÉCNICA Y ESTADO OFFLINE -->
+    <header class="top-bar">
+      <div class="brand-group">
+        <span class="brand-badge">FC</span>
+        <div>
+          <h1 class="brand-title">FincaControl</h1>
+          <p class="brand-subtitle">Hda. La Esperanza • Doble Propósito</p>
+        </div>
+      </div>
+      
+      <div class="top-actions">
+        <div class="status-pill" title="Datos guardados en SQLite local">
+          <span class="status-dot"></span>
+          <span>Offline-First (Local)</span>
+        </div>
+        <div class="role-badge" id="role-indicator" onclick="toggleRole()" title="Haz clic para alternar rol">
+          Rol: Administrador
+        </div>
+      </div>
+    </header>
+
+    <!-- PESTAÑAS DE NAVEGACIÓN MODULAR COMPLETA -->
+    <nav class="nav-tabs" aria-label="Navegación por Módulos">
+      <button class="nav-tab-btn active" onclick="switchTab('dashboard')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h7v9H3V3zm11 0h7v5h-7V3zm0 9h7v9h-7v-9zM3 16h7v5H3v-5z"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('censo')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Censo Rebaño
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('ordeno')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 3v6a6 6 0 0012 0V3M12 15v6m-4 0h8"/></svg>
+        Ordeño & Tanque
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('pesaje')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        Pesajes & Carne
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('sanidad')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Sanidad & Retiro
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('reproduccion')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21a9 9 0 100-18 9 9 0 000 18z"/><path d="M12 7v10M8 12h8"/></svg>
+        Reproducción
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('finanzas')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Financiero Operativo
+      </button>
+    </nav>
+
+    <!-- CUERPO PRINCIPAL -->
+    <main class="main-content">
+      
+      <!-- ======================================================================
+           1. MÓDULO: DASHBOARD PRINCIPAL
+           ====================================================================== -->
+      <section id="view-dashboard" class="module-view active">
+        
+        <!-- Indicadores Resumen -->
+        <div>
+          <div class="section-header" style="margin-bottom: 12px;">
+            <h2 class="section-title">Resumen Operativo del Día</h2>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-action-tank" onclick="abrirModalVentaLeche()">
+                🥛 Vender Leche de Tanque
+              </button>
+              <span class="section-action" onclick="showToast('Sincronizando base de datos local SQLite...')">Recargar</span>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <!-- Métrica Tanque Leche Disponible -->
+            <div class="metric-card tank">
+              <span class="metric-label">🥛 Disponible en Tanque</span>
+              <span class="metric-value" id="kpi-dash-tanque">342.5 L</span>
+              <span class="metric-meta" id="kpi-dash-ordeñado-hoy">Ordeñado hoy: 42.1 L</span>
+            </div>
+
+            <div class="metric-card">
+              <span class="metric-label">🐄 Rebaño Activo</span>
+              <span class="metric-value" id="kpi-dash-censo">6 reses</span>
+              <span class="metric-meta" id="kpi-dash-desincorporados">0 canal / vendidas</span>
+            </div>
+
+            <div class="metric-card danger">
+              <span class="metric-label" style="color: var(--status-danger-text);">🚨 Retiro Sanitario</span>
+              <span class="metric-value" id="kpi-dash-retiros">1 Vaca</span>
+              <span class="metric-meta" style="color: var(--status-danger-text);">Leche/Carne Bloqueada</span>
+            </div>
+
+            <div class="metric-card success">
+              <span class="metric-label" style="color: var(--status-success-text);">💰 Utilidad en Caja</span>
+              <span class="metric-value" id="kpi-dash-utilidad">$ 455.00</span>
+              <span class="metric-meta" id="kpi-dash-ingresos-meta">Ingresos actualizados</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario Rápido en Dashboard con Campos Resaltados -->
+        <div class="form-panel">
+          <span class="panel-badge">⚡ Captura Rápida en Vaquera</span>
+          <h2 class="panel-title">Registro Directo de Ordeño</h2>
+          <p class="panel-desc">Ingresa el ID del animal y la medición para sumar automáticamente al tanque de leche disponible.</p>
+
+          <form id="dash-quick-form" onsubmit="handleDashQuickMilk(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="dash-in-hierro">
+                  <span>N° Hierro / Arete *</span>
+                  <span class="input-hint">Ej: 104, 042</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="dash-in-hierro" 
+                  class="highlight-input" 
+                  placeholder="ID de la res..." 
+                  required 
+                  autocomplete="off"
+                  oninput="checkRetiroInForm(this.value, 'dash-warning')"
+                >
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="dash-in-jornada">
+                  <span>Jornada *</span>
+                </label>
+                <select id="dash-in-jornada" class="highlight-input">
+                  <option value="Mañana">Mañana (05:30 AM)</option>
+                  <option value="Tarde">Tarde (03:00 PM)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="dash-in-litros">
+                  <span>Litros (L) *</span>
+                  <span class="input-hint">Numérico</span>
+                </label>
+                <input 
+                  type="number" 
+                  step="0.1" 
+                  min="0.5" 
+                  max="40" 
+                  id="dash-in-litros" 
+                  class="highlight-input" 
+                  placeholder="0.0 L" 
+                  inputmode="decimal" 
+                  required
+                >
+              </div>
+
+              <div class="input-group">
+                <button type="submit" class="btn-submit">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                  Guardar Medición
+                </button>
+              </div>
+
+            </div>
+
+            <div id="dash-warning" style="display: none; margin-top: 12px; padding: 10px 14px; background-color: var(--status-danger-bg); border: 1.5px solid var(--status-danger-border); border-radius: 8px; font-size: 13px; color: var(--status-danger-text);">
+              ⚠️ <strong>¡ALERTA SANITARIA!</strong> Este animal tiene tratamiento médico vigente. Esta leche <strong>NO entrará al tanque disponible</strong> (se marcará como descarte).
+            </div>
+          </form>
+        </div>
+
+        <!-- Semáforo de Alertas Operativas -->
+        <div>
+          <div class="section-header" style="margin-bottom: 12px;">
+            <h2 class="section-title">Alertas Prioritarias de Manejo</h2>
+            <span class="section-action" onclick="switchTab('sanidad')">Ver módulo sanitario</span>
+          </div>
+
+          <div class="alerts-container">
+            <div class="alert-card danger">
+              <div class="alert-content">
+                <div class="alert-header">
+                  <div>
+                    <span class="alert-badge">Retiro Sanitario Activo</span>
+                    <h3 class="alert-title">Vaca #104 (Canela) • Oxitetraciclina L.A.</h3>
+                  </div>
+                  <span class="alert-time">Fin: 14-Oct</span>
+                </div>
+                <p class="alert-desc">Bloqueo de venta comercial de leche y beneficio en canal activo. Res no apta para consumo hasta cumplir días de retiro.</p>
+              </div>
+            </div>
+
+            <div class="alert-card warning">
+              <div class="alert-content">
+                <div class="alert-header">
+                  <div>
+                    <span class="alert-badge">Secado Programado (~60 días)</span>
+                    <h3 class="alert-title">Vaca #078 (Rubia) • Preñez Confirmada</h3>
+                  </div>
+                  <span class="alert-time">En 5 días</span>
+                </div>
+                <p class="alert-desc">Gestación estimada en 222 días. Suspender ordeño para permitir descanso de ubre y desarrollo fetal.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla Rápida de Últimos Registros -->
+        <div>
+          <div class="section-header" style="margin-bottom: 12px;">
+            <h2 class="section-title">Últimos Registros del Día</h2>
+            <span style="font-size: 12px; color: var(--text-dim);" id="dash-table-count">Mostrando registros recientes</span>
+          </div>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Hierro / Alias</th>
+                  <th>Jornada</th>
+                  <th>Volumen</th>
+                  <th>Condición</th>
+                  <th>Hora</th>
+                </tr>
+              </thead>
+              <tbody id="dash-records-tbody">
+                <!-- Se inyecta dinámicamente con JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================================
+           2. MÓDULO: CENSO E INVENTARIO BOVINO (ANIMAL)
+           ====================================================================== -->
+      <section id="view-censo" class="module-view">
+        
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Inventario Bovino y Genealogía</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Censo digital de animales activos, desincorporaciones y venta en canal.</p>
+          </div>
+          <button class="btn-submit" onclick="toggleElement('form-nuevo-animal')" style="height: 38px; padding: 0 14px;">
+            + Nuevo Animal Manual
+          </button>
+        </div>
+
+        <!-- Sub-navegación entre Rebaño Activo y Beneficiados en Canal -->
+        <div class="subnav-tabs">
+          <button class="subnav-btn active" id="btn-subnav-activos" onclick="switchSubnavCenso('activos')">
+            🐄 Rebaño Activo (<span id="count-censo-activos">6</span>)
+          </button>
+          <button class="subnav-btn" id="btn-subnav-canal" onclick="switchSubnavCenso('canal')">
+            🥩 Historial Canal & Ventas (<span id="count-censo-canal">0</span>)
+          </button>
+        </div>
+
+        <!-- Formulario Desplegable para Alta de Animal -->
+        <div id="form-nuevo-animal" class="form-panel" style="display: none;">
+          <span class="panel-badge">🐄 Alta de Nuevo Bovino</span>
+          <h3 class="panel-title">Ficha de Identificación</h3>
+          <p class="panel-desc">Registra nacimientos o compras con datos de hierro y genealogía conocida. (Puedes usar hierros liberados tras una venta).</p>
+
+          <form onsubmit="handleCrearAnimal(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="censo-in-hierro">
+                  <span>N° Hierro / Arete *</span>
+                  <span class="input-hint">Debe ser único</span>
+                </label>
+                <input type="text" id="censo-in-hierro" class="highlight-input" placeholder="Ej: 112, 201" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-nombre">Nombre / Alias *</label>
+                <input type="text" id="censo-in-nombre" class="highlight-input" placeholder="Ej: Consentida, Tormento" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-sexo">Sexo *</label>
+                <select id="censo-in-sexo" class="highlight-input">
+                  <option value="Hembra">Hembra</option>
+                  <option value="Macho">Macho</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-raza">Raza *</label>
+                <select id="censo-in-raza" class="highlight-input">
+                  <option value="Gyr Mestizo">Gyr Mestizo</option>
+                  <option value="Carora F1">Carora F1</option>
+                  <option value="Brahman">Brahman</option>
+                  <option value="Guzerá">Guzerá</option>
+                  <option value="Pardo Suizo">Pardo Suizo</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-proposito">Propósito *</label>
+                <select id="censo-in-proposito" class="highlight-input">
+                  <option value="Doble Propósito">Doble Propósito</option>
+                  <option value="Leche">Leche</option>
+                  <option value="Carne / Ceba">Carne / Ceba</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-estado">Estado Actual *</label>
+                <select id="censo-in-estado" class="highlight-input">
+                  <option value="En Lactancia">En Lactancia</option>
+                  <option value="Seca">Seca</option>
+                  <option value="Levante / Ceba">Levante / Ceba</option>
+                  <option value="Reproductor">Reproductor</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-madre">Madre (ID Hierro)</label>
+                <input type="text" id="censo-in-madre" class="highlight-input" placeholder="Opcional: Madre...">
+              </div>
+
+              <div class="input-group">
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                  Guardar en Inventario
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabla del Censo Activo -->
+        <div id="wrapper-tabla-activos" class="table-container">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Hierro</th>
+                <th>Nombre / Alias</th>
+                <th>Sexo</th>
+                <th>Raza</th>
+                <th>Propósito</th>
+                <th>Estado Actual</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="censo-tbody">
+              <!-- Renderizado dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tabla de Historial de Ventas / Canal (Desincorporados) -->
+        <div id="wrapper-tabla-canal" class="table-container" style="display: none;">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Hierro Liberado</th>
+                <th>Animal Vendido</th>
+                <th>Fecha Salida</th>
+                <th>Peso Vivo</th>
+                <th>Peso Canal Est.</th>
+                <th>Monto Venta</th>
+                <th>Destino / Matadero</th>
+              </tr>
+            </thead>
+            <tbody id="censo-canal-tbody">
+              <!-- Renderizado dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================================
+           3. MÓDULO: ORDEÑO DIARIO (PRODUCCIÓN LECHE) Y VENTA DE LECHE
+           ====================================================================== -->
+      <section id="view-ordeno" class="module-view">
+        
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Control de Ordeño e Inventario de Tanque</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Carga de litros, balance del tanque de leche y despacho comercial.</p>
+          </div>
+          <button class="btn-action-tank" onclick="abrirModalVentaLeche()">
+            🥛 Vender / Despachar Leche
+          </button>
+        </div>
+
+        <!-- Tarjetas de Balance de Leche -->
+        <div class="metrics-grid">
+          <div class="metric-card tank">
+            <span class="metric-label">🥛 Leche Disponible en Tanque</span>
+            <span class="metric-value" id="ordeno-kpi-disponible">342.5 L</span>
+            <span class="metric-meta">Lista para venta a quesera</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">📊 Ordeñado Hoy (Apto)</span>
+            <span class="metric-value" id="ordeno-kpi-hoy">42.1 L</span>
+            <span class="metric-meta">Mañana y tarde acumulados</span>
+          </div>
+
+          <div class="metric-card success">
+            <span class="metric-label" style="color: var(--status-success-text);">🚚 Total Leche Vendida</span>
+            <span class="metric-value" id="ordeno-kpi-vendida">850.0 L</span>
+            <span class="metric-meta">Despachos registrados</span>
+          </div>
+
+          <div class="metric-card danger">
+            <span class="metric-label" style="color: var(--status-danger-text);">⚠️ Descarte por Retiro</span>
+            <span class="metric-value" id="ordeno-kpi-descarte">12.0 L</span>
+            <span class="metric-meta">No entró al tanque</span>
+          </div>
+        </div>
+
+        <!-- Formulario Carga de Ordeño -->
+        <div class="form-panel">
+          <span class="panel-badge">🥛 Carga de Ordeño</span>
+          <h3 class="panel-title">Entrada de Litros por Vaca</h3>
+          <p class="panel-desc">Los campos resaltados validan automáticamente el estado sanitario del animal.</p>
+
+          <form onsubmit="handleModuloMilk(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="ordeno-in-hierro">Seleccionar Vaca *</label>
+                <select id="ordeno-in-hierro" class="highlight-input" onchange="checkRetiroInForm(this.value, 'ordeno-warning')">
+                  <!-- Se llena con las vacas registradas -->
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="ordeno-in-jornada">Jornada *</label>
+                <select id="ordeno-in-jornada" class="highlight-input">
+                  <option value="Mañana">Mañana (05:00 AM)</option>
+                  <option value="Tarde">Tarde (03:00 PM)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="ordeno-in-litros">Litros Medidos *</label>
+                <input type="number" step="0.1" min="0.5" max="40" id="ordeno-in-litros" class="highlight-input" placeholder="0.0 L" inputmode="decimal" required>
+              </div>
+
+              <div class="input-group">
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                  Registrar Ordeño
+                </button>
+              </div>
+
+            </div>
+
+            <div id="ordeno-warning" style="display: none; margin-top: 12px; padding: 10px 14px; background-color: var(--status-danger-bg); border: 1.5px solid var(--status-danger-border); border-radius: 8px; font-size: 13px; color: var(--status-danger-text);">
+              ⚠️ <strong>¡RETIRO SANITARIO ACTIVO!</strong> No mezclar este volumen en el tanque de leche comercial (se destinará a descarte).
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabla Historial de Ordeño -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Registros de Ordeño de la Jornada</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Hierro</th>
+                  <th>Nombre Vaca</th>
+                  <th>Jornada</th>
+                  <th>Litros</th>
+                  <th>Inocuidad</th>
+                  <th>Fecha y Hora</th>
+                </tr>
+              </thead>
+              <tbody id="ordeno-tbody">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabla de Despachos / Ventas de Leche Realizadas -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Historial de Despachos y Ventas de Leche</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Litros Despachados</th>
+                  <th>Precio / Litro</th>
+                  <th>Total Cobrado ($)</th>
+                  <th>Comprador / Destino</th>
+                  <th>Impacto en Caja</th>
+                </tr>
+              </thead>
+              <tbody id="ordeno-ventas-tbody">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================================
+           4. MÓDULO: PESAJE Y CARNE (GDP / GMD)
+           ====================================================================== -->
+      <section id="view-pesaje" class="module-view">
+        
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Control de Pesajes y Ganancia de Carne</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Cálculo automático e instantáneo de Ganancia Diaria de Peso (GDP).</p>
+          </div>
+          <span class="status-pill">Meta Ceba: <strong>+0.70 kg/día</strong></span>
+        </div>
+
+        <div class="form-panel">
+          <span class="panel-badge">⚖️ Registro de Báscula</span>
+          <h3 class="panel-title">Nuevo Pesaje Periódico</h3>
+          <p class="panel-desc">Al ingresar el peso actual, el sistema calcula de inmediato el incremento diario respecto al último pesaje registrado.</p>
+
+          <form onsubmit="handleRegistrarPesaje(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="pesaje-in-hierro">Animal *</label>
+                <select id="pesaje-in-hierro" class="highlight-input" onchange="mostrarUltimoPeso(this.value)">
+                  <!-- Se llena con los animales -->
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="pesaje-in-fecha">Fecha de Pesaje *</label>
+                <input type="date" id="pesaje-in-fecha" class="highlight-input" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="pesaje-in-peso">
+                  <span>Peso Actual (Kg) *</span>
+                  <span class="input-hint" id="pesaje-prev-hint">Previo: -- kg</span>
+                </label>
+                <input type="number" step="0.5" min="25" max="950" id="pesaje-in-peso" class="highlight-input" placeholder="0.0 Kg" inputmode="decimal" required>
+              </div>
+
+              <div class="input-group">
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                  Calcular y Guardar
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabla Historial Pesajes -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Historial de Pesajes y Evaluación de GDP</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Hierro</th>
+                  <th>Animal</th>
+                  <th>Fecha</th>
+                  <th>Peso Vivo</th>
+                  <th>Peso Previo</th>
+                  <th>GDP Calculada</th>
+                  <th>Desempeño</th>
+                </tr>
+              </thead>
+              <tbody id="pesaje-tbody">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================================
+           5. MÓDULO: SANIDAD Y TIEMPOS DE RETIRO (EVENTO SANITARIO)
+           ====================================================================== -->
+      <section id="view-sanidad" class="module-view">
+        
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Sanidad Animal y Tiempos de Retiro</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Protección de inocuidad: control de días de retiro para leche y carne.</p>
+          </div>
+          <span class="badge-status danger" id="sanidad-badge-cuarentena">🚨 Animales en Cuarentena</span>
+        </div>
+
+        <div class="form-panel">
+          <span class="panel-badge">🩺 Evento Sanitario</span>
+          <h3 class="panel-title">Registrar Tratamiento o Vacunación</h3>
+          <p class="panel-desc">Al ingresar los días de retiro, el semáforo bloqueará automáticamente la venta de leche y el beneficio en canal.</p>
+
+          <form onsubmit="handleRegistrarSanidad(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="sanidad-in-hierro">Animal Tratado *</label>
+                <select id="sanidad-in-hierro" class="highlight-input">
+                  <!-- Se llena con animales -->
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="sanidad-in-tipo">Tipo de Evento *</label>
+                <select id="sanidad-in-tipo" class="highlight-input">
+                  <option value="Tratamiento Antibiótico">Tratamiento Antibiótico</option>
+                  <option value="Desparasitación">Desparasitación</option>
+                  <option value="Vacunación Oficial">Vacunación Oficial</option>
+                  <option value="Vitaminización">Vitaminización</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="sanidad-in-producto">Producto Aplicado *</label>
+                <input type="text" id="sanidad-in-producto" class="highlight-input" placeholder="Ej: Oxitetraciclina L.A." required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="sanidad-in-retiro-leche">Retiro Leche (Días) *</label>
+                <input type="number" min="0" max="60" id="sanidad-in-retiro-leche" class="highlight-input" placeholder="0 días" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="sanidad-in-retiro-carne">Retiro Carne (Días) *</label>
+                <input type="number" min="0" max="90" id="sanidad-in-retiro-carne" class="highlight-input" placeholder="0 días" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="sanidad-in-fecha">Fecha Aplicación *</label>
+                <input type="date" id="sanidad-in-fecha" class="highlight-input" required>
+              </div>
+
+              <div class="input-group" style="grid-column: span 2;">
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                  Guardar Tratamiento y Activar Cuarentena
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabla de Eventos Sanitarios -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Historial de Tratamientos y Estado de Cuarentena</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Hierro</th>
+                  <th>Animal</th>
+                  <th>Tipo Evento</th>
+                  <th>Medicamento</th>
+                  <th>Retiro Leche</th>
+                  <th>Retiro Carne</th>
+                  <th>Estado Inocuidad</th>
+                </tr>
+              </thead>
+              <tbody id="sanidad-tbody">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================================
+           6. MÓDULO: GESTIÓN REPRODUCTIVA (EVENTO REPRODUCTIVO CON ALTA COMPLETA DE CRÍA)
+           ====================================================================== -->
+      <section id="view-reproduccion" class="module-view">
+        
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Manejo Reproductivo y Ciclo de Cría</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Servicios, preñez, secado y registro completo de nacimientos de crías para el censo.</p>
+          </div>
+          <span class="status-pill">Gestación Promedio: <strong>283 días</strong></span>
+        </div>
+
+        <div class="form-panel">
+          <span class="panel-badge">🧬 Evento Reproductivo</span>
+          <h3 class="panel-title">Registrar Evento de Ciclo</h3>
+          <p class="panel-desc">Si seleccionas <strong>Parto</strong>, podrás registrar todos los datos completos del nuevo becerro (Hierro, Nombre, Raza, Propósito, Peso al nacer).</p>
+
+          <form onsubmit="handleRegistrarReproduccion(event)">
+            
+            <!-- Datos del Evento Madre -->
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="repro-in-hembra">Hembra (Vaca / Novilla) *</label>
+                <select id="repro-in-hembra" class="highlight-input">
+                  <!-- Se llena con hembras -->
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="repro-in-tipo">Tipo de Evento *</label>
+                <select id="repro-in-tipo" class="highlight-input" onchange="toggleCamposPartoCompleto(this.value)">
+                  <option value="Celo">Detección de Celo</option>
+                  <option value="Inseminación / Monta">Inseminación / Monta con Toro</option>
+                  <option value="Diagnóstico Preñez">Diagnóstico Preñez (Palpación)</option>
+                  <option value="Secado">Secado de Vaca</option>
+                  <option value="Parto">Parto (Nacimiento de Cría)</option>
+                  <option value="Aborto">Aborto</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="repro-in-macho">Macho / Toro / Semen</label>
+                <input type="text" id="repro-in-macho" class="highlight-input" placeholder="Ej: Toro #009 (Titan)">
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="repro-in-fecha">Fecha del Evento *</label>
+                <input type="date" id="repro-in-fecha" class="highlight-input" required>
+              </div>
+
+              <div class="input-group" id="repro-grupo-resultado">
+                <label class="input-label" for="repro-in-resultado">Resultado / Diagnóstico *</label>
+                <select id="repro-in-resultado" class="highlight-input">
+                  <option value="Exitoso / Normal">Exitoso / Normal</option>
+                  <option value="Preñada Confirmada">Preñada Confirmada</option>
+                  <option value="Vacía">Vacía</option>
+                  <option value="Dudosa">Dudosa</option>
+                </select>
+              </div>
+
+            </div>
+
+            <!-- SUB-PANEL DESTACADO: DATOS COMPLETOS DE LA CRÍA AL REGISTRAR PARTO -->
+            <div id="panel-parto-completo" style="display: none; margin-top: 16px; padding: 16px; background-color: var(--color-primary-subtle); border: 2px dashed var(--color-primary-border); border-radius: var(--radius-md);">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span class="panel-badge" style="margin-bottom: 0;">🐄 Ficha Completa del Nuevo Becerro (Censo)</span>
+                <span style="font-size: 12px; color: var(--color-primary); font-weight: 600;">(Puedes asignar un hierro liberado o uno nuevo)</span>
+              </div>
+
+              <div class="form-grid-4">
+                
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-hierro">
+                    <span>N° Hierro Cría *</span>
+                    <span class="input-hint">Identificación</span>
+                  </label>
+                  <input type="text" id="repro-in-cria-hierro" class="highlight-input" placeholder="Ej: 115, 202">
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-nombre">
+                    <span>Nombre / Alias Cría *</span>
+                    <span class="input-hint">Ficha Oficial</span>
+                  </label>
+                  <input type="text" id="repro-in-cria-nombre" class="highlight-input" placeholder="Ej: Relámpago, Diamante">
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-sexo">Sexo de la Cría *</label>
+                  <select id="repro-in-cria-sexo" class="highlight-input">
+                    <option value="Hembra">Hembra (Becerra)</option>
+                    <option value="Macho">Macho (Torete)</option>
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-raza">Raza *</label>
+                  <select id="repro-in-cria-raza" class="highlight-input">
+                    <option value="Gyr Mestizo">Gyr Mestizo</option>
+                    <option value="Carora F1">Carora F1</option>
+                    <option value="Brahman">Brahman</option>
+                    <option value="Guzerá">Guzerá</option>
+                    <option value="Pardo Suizo">Pardo Suizo</option>
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-proposito">Propósito *</label>
+                  <select id="repro-in-cria-proposito" class="highlight-input">
+                    <option value="Doble Propósito">Doble Propósito</option>
+                    <option value="Leche">Leche</option>
+                    <option value="Carne / Ceba">Carne / Ceba</option>
+                  </select>
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-peso">
+                    <span>Peso al Nacer (Kg) *</span>
+                    <span class="input-hint">Báscula Cría</span>
+                  </label>
+                  <input type="number" step="0.5" min="20" max="65" id="repro-in-cria-peso" class="highlight-input" placeholder="Ej: 36.5 Kg" value="35.0">
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div style="margin-top: 14px;">
+              <button type="submit" class="btn-submit" style="width: 100%;">
+                Guardar Evento y Procesar Impacto en Censo
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Tabla de Eventos Reproductivos -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Bitácora de Reproducción del Rebaño</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Hembra</th>
+                  <th>Tipo Evento</th>
+                  <th>Macho / Semen</th>
+                  <th>Fecha</th>
+                  <th>Resultado</th>
+                  <th>Impacto Operativo</th>
+                </tr>
+              </thead>
+              <tbody id="repro-tbody">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================================
+           7. MÓDULO: FINANCIERO OPERATIVO (TRANSACCIÓN FINANCIERA)
+           ====================================================================== -->
+      <section id="view-finanzas" class="module-view">
+        
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Control Financiero Operativo y Costos Directos</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Cálculo de flujo de caja, ingresos por leche/carne y costo por litro.</p>
+          </div>
+          <span class="badge-status info">Acceso: Administrador</span>
+        </div>
+
+        <!-- KPIs Financieros -->
+        <div class="metrics-grid">
+          <div class="metric-card success">
+            <span class="metric-label">💵 Ingresos Totales</span>
+            <span class="metric-value" id="fin-total-ingresos">$ 680.00</span>
+            <span class="metric-meta" id="fin-meta-ingresos">Ventas registradas</span>
+          </div>
+
+          <div class="metric-card danger">
+            <span class="metric-label" style="color: var(--status-danger-text);">🧾 Egresos Operativos</span>
+            <span class="metric-value" id="fin-total-egresos">$ 225.00</span>
+            <span class="metric-meta" style="color: var(--status-danger-text);">Insumos, Sanidad y Jornales</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">📊 Margen de Caja</span>
+            <span class="metric-value" id="fin-utilidad-neta">$ 455.00</span>
+            <span class="metric-meta" id="fin-margen-pct">66.9% Margen Bruto</span>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">🥛 Costo Estimado / Litro</span>
+            <span class="metric-value" id="fin-costo-litro">$ 0.28</span>
+            <span class="metric-meta">Precio Venta Ref: $0.45 / L</span>
+          </div>
+        </div>
+
+        <!-- Formulario de Transacción Financiera Manual con Campos Resaltados -->
+        <div class="form-panel">
+          <span class="panel-badge">💰 Nueva Transacción Manual</span>
+          <h3 class="panel-title">Asiento de Ingreso o Gasto Operativo</h3>
+          <p class="panel-desc">Registra ventas diversas o gastos en finca para recalcular la rentabilidad en tiempo real.</p>
+
+          <form onsubmit="handleRegistrarTransaccion(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="fin-in-tipo">Tipo de Movimiento *</label>
+                <select id="fin-in-tipo" class="highlight-input" onchange="actualizarCategoriasFinancieras(this.value)">
+                  <option value="Ingreso">Ingreso (+)</option>
+                  <option value="Egreso">Egreso (-)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="fin-in-categoria">Categoría *</label>
+                <select id="fin-in-categoria" class="highlight-input">
+                  <option value="Venta de Leche">Venta de Leche</option>
+                  <option value="Venta de Ganado / Canal">Venta de Ganado / Canal</option>
+                  <option value="Subproductos (Queso)">Subproductos (Queso)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="fin-in-monto">Monto ($ USD) *</label>
+                <input type="number" step="0.5" min="1" max="100000" id="fin-in-monto" class="highlight-input" placeholder="0.00 $" inputmode="decimal" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="fin-in-fecha">Fecha *</label>
+                <input type="date" id="fin-in-fecha" class="highlight-input" required>
+              </div>
+
+              <div class="input-group" style="grid-column: span 3;">
+                <label class="input-label" for="fin-in-desc">Concepto / Detalle *</label>
+                <input type="text" id="fin-in-desc" class="highlight-input" placeholder="Ej: Compra de 4 rollos de alambre de púas..." required>
+              </div>
+
+              <div class="input-group">
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                  Registrar Asiento
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabla de Transacciones Financieras -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Libro de Caja y Transacciones Recientes</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Categoría</th>
+                  <th>Concepto</th>
+                  <th>Monto</th>
+                  <th>Registrado Por</th>
+                </tr>
+              </thead>
+              <tbody id="fin-tbody">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ======================================================================
+         MODAL 1: HOJA DE VIDA INDIVIDUAL DEL BOVINO
+         ====================================================================== -->
+    <div id="modal-hoja-vida" class="modal-overlay" onclick="cerrarModalExterno(event, 'modal-hoja-vida')">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span class="badge-status success" id="modal-badge-estado">Activo</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;" id="modal-titulo">Hoja de Vida: Vaca #042</h3>
+          </div>
+          <button onclick="cerrarModal('modal-hoja-vida')" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-dim);">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-sm);">
+            <div><strong>Raza:</strong> <span id="modal-raza">Guzerá</span></div>
+            <div><strong>Sexo:</strong> <span id="modal-sexo">Hembra</span></div>
+            <div><strong>Propósito:</strong> <span id="modal-proposito">Doble Propósito</span></div>
+            <div><strong>Último Peso:</strong> <span id="modal-peso">465 Kg</span></div>
+            <div><strong>Madre (Línea):</strong> <span id="modal-madre">#010 (Paloma)</span></div>
+            <div><strong>Padre:</strong> <span id="modal-padre">#009 (Titan)</span></div>
+          </div>
+
+          <div>
+            <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;">Árbol de Genealogía</h4>
+            <div style="border: 1px dashed var(--border-medium); padding: 12px; border-radius: var(--radius-sm); font-size: 13px; background: #FAFAF9;">
+              <div>🌲 <strong>Ascendencia Directa:</strong></div>
+              <div style="margin-left: 14px; margin-top: 4px;">• Padre: <strong>#009 Titan (Brahman Puro)</strong></div>
+              <div style="margin-left: 14px;">• Madre: <strong>#010 Paloma (Guzerá F1)</strong></div>
+              <div style="margin-top: 6px; color: #166534; font-size: 12px;">✅ <em>Sin consanguinidad detectada con los toros reproductores activos.</em></div>
+            </div>
+          </div>
+
+          <div>
+            <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;">Historial Reciente Consolidado</h4>
+            <div id="modal-historial" style="font-size: 13px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;">
+              <!-- Historial -->
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="cerrarModal('modal-hoja-vida')">Cerrar Ficha</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======================================================================
+         MODAL 2: VENDER / DESPACHAR LECHE DEL TANQUE
+         ====================================================================== -->
+    <div id="modal-venta-leche" class="modal-overlay" onclick="cerrarModalExterno(event, 'modal-venta-leche')">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span class="panel-badge" style="margin-bottom: 0;">🥛 Despacho Comercial de Leche</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;">Venta y Salida de Tanque</h3>
+          </div>
+          <button onclick="cerrarModal('modal-venta-leche')" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-dim);">&times;</button>
+        </div>
+
+        <form onsubmit="handleConfirmarVentaLeche(event)">
+          <div class="modal-body">
+            
+            <div style="background-color: var(--status-info-bg); border: 1px solid var(--status-info-border); border-radius: var(--radius-sm); padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 12px; color: var(--status-info-text); font-weight: 600;">Saldo Actual en Tanque:</span>
+                <div style="font-size: 20px; font-weight: 700; color: #1E40AF;" id="modal-leche-saldo-disp">342.5 L</div>
+              </div>
+              <span style="font-size: 12px; color: var(--text-muted);">Apto para entrega comercial</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="input-group">
+                <label class="input-label" for="vleche-in-litros">
+                  <span>Litros a Vender *</span>
+                  <span class="input-hint">Máx: <span id="vleche-max-hint">342.5</span> L</span>
+                </label>
+                <input 
+                  type="number" 
+                  step="0.5" 
+                  min="1" 
+                  id="vleche-in-litros" 
+                  class="highlight-input" 
+                  placeholder="0.0 L" 
+                  inputmode="decimal" 
+                  required
+                  oninput="calcularTotalVentaLeche()"
+                >
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="vleche-in-precio">
+                  <span>Precio por Litro ($) *</span>
+                </label>
+                <input 
+                  type="number" 
+                  step="0.01" 
+                  min="0.05" 
+                  id="vleche-in-precio" 
+                  class="highlight-input" 
+                  placeholder="0.45 $" 
+                  value="0.45" 
+                  inputmode="decimal" 
+                  required
+                  oninput="calcularTotalVentaLeche()"
+                >
+              </div>
+            </div>
+
+            <div style="background-color: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: var(--radius-sm); padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; font-weight: 600; color: #166534;">Total a Percibir en Caja:</span>
+              <span style="font-size: 22px; font-weight: 700; color: #166534;" id="vleche-total-display">$ 0.00</span>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="vleche-in-comprador">Comprador / Destino *</label>
+              <input type="text" id="vleche-in-comprador" class="highlight-input" placeholder="Ej: Quesera Don Pedro, Planta Láctea..." value="Quesera Don Pedro" required>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="vleche-in-fecha">Fecha de Despacho *</label>
+              <input type="date" id="vleche-in-fecha" class="highlight-input" required>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="cerrarModal('modal-venta-leche')">Cancelar</button>
+            <button type="submit" class="btn-submit">
+              Confirmar Venta y Descargar Tanque
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ======================================================================
+         MODAL 3: BENEFICIO EN CANAL / VENTA DE CARNE (DESINCORPORACIÓN Y LIBERACIÓN DE HIERRO)
+         ====================================================================== -->
+    <div id="modal-venta-canal" class="modal-overlay" onclick="cerrarModalExterno(event, 'modal-venta-canal')">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span class="badge-status danger" style="margin-bottom: 2px;">🥩 Beneficio en Canal / Venta</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;" id="canal-modal-titulo">Pasar a Canal: Animal #201</h3>
+          </div>
+          <button onclick="cerrarModal('modal-venta-canal')" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-dim);">&times;</button>
+        </div>
+
+        <form onsubmit="handleConfirmarVentaCanal(event)">
+          <input type="hidden" id="canal-hidden-id">
+          
+          <div class="modal-body">
+            
+            <!-- ALERTA EN CASO DE RETIRO SANITARIO DE CARNE ACTIVO (BLOQUEO) -->
+            <div id="canal-bloqueo-retiro" style="display: none; background-color: var(--status-danger-bg); border: 2px solid var(--status-danger-border); border-radius: var(--radius-sm); padding: 14px; color: var(--status-danger-text);">
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">🚨 PROHIBIDO EL BENEFICIO SANITARIO</h4>
+              <p style="font-size: 13px;">Este animal tiene un <strong>Tratamiento Médico con Retiro de Carne Activo</strong>. No puede ser beneficiado ni enviado a matadero hasta que se cumpla el período de carencia residual.</p>
+            </div>
+
+            <div style="background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6;">
+              <div><strong>Animal Seleccionado:</strong> <span id="canal-det-nombre">--</span></div>
+              <div><strong>Raza / Propósito:</strong> <span id="canal-det-raza">--</span></div>
+              <div><strong>Último Peso Vivo Registrado:</strong> <span id="canal-det-peso">-- Kg</span></div>
+              <div style="margin-top: 4px; color: #166534; font-weight: 600;">
+                ℹ️ <em>Al confirmar, el animal se desincorporará del censo y <strong>su número de hierro quedará liberado</strong> para futuras crías.</em>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="input-group">
+                <label class="input-label" for="canal-in-pesovivo">
+                  <span>Peso Vivo en Báscula (Kg) *</span>
+                </label>
+                <input 
+                  type="number" 
+                  step="0.5" 
+                  min="50" 
+                  id="canal-in-pesovivo" 
+                  class="highlight-input" 
+                  required
+                  oninput="calcularTotalVentaCanal()"
+                >
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="canal-in-rendimiento">
+                  <span>Rendimiento Canal (%) *</span>
+                  <span class="input-hint">Est. 52-56%</span>
+                </label>
+                <input 
+                  type="number" 
+                  step="0.5" 
+                  min="40" 
+                  max="65" 
+                  id="canal-in-rendimiento" 
+                  class="highlight-input" 
+                  value="53.5" 
+                  required
+                  oninput="calcularTotalVentaCanal()"
+                >
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="input-group">
+                <label class="input-label" for="canal-in-preciokg">
+                  <span>Precio por Kg en Pie/Canal ($) *</span>
+                </label>
+                <input 
+                  type="number" 
+                  step="0.05" 
+                  min="0.5" 
+                  id="canal-in-preciokg" 
+                  class="highlight-input" 
+                  value="1.85" 
+                  required
+                  oninput="calcularTotalVentaCanal()"
+                >
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Total Liquidación ($)</label>
+                <div style="height: 48px; background-color: #F0FDF4; border: 2px solid #BBF7D0; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #166534;" id="canal-total-display">
+                  $ 0.00
+                </div>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="canal-in-comprador">Destino / Matadero / Frigorífico *</label>
+              <input type="text" id="canal-in-comprador" class="highlight-input" placeholder="Ej: Frigorífico Industrial del Centro" value="Frigorífico Ganadero" required>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="canal-in-fecha">Fecha de Beneficio / Venta *</label>
+              <input type="date" id="canal-in-fecha" class="highlight-input" required>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="cerrarModal('modal-venta-canal')">Cancelar</button>
+            <button type="submit" class="btn-submit" id="canal-btn-confirmar" style="background-color: #991B1B;">
+              🥩 Confirmar Venta, Desincorporar y Liberar Hierro
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- NOTIFICACIÓN FLOTANTE (TOAST) -->
+    <div id="toast" class="toast-msg">
+      <svg width="18" height="18" fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+      <span id="toast-text">Acción realizada correctamente.</span>
+    </div>
+
+  </div>
+
+  <!-- ==========================================================================
+       LÓGICA DEL PROTOTIPO: ESTADO COMPLETO Y REACTIVO EN MEMORIA
+       ========================================================================== -->
+  <script>
+    // --------------------------------------------------------------------------
+    // BASE DE DATOS LOCAL SIMULADA (MODELO DE DOMINIO FINCACONTROL)
+    // --------------------------------------------------------------------------
+    
+    // 1. Entidad Animal (Censo Activo)
+    let animales = [
+      { id: "042", nombre: "Mariposa", sexo: "Hembra", raza: "Guzerá", proposito: "Doble Propósito", estado: "En Lactancia", peso: 465, madre: "010", padre: "009" },
+      { id: "088", nombre: "Gitana", sexo: "Hembra", raza: "Brahman", proposito: "Doble Propósito", estado: "En Lactancia", peso: 490, madre: "021", padre: "009" },
+      { id: "104", nombre: "Canela", sexo: "Hembra", raza: "Carora F1", proposito: "Leche", estado: "En Lactancia", peso: 510, madre: "033", padre: "002" },
+      { id: "015", nombre: "Paloma", sexo: "Hembra", raza: "Pardo Suizo", proposito: "Doble Propósito", estado: "En Lactancia", peso: 480, madre: "001", padre: "009" },
+      { id: "078", nombre: "Rubia", sexo: "Hembra", raza: "Gyr Mestizo", proposito: "Doble Propósito", estado: "Seca", peso: 475, madre: "014", padre: "009" },
+      { id: "201", nombre: "Campeón", sexo: "Macho", raza: "Brahman Rojo", proposito: "Carne / Ceba", estado: "Levante / Ceba", peso: 340, madre: "042", padre: "009" }
+    ];
+
+    // Historial de Animales Desincorporados / Beneficiados en Canal (Hierros Liberados)
+    let historialVentasCanal = [];
+
+    // Inventario de Leche en Tanque (Litros disponibles para venta comercial)
+    let lecheDisponibleTanque = 342.5;
+
+    // Historial de Ventas / Despachos de Leche Realizadas
+    let historialVentasLeche = [
+      { fecha: "2026-10-09", litros: 850.0, precio: 0.45, total: 382.50, comprador: "Quesera Don Pedro" }
+    ];
+
+    // IDs de animales con retiro sanitario activo
+    let animalesEnRetiro = ["104"];
+
+    // 2. Entidad RegistroOrdeno
+    let registrosOrdeno = [
+      { hierro: "042", nombre: "Mariposa", jornada: "Mañana", litros: 11.4, esRetiro: false, hora: "05:42 AM", fecha: "2026-10-11" },
+      { hierro: "088", nombre: "Gitana", jornada: "Mañana", litros: 8.2, esRetiro: false, hora: "05:45 AM", fecha: "2026-10-11" },
+      { hierro: "104", nombre: "Canela", jornada: "Mañana", litros: 12.0, esRetiro: true, hora: "05:48 AM", fecha: "2026-10-11" },
+      { hierro: "015", nombre: "Paloma", jornada: "Mañana", litros: 10.5, esRetiro: false, hora: "05:51 AM", fecha: "2026-10-11" }
+    ];
+
+    // 3. Entidad RegistroPesaje
+    let registrosPesaje = [
+      { hierro: "201", nombre: "Campeón", fecha: "2026-10-10", peso: 340, pesoPrevio: 320, gdp: 0.67, evaluacion: "Óptimo" },
+      { hierro: "042", nombre: "Mariposa", fecha: "2026-09-28", peso: 465, pesoPrevio: 450, gdp: 0.50, evaluacion: "Normal" },
+      { hierro: "104", nombre: "Canela", fecha: "2026-09-25", peso: 510, pesoPrevio: 505, gdp: 0.16, evaluacion: "Estancado" }
+    ];
+
+    // 4. Entidad EventoSanitario
+    let eventosSanitarios = [
+      { hierro: "104", nombre: "Canela", tipo: "Tratamiento Antibiótico", producto: "Oxitetraciclina L.A.", retiroLeche: 5, retiroCarne: 28, fecha: "2026-10-09", activo: true },
+      { hierro: "088", nombre: "Gitana", tipo: "Vacunación Oficial", producto: "Aftosa y Rabia", retiroLeche: 0, retiroCarne: 0, fecha: "2026-09-15", activo: false },
+      { hierro: "042", nombre: "Mariposa", tipo: "Desparasitación", producto: "Albendazol 10%", retiroLeche: 3, retiroCarne: 14, fecha: "2026-09-01", activo: false }
+    ];
+
+    // 5. Entidad EventoReproductivo
+    let eventosReproductivos = [
+      { hembra: "078", tipo: "Diagnóstico Preñez", macho: "Toro #009", fecha: "2026-07-20", resultado: "Preñada Confirmada", impacto: "Secado en 5 días" },
+      { hembra: "042", tipo: "Inseminación / Monta", macho: "Pajuela Gyr F1", fecha: "2026-08-14", resultado: "Exitoso / Normal", impacto: "Palpación en 15 días" },
+      { hembra: "015", tipo: "Celo", macho: "--", fecha: "2026-10-02", resultado: "Detectado", impacto: "Servicio programado" }
+    ];
+
+    // 6. Entidad TransaccionFinanciera
+    let transaccionesFinancieras = [
+      { id: "TRX-01", tipo: "Ingreso", categoria: "Venta de Leche", concepto: "Pago semanal 850L Quesera Don Pedro", monto: 382.50, fecha: "2026-10-09", usuario: "Johan M." },
+      { id: "TRX-02", tipo: "Ingreso", categoria: "Subproductos (Queso)", concepto: "Venta de 35 kg queso blanco", monto: 140.00, fecha: "2026-10-08", usuario: "Johan M." },
+      { id: "TRX-03", tipo: "Egreso", categoria: "Alimentación / Sal", concepto: "Compra de 4 sacos de sal mineralizada", monto: 95.00, fecha: "2026-10-06", usuario: "José C." },
+      { id: "TRX-04", tipo: "Egreso", categoria: "Sanidad / Medicinas", concepto: "Oxitetraciclina y jeringas", monto: 45.00, fecha: "2026-10-05", usuario: "Johan M." },
+      { id: "TRX-05", tipo: "Egreso", categoria: "Mano de Obra", concepto: "Jornales de ordeño fin de semana", monto: 85.00, fecha: "2026-10-04", usuario: "Johan M." },
+      { id: "TRX-06", tipo: "Ingreso", categoria: "Venta de Leche", concepto: "Anticipo de quesera", monto: 157.50, fecha: "2026-10-01", usuario: "Johan M." }
+    ];
+
+    // Rol actual
+    let rolActual = "Administrador";
+
+    // --------------------------------------------------------------------------
+    // INICIALIZACIÓN
+    // --------------------------------------------------------------------------
+    document.addEventListener("DOMContentLoaded", () => {
+      const todayStr = new Date().toISOString().split('T')[0];
+      document.querySelectorAll('input[type="date"]').forEach(el => el.value = todayStr);
+
+      refrescarSelectoresAnimales();
+      renderizarDashboard();
+      renderizarCenso();
+      renderizarOrdeno();
+      renderizarPesajes();
+      renderizarSanidad();
+      renderizarReproduccion();
+      renderizarFinanzas();
+    });
+
+    // --------------------------------------------------------------------------
+    // NAVEGACIÓN ENTRE PESTAÑAS
+    // --------------------------------------------------------------------------
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.querySelectorAll('.module-view').forEach(view => view.classList.remove('active'));
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) targetView.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleElement(elemId) {
+      const el = document.getElementById(elemId);
+      el.style.display = (el.style.display === 'none' || !el.style.display) ? 'block' : 'none';
+    }
+
+    function toggleRole() {
+      rolActual = (rolActual === "Administrador") ? "Operador" : "Administrador";
+      document.getElementById("role-indicator").textContent = `Rol: ${rolActual}`;
+      showToast(`Cambiado a rol: ${rolActual}. Permisos actualizados.`);
+    }
+
+    function switchSubnavCenso(tipo) {
+      const btnActivos = document.getElementById("btn-subnav-activos");
+      const btnCanal = document.getElementById("btn-subnav-canal");
+      const tablaActivos = document.getElementById("wrapper-tabla-activos");
+      const tablaCanal = document.getElementById("wrapper-tabla-canal");
+
+      if (tipo === 'activos') {
+        btnActivos.classList.add('active');
+        btnCanal.classList.remove('active');
+        tablaActivos.style.display = 'block';
+        tablaCanal.style.display = 'none';
+      } else {
+        btnCanal.classList.add('active');
+        btnActivos.classList.remove('active');
+        tablaCanal.style.display = 'block';
+        tablaActivos.style.display = 'none';
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: SELECTORES Y LISTAS DE ANIMALES
+    // --------------------------------------------------------------------------
+    function refrescarSelectoresAnimales() {
+      const selects = [
+        document.getElementById("ordeno-in-hierro"),
+        document.getElementById("pesaje-in-hierro"),
+        document.getElementById("sanidad-in-hierro"),
+        document.getElementById("repro-in-hembra")
+      ];
+
+      selects.forEach(sel => {
+        if (!sel) return;
+        sel.innerHTML = "";
+        animales.forEach(a => {
+          if ((sel.id === "ordeno-in-hierro" || sel.id === "repro-in-hembra") && a.sexo !== "Hembra") return;
+          const opt = document.createElement("option");
+          opt.value = a.id;
+          opt.textContent = `#${a.id} ${a.nombre} (${a.raza})`;
+          sel.appendChild(opt);
+        });
+      });
+
+      if (selects[1] && selects[1].value) {
+        mostrarUltimoPeso(selects[1].value);
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: DASHBOARD
+    // --------------------------------------------------------------------------
+    function renderizarDashboard() {
+      let litrosOrdeñadosHoy = registrosOrdeno.filter(r => !r.esRetiro).reduce((sum, r) => sum + r.litros, 0);
+
+      document.getElementById("kpi-dash-tanque").textContent = `${lecheDisponibleTanque.toFixed(1)} L`;
+      document.getElementById("kpi-dash-ordeñado-hoy").textContent = `Ordeñado hoy (apto): ${litrosOrdeñadosHoy.toFixed(1)} L`;
+      document.getElementById("kpi-dash-censo").textContent = `${animales.length} reses`;
+      document.getElementById("kpi-dash-desincorporados").textContent = `${historialVentasCanal.length} canal / vendidas`;
+      document.getElementById("kpi-dash-retiros").textContent = `${animalesEnRetiro.length} Vaca(s)`;
+
+      const tbody = document.getElementById("dash-records-tbody");
+      tbody.innerHTML = "";
+      registrosOrdeno.slice(0, 5).forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="animal-id">#${r.hierro}</span> ${r.nombre}</td>
+          <td>${r.jornada}</td>
+          <td><strong>${r.litros.toFixed(1)} L</strong></td>
+          <td>
+            <span class="badge-status ${r.esRetiro ? 'danger' : 'success'}">
+              ${r.esRetiro ? '⚠️ Descarte (Retiro)' : 'Sumó a Tanque'}
+            </span>
+          </td>
+          <td>${r.hora}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: CENSO Y BENEFICIO EN CANAL
+    // --------------------------------------------------------------------------
+    function renderizarCenso() {
+      // Contador subnavegación
+      document.getElementById("count-censo-activos").textContent = animales.length;
+      document.getElementById("count-censo-canal").textContent = historialVentasCanal.length;
+
+      // Tabla Censo Activo
+      const tbodyActivos = document.getElementById("censo-tbody");
+      tbodyActivos.innerHTML = "";
+      animales.forEach(a => {
+        const esRetiro = animalesEnRetiro.includes(a.id);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="animal-id">#${a.id}</span></td>
+          <td><strong>${a.nombre}</strong></td>
+          <td>${a.sexo}</td>
+          <td>${a.raza}</td>
+          <td>${a.proposito}</td>
+          <td>
+            <span class="badge-status ${esRetiro ? 'danger' : (a.estado === 'En Lactancia' ? 'success' : 'normal')}">
+              ${esRetiro ? '⚠️ En Retiro Sanitario' : a.estado}
+            </span>
+          </td>
+          <td>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-secondary" style="height: 32px; font-size: 12px; padding: 0 10px;" onclick="abrirHojaVida('${a.id}')">
+                Hoja de Vida
+              </button>
+              <button class="btn-danger-outline" onclick="abrirModalVentaCanal('${a.id}')" title="Pasar animal a canal y liberar número de hierro">
+                🥩 Vender en Canal
+              </button>
+            </div>
+          </td>
+        `;
+        tbodyActivos.appendChild(tr);
+      });
+
+      // Tabla Censo Canal (Desincorporados)
+      const tbodyCanal = document.getElementById("censo-canal-tbody");
+      tbodyCanal.innerHTML = "";
+      if (historialVentasCanal.length === 0) {
+        tbodyCanal.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-dim); padding: 18px;">No hay animales beneficiados en canal aún.</td></tr>`;
+      } else {
+        historialVentasCanal.forEach(c => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><span class="badge-status success">Hierro #${c.hierro} Liberado</span></td>
+            <td><strong>${c.nombre}</strong> (${c.raza})</td>
+            <td>${c.fecha}</td>
+            <td>${c.pesoVivo} Kg</td>
+            <td><strong>${c.pesoCanal.toFixed(1)} Kg</strong> (${c.rendimiento}%)</td>
+            <td style="font-weight: 700; color: #166534;">$ ${c.totalVenta.toFixed(2)}</td>
+            <td>${c.comprador}</td>
+          `;
+          tbodyCanal.appendChild(tr);
+        });
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: ORDEÑO Y TANQUE DE LECHE
+    // --------------------------------------------------------------------------
+    function renderizarOrdeno() {
+      let litrosAptoHoy = registrosOrdeno.filter(r => !r.esRetiro).reduce((sum, r) => sum + r.litros, 0);
+      let litrosDescarteHoy = registrosOrdeno.filter(r => r.esRetiro).reduce((sum, r) => sum + r.litros, 0);
+      let totalVendida = historialVentasLeche.reduce((sum, v) => sum + v.litros, 0);
+
+      document.getElementById("ordeno-kpi-disponible").textContent = `${lecheDisponibleTanque.toFixed(1)} L`;
+      document.getElementById("ordeno-kpi-hoy").textContent = `${litrosAptoHoy.toFixed(1)} L`;
+      document.getElementById("ordeno-kpi-vendida").textContent = `${totalVendida.toFixed(1)} L`;
+      document.getElementById("ordeno-kpi-descarte").textContent = `${litrosDescarteHoy.toFixed(1)} L`;
+
+      // Tabla Registros de Ordeño
+      const tbody = document.getElementById("ordeno-tbody");
+      tbody.innerHTML = "";
+      registrosOrdeno.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="animal-id">#${r.hierro}</span></td>
+          <td>${r.nombre}</td>
+          <td>${r.jornada}</td>
+          <td><strong>${r.litros.toFixed(1)} L</strong></td>
+          <td>
+            <span class="badge-status ${r.esRetiro ? 'danger' : 'success'}">
+              ${r.esRetiro ? '⚠️ Descarte (No fue al tanque)' : 'Sumó a Tanque'}
+            </span>
+          </td>
+          <td>${r.fecha} ${r.hora}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Tabla Ventas de Leche
+      const tbodyVentas = document.getElementById("ordeno-ventas-tbody");
+      tbodyVentas.innerHTML = "";
+      historialVentasLeche.forEach(v => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${v.fecha}</td>
+          <td><strong>${v.litros.toFixed(1)} L</strong></td>
+          <td>$ ${v.precio.toFixed(2)} / L</td>
+          <td style="font-weight: 700; color: #166534;">$ ${v.total.toFixed(2)}</td>
+          <td>${v.comprador}</td>
+          <td><span class="badge-status success">+ Acreditado en Caja</span></td>
+        `;
+        tbodyVentas.appendChild(tr);
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: PESAJES
+    // --------------------------------------------------------------------------
+    function renderizarPesajes() {
+      const tbody = document.getElementById("pesaje-tbody");
+      tbody.innerHTML = "";
+      registrosPesaje.forEach(p => {
+        const tr = document.createElement("tr");
+        const badgeClass = p.gdp >= 0.6 ? 'success' : (p.gdp >= 0.3 ? 'normal' : 'danger');
+        tr.innerHTML = `
+          <td><span class="animal-id">#${p.hierro}</span></td>
+          <td>${p.nombre}</td>
+          <td>${p.fecha}</td>
+          <td><strong>${p.peso} Kg</strong></td>
+          <td>${p.pesoPrevio} Kg</td>
+          <td><strong>${p.gdp > 0 ? '+' : ''}${p.gdp.toFixed(2)} kg/día</strong></td>
+          <td><span class="badge-status ${badgeClass}">${p.evaluacion}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function mostrarUltimoPeso(hierro) {
+      const a = animales.find(x => x.id === hierro);
+      const hint = document.getElementById("pesaje-prev-hint");
+      if (a && hint) {
+        hint.textContent = `Previo: ${a.peso} Kg`;
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: SANIDAD
+    // --------------------------------------------------------------------------
+    function renderizarSanidad() {
+      const badgeCuarentena = document.getElementById("sanidad-badge-cuarentena");
+      badgeCuarentena.textContent = `🚨 ${animalesEnRetiro.length} Animal(es) en Cuarentena`;
+
+      const tbody = document.getElementById("sanidad-tbody");
+      tbody.innerHTML = "";
+      eventosSanitarios.forEach(s => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="animal-id">#${s.hierro}</span></td>
+          <td>${s.nombre}</td>
+          <td>${s.tipo}</td>
+          <td><strong>${s.producto}</strong></td>
+          <td>${s.retiroLeche} días</td>
+          <td>${s.retiroCarne} días</td>
+          <td>
+            <span class="badge-status ${s.activo ? 'danger' : 'success'}">
+              ${s.activo ? '🚨 Cuarentena Activa' : 'Liberado / Apto'}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: REPRODUCCIÓN
+    // --------------------------------------------------------------------------
+    function renderizarReproduccion() {
+      const tbody = document.getElementById("repro-tbody");
+      tbody.innerHTML = "";
+      eventosReproductivos.forEach(e => {
+        const hAnimal = animales.find(a => a.id === e.hembra);
+        const nombreH = hAnimal ? hAnimal.nombre : `Vaca #${e.hembra}`;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="animal-id">#${e.hembra}</span> ${nombreH}</td>
+          <td><strong>${e.tipo}</strong></td>
+          <td>${e.macho || '--'}</td>
+          <td>${e.fecha}</td>
+          <td><span class="badge-status info">${e.resultado}</span></td>
+          <td>${e.impacto}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleCamposPartoCompleto(tipo) {
+      const panelParto = document.getElementById("panel-parto-completo");
+      const grupoResultado = document.getElementById("repro-grupo-resultado");
+      if (tipo === "Parto") {
+        panelParto.style.display = "block";
+        if (grupoResultado) grupoResultado.style.display = "none";
+      } else {
+        panelParto.style.display = "none";
+        if (grupoResultado) grupoResultado.style.display = "flex";
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: FINANZAS OPERATIVAS
+    // --------------------------------------------------------------------------
+    function renderizarFinanzas() {
+      let totalIngresos = transaccionesFinancieras.filter(t => t.tipo === "Ingreso").reduce((sum, t) => sum + t.monto, 0);
+      let totalEgresos = transaccionesFinancieras.filter(t => t.tipo === "Egreso").reduce((sum, t) => sum + t.monto, 0);
+      let utilidad = totalIngresos - totalEgresos;
+      let margen = totalIngresos > 0 ? ((utilidad / totalIngresos) * 100).toFixed(1) : 0;
+
+      let litrosTotal = registrosOrdeno.reduce((sum, r) => sum + r.litros, 0) * 7;
+      let costoLitro = litrosTotal > 0 ? (totalEgresos / litrosTotal).toFixed(2) : "0.28";
+
+      document.getElementById("fin-total-ingresos").textContent = `$ ${totalIngresos.toFixed(2)}`;
+      document.getElementById("fin-total-egresos").textContent = `$ ${totalEgresos.toFixed(2)}`;
+      document.getElementById("fin-utilidad-neta").textContent = `$ ${utilidad.toFixed(2)}`;
+      document.getElementById("fin-margen-pct").textContent = `${margen}% Margen Bruto`;
+      document.getElementById("fin-costo-litro").textContent = `$ ${costoLitro}`;
+
+      // Dashboard
+      document.getElementById("kpi-dash-utilidad").textContent = `$ ${utilidad.toFixed(2)}`;
+
+      const tbody = document.getElementById("fin-tbody");
+      tbody.innerHTML = "";
+      transaccionesFinancieras.forEach(t => {
+        const esIngreso = t.tipo === "Ingreso";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${t.fecha}</td>
+          <td>
+            <span class="badge-status ${esIngreso ? 'success' : 'danger'}">
+              ${esIngreso ? '+ Ingreso' : '- Egreso'}
+            </span>
+          </td>
+          <td><strong>${t.categoria}</strong></td>
+          <td>${t.concepto}</td>
+          <td style="font-weight: 700; color: ${esIngreso ? '#166534' : '#991B1B'};">
+            ${esIngreso ? '+' : '-'}$ ${t.monto.toFixed(2)}
+          </td>
+          <td>${t.usuario}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function actualizarCategoriasFinancieras(tipo) {
+      const selectCat = document.getElementById("fin-in-categoria");
+      selectCat.innerHTML = "";
+      if (tipo === "Ingreso") {
+        const opts = ["Venta de Leche", "Venta de Ganado / Canal", "Subproductos (Queso)", "Venta de Abono"];
+        opts.forEach(o => {
+          const opt = document.createElement("option");
+          opt.value = o; opt.textContent = o;
+          selectCat.appendChild(opt);
+        });
+      } else {
+        const opts = ["Alimentación / Sal", "Sanidad / Medicinas", "Mano de Obra / Jornales", "Mantenimiento / Combustible", "Herramientas"];
+        opts.forEach(o => {
+          const opt = document.createElement("option");
+          opt.value = o; opt.textContent = o;
+          selectCat.appendChild(opt);
+        });
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // VALIDACIÓN INTERACTIVA DE RETIRO EN FORMULARIOS
+    // --------------------------------------------------------------------------
+    function checkRetiroInForm(hierroVal, warningId) {
+      const cleanVal = hierroVal.trim();
+      const warningBox = document.getElementById(warningId);
+      if (!warningBox) return;
+
+      if (animalesEnRetiro.includes(cleanVal)) {
+        warningBox.style.display = "block";
+      } else {
+        warningBox.style.display = "none";
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // MANEJADORES: ORDEÑO (SUMA AL TANQUE)
+    // --------------------------------------------------------------------------
+    function handleDashQuickMilk(e) {
+      e.preventDefault();
+      const hierro = document.getElementById("dash-in-hierro").value.trim();
+      const jornada = document.getElementById("dash-in-jornada").value;
+      const litros = parseFloat(document.getElementById("dash-in-litros").value);
+
+      const a = animales.find(x => x.id === hierro);
+      const nombre = a ? a.nombre : "Vaca";
+      const esRetiro = animalesEnRetiro.includes(hierro);
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      registrosOrdeno.unshift({
+        hierro, nombre, jornada, litros, esRetiro, hora: timeStr, fecha: new Date().toISOString().split('T')[0]
+      });
+
+      if (!esRetiro) {
+        lecheDisponibleTanque += litros;
+      }
+
+      renderizarDashboard();
+      renderizarOrdeno();
+
+      document.getElementById("dash-in-hierro").value = "";
+      document.getElementById("dash-in-litros").value = "";
+      document.getElementById("dash-warning").style.display = "none";
+      document.getElementById("dash-in-hierro").focus();
+
+      showToast(esRetiro 
+        ? `⚠️ Guardado #${hierro}. ¡Marcado como descarte médico (No sumó al tanque)!` 
+        : `✅ Ordeño #${hierro} (+${litros} L) sumado al tanque disponible.`
+      );
+    }
+
+    function handleModuloMilk(e) {
+      e.preventDefault();
+      const hierro = document.getElementById("ordeno-in-hierro").value;
+      const jornada = document.getElementById("ordeno-in-jornada").value;
+      const litros = parseFloat(document.getElementById("ordeno-in-litros").value);
+
+      const a = animales.find(x => x.id === hierro);
+      const nombre = a ? a.nombre : "Vaca";
+      const esRetiro = animalesEnRetiro.includes(hierro);
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      registrosOrdeno.unshift({
+        hierro, nombre, jornada, litros, esRetiro, hora: timeStr, fecha: new Date().toISOString().split('T')[0]
+      });
+
+      if (!esRetiro) {
+        lecheDisponibleTanque += litros;
+      }
+
+      renderizarDashboard();
+      renderizarOrdeno();
+      document.getElementById("ordeno-in-litros").value = "";
+
+      showToast(esRetiro
+        ? `⚠️ Ordeño registrado para #${hierro}. Leche enviada a descarte.`
+        : `🥛 Ordeño #${hierro} registrado. Se agregaron ${litros} L al tanque.`
+      );
+    }
+
+    // --------------------------------------------------------------------------
+    // VENTA DE LECHE (DESCARGA DE TANQUE Y GENERA INGRESO FINANCIERO)
+    // --------------------------------------------------------------------------
+    function abrirModalVentaLeche() {
+      document.getElementById("modal-leche-saldo-disp").textContent = `${lecheDisponibleTanque.toFixed(1)} L`;
+      document.getElementById("vleche-max-hint").textContent = lecheDisponibleTanque.toFixed(1);
+      document.getElementById("vleche-in-litros").max = lecheDisponibleTanque;
+      document.getElementById("vleche-in-litros").value = "";
+      document.getElementById("vleche-total-display").textContent = "$ 0.00";
+      document.getElementById("modal-venta-leche").classList.add("open");
+    }
+
+    function calcularTotalVentaLeche() {
+      const litros = parseFloat(document.getElementById("vleche-in-litros").value) || 0;
+      const precio = parseFloat(document.getElementById("vleche-in-precio").value) || 0;
+      const total = litros * precio;
+      document.getElementById("vleche-total-display").textContent = `$ ${total.toFixed(2)}`;
+    }
+
+    function handleConfirmarVentaLeche(e) {
+      e.preventDefault();
+      const litros = parseFloat(document.getElementById("vleche-in-litros").value);
+      const precio = parseFloat(document.getElementById("vleche-in-precio").value);
+      const comprador = document.getElementById("vleche-in-comprador").value.trim();
+      const fecha = document.getElementById("vleche-in-fecha").value;
+
+      if (litros > lecheDisponibleTanque) {
+        alert(`No puedes vender más de los litros disponibles en el tanque (${lecheDisponibleTanque.toFixed(1)} L).`);
+        return;
+      }
+
+      const totalVenta = litros * precio;
+
+      // 1. Disminuir litros del tanque
+      lecheDisponibleTanque -= litros;
+
+      // 2. Guardar en historial de ventas de leche
+      historialVentasLeche.unshift({
+        fecha, litros, precio, total: totalVenta, comprador
+      });
+
+      // 3. Generar automáticamente transacción financiera de Ingreso
+      transaccionesFinancieras.unshift({
+        id: `TRX-${Date.now().toString().slice(-4)}`,
+        tipo: "Ingreso",
+        categoria: "Venta de Leche",
+        monto: totalVenta,
+        fecha,
+        concepto: `Despacho de ${litros.toFixed(1)}L a ${comprador} ($${precio.toFixed(2)}/L)`,
+        usuario: "Johan M."
+      });
+
+      cerrarModal("modal-venta-leche");
+      renderizarDashboard();
+      renderizarOrdeno();
+      renderizarFinanzas();
+
+      showToast(`✅ Venta de ${litros} L confirmada. Se descargó del tanque e ingresaron $${totalVenta.toFixed(2)} a caja.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // PASAR A CANAL / VENDER CARNE (DESINCORPORAR DEL CENSO Y LIBERAR HIERRO)
+    // --------------------------------------------------------------------------
+    function abrirModalVentaCanal(id) {
+      const a = animales.find(x => x.id === id);
+      if (!a) return;
+
+      const esRetiro = animalesEnRetiro.includes(a.id);
+      document.getElementById("canal-hidden-id").value = a.id;
+      document.getElementById("canal-modal-titulo").textContent = `Pasar a Canal: #${a.id} ${a.nombre}`;
+      document.getElementById("canal-det-nombre").textContent = `#${a.id} ${a.nombre}`;
+      document.getElementById("canal-det-raza").textContent = `${a.raza} (${a.proposito})`;
+      document.getElementById("canal-det-peso").textContent = `${a.peso} Kg`;
+      document.getElementById("canal-in-pesovivo").value = a.peso;
+
+      const bloqueoDiv = document.getElementById("canal-bloqueo-retiro");
+      const btnConfirmar = document.getElementById("canal-btn-confirmar");
+
+      if (esRetiro) {
+        bloqueoDiv.style.display = "block";
+        btnConfirmar.disabled = true;
+        btnConfirmar.style.opacity = "0.5";
+        btnConfirmar.style.cursor = "not-allowed";
+      } else {
+        bloqueoDiv.style.display = "none";
+        btnConfirmar.disabled = false;
+        btnConfirmar.style.opacity = "1";
+        btnConfirmar.style.cursor = "pointer";
+      }
+
+      calcularTotalVentaCanal();
+      document.getElementById("modal-venta-canal").classList.add("open");
+    }
+
+    function calcularTotalVentaCanal() {
+      const pesoVivo = parseFloat(document.getElementById("canal-in-pesovivo").value) || 0;
+      const rendimiento = parseFloat(document.getElementById("canal-in-rendimiento").value) || 53.5;
+      const precioKg = parseFloat(document.getElementById("canal-in-preciokg").value) || 1.85;
+
+      const pesoCanal = pesoVivo * (rendimiento / 100);
+      const total = pesoVivo * precioKg;
+      document.getElementById("canal-total-display").textContent = `$ ${total.toFixed(2)}`;
+    }
+
+    function handleConfirmarVentaCanal(e) {
+      e.preventDefault();
+      const id = document.getElementById("canal-hidden-id").value;
+      const a = animales.find(x => x.id === id);
+      if (!a) return;
+
+      if (animalesEnRetiro.includes(id)) {
+        alert("¡Acción bloqueada! El animal está en período de retiro de carne.");
+        return;
+      }
+
+      const pesoVivo = parseFloat(document.getElementById("canal-in-pesovivo").value);
+      const rendimiento = parseFloat(document.getElementById("canal-in-rendimiento").value);
+      const precioKg = parseFloat(document.getElementById("canal-in-preciokg").value);
+      const comprador = document.getElementById("canal-in-comprador").value.trim();
+      const fecha = document.getElementById("canal-in-fecha").value;
+
+      const pesoCanal = pesoVivo * (rendimiento / 100);
+      const totalVenta = pesoVivo * precioKg;
+
+      // 1. Guardar en historial de ventas / canal
+      historialVentasCanal.unshift({
+        hierro: a.id,
+        nombre: a.nombre,
+        raza: a.raza,
+        pesoVivo,
+        rendimiento,
+        pesoCanal,
+        totalVenta,
+        comprador,
+        fecha
+      });
+
+      // 2. DESINCORPORAR DEL CENSO DE REBAÑO ACTIVO (LIBERA EL NÚMERO DE HIERRO)
+      animales = animales.filter(x => x.id !== id);
+
+      // 3. Generar Ingreso Financiero automático
+      transaccionesFinancieras.unshift({
+        id: `TRX-${Date.now().toString().slice(-4)}`,
+        tipo: "Ingreso",
+        categoria: "Venta de Ganado / Canal",
+        monto: totalVenta,
+        fecha,
+        concepto: `Venta en canal #${a.id} ${a.nombre} (${pesoVivo} kg pie, ${pesoCanal.toFixed(1)} kg canal) a ${comprador}`,
+        usuario: "Johan M."
+      });
+
+      cerrarModal("modal-venta-canal");
+      refrescarSelectoresAnimales();
+      renderizarCenso();
+      renderizarDashboard();
+      renderizarFinanzas();
+
+      showToast(`🥩 #${a.id} ${a.nombre} desincorporado por canal. ¡Hierro #${a.id} liberado para nuevas crías! +$${totalVenta.toFixed(2)} en caja.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // REGISTRO DE PARTO COMPLETO (ALTA COMPLETA DE CRÍA EN CENSO)
+    // --------------------------------------------------------------------------
+    function handleRegistrarReproduccion(e) {
+      e.preventDefault();
+      const hembra = document.getElementById("repro-in-hembra").value;
+      const tipo = document.getElementById("repro-in-tipo").value;
+      const macho = document.getElementById("repro-in-macho").value.trim() || "--";
+      const fecha = document.getElementById("repro-in-fecha").value;
+
+      let resultado = "Normal";
+      let impacto = "Registro en bitácora";
+
+      if (tipo === "Parto") {
+        const criaHierro = document.getElementById("repro-in-cria-hierro").value.trim();
+        const criaNombre = document.getElementById("repro-in-cria-nombre").value.trim();
+        const criaSexo = document.getElementById("repro-in-cria-sexo").value;
+        const criaRaza = document.getElementById("repro-in-cria-raza").value;
+        const criaProposito = document.getElementById("repro-in-cria-proposito").value;
+        const criaPeso = parseFloat(document.getElementById("repro-in-cria-peso").value) || 35.0;
+
+        if (!criaHierro || !criaNombre) {
+          alert("Por favor ingresa el número de hierro y el nombre completo de la cría para el censo.");
+          return;
+        }
+
+        // Validar si el hierro ya está en uso en el rebaño activo
+        if (animales.some(a => a.id === criaHierro)) {
+          alert(`El hierro #${criaHierro} ya está en uso por otro animal activo en el censo. (Si fue vendido a canal, ya estaría libre).`);
+          return;
+        }
+
+        // ALTA COMPLETA DE LA CRÍA EN EL CENSO
+        animales.push({
+          id: criaHierro,
+          nombre: criaNombre,
+          sexo: criaSexo,
+          raza: criaRaza,
+          proposito: criaProposito,
+          estado: "Cría / Lactante",
+          peso: criaPeso,
+          madre: hembra,
+          padre: macho
+        });
+
+        // La vaca madre pasa a En Lactancia
+        const madreObj = animales.find(a => a.id === hembra);
+        if (madreObj) madreObj.estado = "En Lactancia";
+
+        resultado = `Nació ${criaSexo === 'Hembra' ? 'Becerra' : 'Torete'} #${criaHierro} ${criaNombre}`;
+        impacto = `Cría #${criaHierro} ${criaNombre} dada de alta con ficha completa en el Censo`;
+
+        // Limpiar campos de cría
+        document.getElementById("repro-in-cria-hierro").value = "";
+        document.getElementById("repro-in-cria-nombre").value = "";
+
+        refrescarSelectoresAnimales();
+        renderizarCenso();
+      } else if (tipo === "Secado") {
+        const madreObj = animales.find(a => a.id === hembra);
+        if (madreObj) madreObj.estado = "Seca";
+        resultado = "Secado confirmado";
+        impacto = "Vaca pasa a estado Seca (descanso de ubre)";
+        renderizarCenso();
+      } else {
+        resultado = document.getElementById("repro-in-resultado").value;
+        impacto = `Evento ${tipo} registrado`;
+      }
+
+      eventosReproductivos.unshift({
+        hembra, tipo, macho, fecha, resultado, impacto
+      });
+
+      renderizarReproduccion();
+      renderizarDashboard();
+      showToast(`🧬 Evento reproductivo guardado: ${tipo} en vaca #${hembra}.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // CREAR ANIMAL MANUAL (CENSO)
+    // --------------------------------------------------------------------------
+    function handleCrearAnimal(e) {
+      e.preventDefault();
+      const id = document.getElementById("censo-in-hierro").value.trim();
+      const nombre = document.getElementById("censo-in-nombre").value.trim();
+      const sexo = document.getElementById("censo-in-sexo").value;
+      const raza = document.getElementById("censo-in-raza").value;
+      const proposito = document.getElementById("censo-in-proposito").value;
+      const estado = document.getElementById("censo-in-estado").value;
+      const madre = document.getElementById("censo-in-madre").value.trim() || "--";
+
+      if (animales.some(a => a.id === id)) {
+        alert("¡Ya existe un animal ACTIVO con este número de hierro! (Si fue vendido a canal, ya estaría libre).");
+        return;
+      }
+
+      animales.push({ id, nombre, sexo, raza, proposito, estado, peso: 250, madre, padre: "--" });
+      refrescarSelectoresAnimales();
+      renderizarCenso();
+      renderizarDashboard();
+
+      document.getElementById("form-nuevo-animal").style.display = "none";
+      showToast(`🐄 Animal #${id} ${nombre} registrado en el censo.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // REGISTRAR PESAJE
+    // --------------------------------------------------------------------------
+    function handleRegistrarPesaje(e) {
+      e.preventDefault();
+      const hierro = document.getElementById("pesaje-in-hierro").value;
+      const fecha = document.getElementById("pesaje-in-fecha").value;
+      const pesoActual = parseFloat(document.getElementById("pesaje-in-peso").value);
+
+      const a = animales.find(x => x.id === hierro);
+      const pesoPrevio = a ? a.peso : pesoActual;
+
+      const diffKg = pesoActual - pesoPrevio;
+      const gdp = diffKg / 30;
+      const evaluacion = gdp >= 0.6 ? "Excelente" : (gdp >= 0.3 ? "Aceptable" : "Estancado");
+
+      registrosPesaje.unshift({
+        hierro,
+        nombre: a ? a.nombre : "Res",
+        fecha,
+        peso: pesoActual,
+        pesoPrevio,
+        gdp,
+        evaluacion
+      });
+
+      if (a) a.peso = pesoActual;
+
+      renderizarPesajes();
+      document.getElementById("pesaje-in-peso").value = "";
+      mostrarUltimoPeso(hierro);
+      showToast(`⚖️ Pesaje de #${hierro} guardado. GDP: +${gdp.toFixed(2)} kg/día.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // REGISTRAR SANIDAD
+    // --------------------------------------------------------------------------
+    function handleRegistrarSanidad(e) {
+      e.preventDefault();
+      const hierro = document.getElementById("sanidad-in-hierro").value;
+      const tipo = document.getElementById("sanidad-in-tipo").value;
+      const producto = document.getElementById("sanidad-in-producto").value.trim();
+      const retiroLeche = parseInt(document.getElementById("sanidad-in-retiro-leche").value) || 0;
+      const retiroCarne = parseInt(document.getElementById("sanidad-in-retiro-carne").value) || 0;
+      const fecha = document.getElementById("sanidad-in-fecha").value;
+
+      const a = animales.find(x => x.id === hierro);
+      const tieneRetiro = (retiroLeche > 0 || retiroCarne > 0);
+
+      eventosSanitarios.unshift({
+        hierro,
+        nombre: a ? a.nombre : "Res",
+        tipo,
+        producto,
+        retiroLeche,
+        retiroCarne,
+        fecha,
+        activo: tieneRetiro
+      });
+
+      if (tieneRetiro && !animalesEnRetiro.includes(hierro)) {
+        animalesEnRetiro.push(hierro);
+      }
+
+      renderizarSanidad();
+      renderizarDashboard();
+      renderizarCenso();
+
+      document.getElementById("sanidad-in-producto").value = "";
+      document.getElementById("sanidad-in-retiro-leche").value = "";
+      document.getElementById("sanidad-in-retiro-carne").value = "";
+
+      showToast(tieneRetiro 
+        ? `🚨 Tratamiento guardado. ¡Vaca #${hierro} en cuarentena activa!` 
+        : `🩺 Evento sanitario de #${hierro} guardado.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // REGISTRAR TRANSACCIÓN FINANCIERA MANUAL
+    // --------------------------------------------------------------------------
+    function handleRegistrarTransaccion(e) {
+      e.preventDefault();
+      const tipo = document.getElementById("fin-in-tipo").value;
+      const categoria = document.getElementById("fin-in-categoria").value;
+      const monto = parseFloat(document.getElementById("fin-in-monto").value);
+      const fecha = document.getElementById("fin-in-fecha").value;
+      const concepto = document.getElementById("fin-in-desc").value.trim();
+
+      transaccionesFinancieras.unshift({
+        id: `TRX-${Date.now().toString().slice(-4)}`,
+        tipo,
+        categoria,
+        monto,
+        fecha,
+        concepto,
+        usuario: "Johan M."
+      });
+
+      renderizarFinanzas();
+      document.getElementById("fin-in-monto").value = "";
+      document.getElementById("fin-in-desc").value = "";
+
+      showToast(`💰 Transacción registrada: ${tipo} de $${monto.toFixed(2)}.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // HOJA DE VIDA DEL ANIMAL (MODAL)
+    // --------------------------------------------------------------------------
+    function abrirHojaVida(id) {
+      const a = animales.find(x => x.id === id);
+      if (!a) return;
+
+      const esRetiro = animalesEnRetiro.includes(a.id);
+      document.getElementById("modal-titulo").textContent = `Hoja de Vida: #${a.id} ${a.nombre}`;
+      document.getElementById("modal-badge-estado").textContent = esRetiro ? "⚠️ Retiro Activo" : a.estado;
+      document.getElementById("modal-badge-estado").className = `badge-status ${esRetiro ? 'danger' : 'success'}`;
+      document.getElementById("modal-raza").textContent = a.raza;
+      document.getElementById("modal-sexo").textContent = a.sexo;
+      document.getElementById("modal-proposito").textContent = a.proposito;
+      document.getElementById("modal-peso").textContent = `${a.peso} Kg`;
+      document.getElementById("modal-madre").textContent = `#${a.madre}`;
+      document.getElementById("modal-padre").textContent = `#${a.padre}`;
+
+      const histDiv = document.getElementById("modal-historial");
+      const ultimoOrdeño = registrosOrdeno.find(r => r.hierro === a.id);
+      const ultimoPesaje = registrosPesaje.find(p => p.hierro === a.id);
+      const ultimoSanitario = eventosSanitarios.find(s => s.hierro === a.id);
+
+      histDiv.innerHTML = `
+        <div>🥛 <strong>Último Ordeño:</strong> ${ultimoOrdeño ? `${ultimoOrdeño.litros} L (${ultimoOrdeño.jornada})` : 'Sin registros hoy'}</div>
+        <div>⚖️ <strong>Último Pesaje:</strong> ${ultimoPesaje ? `${ultimoPesaje.peso} Kg (GDP: ${ultimoPesaje.gdp.toFixed(2)} kg/d)` : `${a.peso} Kg`}</div>
+        <div>🩺 <strong>Sanidad:</strong> ${ultimoSanitario ? `${ultimoSanitario.producto} (${ultimoSanitario.activo ? 'En Retiro' : 'Apto'})` : 'Sin tratamientos activos'}</div>
+      `;
+
+      document.getElementById("modal-hoja-vida").classList.add("open");
+    }
+
+    function cerrarModal(modalId) {
+      document.getElementById(modalId).classList.remove("open");
+    }
+
+    function cerrarModalExterno(e, modalId) {
+      if (e.target.id === modalId) {
+        cerrarModal(modalId);
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // TOAST
+    // --------------------------------------------------------------------------
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const toastText = document.getElementById("toast-text");
+      toastText.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
