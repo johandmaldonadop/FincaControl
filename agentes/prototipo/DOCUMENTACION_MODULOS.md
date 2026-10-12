@@ -1,28 +1,129 @@
 # 📖 Manual de Funcionamiento y Especificación de Módulos: FincaControl
 > **Sistema Integral de Gestión Ganadera para Fincas de Doble Propósito (Leche y Carne)**  
 > **Equipo de Desarrollo:** Johan Maldonado – José Chacón  
-> **Ubicación del Prototipo:** [`C:\Users\Usuario\Documents\GitHub\FincaControl\agentes\prototipo\index.html`](./index.html)
+> **Ubicación del Prototipo:** [`https://github.com/johandmaldonadop/FincaControl/blob/main/agentes/prototipo/index.html`](./index.html)
 
 ---
 
 <a id="indice"></a>
-## 📑 Índice de Módulos Documentados
+## 📑 Índice General
 
-Haga clic en cualquiera de los módulos para consultar su funcionamiento operativo y técnico:
+Haga clic en cualquiera de las secciones para consultar su descripción técnica y operativa:
 
-1. [Módulo 1: Tablero General (Dashboard) y Arquitectura Base](#modulo-1-dashboard)
-2. [Módulo 2: Censo e Inventario Bovino (`Animal`) y Beneficio en Canal](#modulo-2-censo-canal)
-3. [Módulo 3: Control de Ordeño y Gestión del Tanque de Leche (`RegistroOrdeno`)](#modulo-3-ordeno-tanque)
-4. [Módulo 4: Pesajes, Carne y Ganancia Diaria de Peso (`RegistroPesaje`)](#modulo-4-pesaje-carne)
-5. [Módulo 5: Sanidad Animal y Tiempos de Retiro (`EventoSanitario`)](#modulo-5-sanidad-retiros)
-6. [Módulo 6: Gestión Reproductiva y Alta Completa de Crías (`EventoReproductivo`)](#modulo-6-reproduccion)
-7. [Módulo 7: Financiero Operativo y Costos Directos (`TransaccionFinanciera`)](#modulo-7-finanzas)
-8. [Ciclo de Vida del Número de Hierro y Matriz de Interconexión](#matriz-interconexion)
+1. [🎯 Objetivo y Alcance del Proyecto](#objetivo-alcance)
+   * [1.1. Propósito y Declaración del Problema](#proposito-problema)
+   * [1.2. Declaración de Visión del Producto](#vision-producto)
+   * [1.3. Objetivo General y Objetivos Específicos](#objetivos-proyecto)
+   * [1.4. Alcance del Proyecto (Dentro y Fuera de Alcance)](#alcance-proyecto)
+   * [1.5. Atributos de Calidad y Criterios Arquitectónicos](#criterios-calidad)
+2. [Módulo 1: Tablero General (Dashboard) y Arquitectura Base](#modulo-1-dashboard)
+3. [Módulo 2: Censo e Inventario Bovino (`Animal`) y Beneficio en Canal](#modulo-2-censo-canal)
+4. [Módulo 3: Control de Ordeño y Gestión del Tanque de Leche (`RegistroOrdeno`)](#modulo-3-ordeno-tanque)
+5. [Módulo 4: Pesajes, Carne y Ganancia Diaria de Peso (`RegistroPesaje`)](#modulo-4-pesaje-carne)
+6. [Módulo 5: Sanidad Animal y Tiempos de Retiro (`EventoSanitario`)](#modulo-5-sanidad-retiros)
+7. [Módulo 6: Gestión Reproductiva y Alta Completa de Crías (`EventoReproductivo`)](#modulo-6-reproduccion)
+8. [Módulo 7: Financiero Operativo y Costos Directos (`TransaccionFinanciera`)](#modulo-7-finanzas)
+9. [Ciclo de Vida del Número de Hierro y Matriz de Interconexión](#matriz-interconexion)
+
+---
+
+<a id="objetivo-alcance"></a>
+## 🎯 Objetivo y Alcance del Proyecto
+
+<a id="proposito-problema"></a>
+### 1.1. Propósito y Declaración del Problema
+
+* **Nombre del Proyecto:** FincaControl
+* **El Problema:** En las fincas ganaderas productoras de doble propósito (producción combinada de leche y carne), comúnmente se carece de mecanismos formales y ágiles para llevar una trazabilidad ordenada de los animales y de los eventos productivos. La gestión descansa casi exclusivamente en registros físicos sobre papel, cuadernos o libretas de vaquería. Esta práctica genera:
+  1. Dificultad extrema para acceder a la información histórica y al estado real de la finca en el momento oportuno.
+  2. Alta propensión a pérdidas de datos, deterioros físicos por humedad o barro en el corral, y errores de transcripción.
+  3. Falta de control sobre los tiempos de retiro de medicamentos veterinarios, poniendo en riesgo la inocuidad alimentaria de la leche y la carne.
+  4. Pérdida de rentabilidad al no poder cruzar costos directos operativos con los rendimientos individuales por animal.
+* **Solución Propuesta:** **FincaControl** es una solución de software tipo aplicación móvil con arquitectura *Offline-First* diseñada para llevar el control integral de la explotación ganadera: inventario bovino, trazabilidad genealógica, partos y nacimientos, monitoreo del ordeño diario, pesajes periódicos de carne, semáforo de inocuidad sanitaria y finanzas operativas de caja.
+
+---
+
+<a id="vision-producto"></a>
+### 1.2. Declaración de Visión del Producto
+
+* **Para:** Pequeños y medianos productores, encargados y propietarios de fincas ganaderas de doble propósito.
+* **Que necesitan:** Centralizar el historial productivo, sanitario y financiero de su finca para optimizar la toma de decisiones zootécnicas y maximizar la rentabilidad del negocio.
+* **FincaControl:** Es una aplicación móvil especializada en gestión ganadera de doble propósito.
+* **Que permite:** Registrar el ganado en campo, monitorear la producción lechera y el crecimiento cárnico en tiempo real, prevenir riesgos sanitarios mediante alertas visuales e integrar métricas financieras para un control total.
+* **A diferencia de:** Los registros en físico propensos a extravío y las hojas de cálculo convencionales que requieren conectividad constante a internet y resultan complejas de operar en un corral.
+* **Nuestro Producto:** Ofrece una interfaz intuitiva, minimalista, de alto contraste y adaptada a la luz solar exterior, con la capacidad distintiva de **operatividad continua 100% sin conexión a internet (Offline-First)**.
+
+---
+
+<a id="objetivos-proyecto"></a>
+### 1.3. Objetivo General y Objetivos Específicos
+
+#### 🏆 Objetivo General
+Permitir que las fincas ganaderas de doble propósito transformen su recolección de datos operativos pasando del registro físico tradicional en papel a un sistema digital integrado, facilitando un control preciso de la productividad individual por animal (leche y carne), la trazabilidad genealógica y la rentabilidad financiera en tiempo real.
+
+#### 🎯 Objetivos Específicos
+1. **Digitalizar el Censo y la Genealogía:** Estandarizar la identificación individual de cada bovino mediante su número de hierro/arete, consolidando su hoja de vida y árbol genealógico para prevenir la consanguinidad (endogamia).
+2. **Optimizar el Control de Producción:** Proveer mecanismos de carga rápida para registrar la producción lechera diaria por jornadas (mañana/tarde), gestionar el inventario del tanque de leche disponible y controlar los pesajes periódicos con cálculo automático de Ganancia Diaria de Peso ($\text{GDP}$).
+3. **Salvaguardar la Inocuidad y Bioseguridad:** Implementar un semáforo sanitario estricto que calcule automáticamente los **Tiempos de Retiro** de fármacos veterinarios, bloqueando la comercialización de leche contaminada y prohibiendo el beneficio en canal de animales medicados.
+4. **Sistematizar el Ciclo Reproductivo:** Registrar celos, servicios y diagnósticos de gestación, emitiendo alertas preventivas de secado y automatizando el alta oficial de las nuevas crías en el censo al momento del parto.
+5. **Calcular la Rentabilidad Operativa:** Registrar los ingresos por despacho de leche y beneficio en canal junto con los egresos cotidianos de la finca, estimando el costo directo real por litro de leche producido ($\text{\$/L}$).
+6. **Asegurar la Disponibilidad en Campo:** Implementar un esquema de almacenamiento local seguro que garantice el uso de la aplicación en áreas rurales sin cobertura de datos móviles o internet.
+
+---
+
+<a id="alcance-proyecto"></a>
+### 1.4. Alcance del Proyecto (Dentro y Fuera de Alcance)
+
+#### 📋 Dentro del Alcance (In Scope)
+* **Gestión de Inventario y Trazabilidad Genealógica:**
+  * Alta de bovinos con identificación única por número de hierro, nombre, raza, sexo y propósito.
+  * Hoja de vida digital individual con histórico productivo, sanitario y genealógico (padre y madre).
+  * Desincorporación de animales por venta o beneficio en canal con **liberación formal del número de hierro** para su reutilización en nuevas crías.
+* **Control de Producción de Doble Propósito:**
+  * Registro de ordeño diario individual y masivo por jornadas (Mañana/Tarde).
+  * Control del volumen disponible en el tanque de leche enfriada y registro de ventas/despachos a centros de acopio.
+  * Registro de pesajes en báscula con cálculo automático de Ganancia Diaria de Peso ($\text{GDP}$ en kg/día) y calificación de desempeño zootécnico.
+* **Gestión Sanitaria y Tiempos de Retiro:**
+  * Registro de vacunaciones oficiales, desparasitaciones y tratamientos antibióticos.
+  * Vademécum básico referencial y cálculo automático de fechas de liberación.
+  * Semáforo de advertencia roja con bloqueo preventivo en ordeño (leche a descarte) y en ventas a matadero.
+* **Gestión Reproductiva y Ciclo de Cría:**
+  * Registro cronológico de celos, servicios (inseminación o monta natural con toro) y palpaciones.
+  * Alertas automáticas de secado (~60 días antes del parto estimado).
+  * Registro de partos con formulario integral que da de alta al nuevo ternero en el censo (hierro, nombre, raza, sexo y peso al nacer).
+* **Módulo Financiero Operativo:**
+  * Libro de caja simplificado con acreditación automática de ventas de leche y ganado en canal.
+  * Registro de egresos operacionales (concentrado, sal, medicamentos, jornales, combustible).
+  * Cálculo en tiempo real de utilidad de caja, margen operativo y costo directo por litro de leche.
+* **Arquitectura Offline-First:**
+  * Persistencia en base de datos local relacional (SQLite) para funcionamiento sin cobertura celular.
+  * Cola de sincronización en segundo plano con control de acceso basado en roles (`Administrador` vs. `Operador`).
+
+#### 🚫 Fuera del Alcance (Out of Scope)
+* **Contabilidad Fiscal y Tributaria Compleja:** No incluye módulos de facturación electrónica bajo normativas de entes tributarios gubernamentales específicos (ej. SENIAT, DIAN, SAT) ni declaraciones de impuestos formales.
+* **Marketplace y Pasarelas de Pago Externas:** No contempla comercio electrónico público abierto a terceros, subastas ganaderas virtuales ni pasarelas de pago bancarias integradas.
+* **Otras Especies o Explotaciones Agropecuarias:** Diseñado exclusivamente para ganado bovino de doble propósito (leche y carne); no está adaptado para porcicultura, avicultura, ovinos ni agricultura de cosechas extensivas.
+* **Hardware Especializado de Automatización:** No incluye integración directa mediante protocolos propietarios con básculas electrónicas industriales, sensores de collares IoT ni ordeñadoras mecánicas automatizadas con telemetría en tiempo real (la captura se realiza mediante teclado táctil optimizado en el dispositivo móvil).
+
+---
+
+<a id="criterios-calidad"></a>
+### 1.5. Atributos de Calidad y Criterios Arquitectónicos
+
+1. **Disponibilidad Continua (Enfoque Offline-First):** La aplicación debe funcionar sin degradación en ausencia de señal de red. Todas las escrituras y lecturas se resuelven contra la base de datos local.
+2. **Rendimiento y Usabilidad Ergonómica en Campo:** Pantallas con contraste optimizado para luz solar intensa, tipografía legible (`Inter`), controles táctiles mínimos de **48 px** e interfaces de captura rápida en menos de tres toques por animal.
+3. **Integridad y Trazabilidad Sanitaria:** La lógica de negocio prioriza la inocuidad alimentaria, impidiendo que animales bajo tratamiento médico descarguen leche al tanque comercial o sean enviados a beneficio en canal.
+4. **Seguridad y Control de Acceso (RBAC):** Separación estricta de perfiles: el rol `Operador` registra datos técnicos de vaquería sin acceso a costos, ingresos o balances de dinero; el rol `Administrador` posee acceso total.
+5. **Escalabilidad del Modelo de Datos:** Estructura modular relacional capaz de soportar el crecimiento del censo desde hatos pequeños (20 cabezas) hasta medianos y grandes productores (más de 1.000 cabezas).
+
+---
+
+[⬆ Volver al Índice](#indice)
 
 ---
 
 <a id="modulo-1-dashboard"></a>
-## 1. Módulo 1: Tablero General (Dashboard) y Arquitectura Base
+## 2. Módulo 1: Tablero General (Dashboard) y Arquitectura Base
 
 ### 🎯 Propósito
 Consolidar el estado productivo, sanitario y financiero de la finca en una sola pantalla de alta visibilidad, permitiendo la captura rápida de datos durante las faenas de campo sin cambiar de vista.
@@ -51,7 +152,7 @@ Consolidar el estado productivo, sanitario y financiero de la finca en una sola 
 ---
 
 <a id="modulo-2-censo-canal"></a>
-## 2. Módulo 2: Censo e Inventario Bovino (`Animal`) y Beneficio en Canal
+## 3. Módulo 2: Censo e Inventario Bovino (`Animal`) y Beneficio en Canal
 
 ### 🎯 Propósito
 Gestionar el padrón oficial de animales de la finca, su genealogía, hoja de vida y el proceso de desincorporación por venta en matadero/canal liberando el número de hierro para nuevas generaciones.
@@ -79,7 +180,7 @@ Gestionar el padrón oficial de animales de la finca, su genealogía, hoja de vi
 ---
 
 <a id="modulo-3-ordeno-tanque"></a>
-## 3. Módulo 3: Control de Ordeño y Gestión del Tanque de Leche (`RegistroOrdeno`)
+## 4. Módulo 3: Control de Ordeño y Gestión del Tanque de Leche (`RegistroOrdeno`)
 
 ### 🎯 Propósito
 Registrar la producción lechera diaria, resguardar la inocuidad alimentaria controlando descartes médicos y gestionar el inventario del tanque de enfriamiento para su despacho comercial.
@@ -106,7 +207,7 @@ Registrar la producción lechera diaria, resguardar la inocuidad alimentaria con
 ---
 
 <a id="modulo-4-pesaje-carne"></a>
-## 4. Módulo 4: Pesajes, Carne y Ganancia Diaria de Peso (`RegistroPesaje`)
+## 5. Módulo 4: Pesajes, Carne y Ganancia Diaria de Peso (`RegistroPesaje`)
 
 ### 🎯 Propósito
 Monitorear el crecimiento ponderal de los lotes de levante y ceba en pastoreo, evaluando la conversión alimenticia y detectando animales estancados.
@@ -129,7 +230,7 @@ Monitorear el crecimiento ponderal de los lotes de levante y ceba en pastoreo, e
 ---
 
 <a id="modulo-5-sanidad-retiros"></a>
-## 5. Módulo 5: Sanidad Animal y Tiempos de Retiro (`EventoSanitario`)
+## 6. Módulo 5: Sanidad Animal y Tiempos de Retiro (`EventoSanitario`)
 
 ### 🎯 Propósito
 Gestionar planes de vacunación, desparasitación y tratamientos con antibióticos, garantizando la inocuidad mediante el bloqueo estricto por **Tiempos de Retiro**.
@@ -150,7 +251,7 @@ Gestionar planes de vacunación, desparasitación y tratamientos con antibiótic
 ---
 
 <a id="modulo-6-reproduccion"></a>
-## 6. Módulo 6: Gestión Reproductiva y Alta Completa de Crías (`EventoReproductivo`)
+## 7. Módulo 6: Gestión Reproductiva y Alta Completa de Crías (`EventoReproductivo`)
 
 ### 🎯 Propósito
 Controlar el ciclo reproductivo de las vacas y novillas, programar fechas de secado oportunas y dar de alta de forma integral a los nuevos terneros nacidos en la finca.
@@ -177,7 +278,7 @@ Controlar el ciclo reproductivo de las vacas y novillas, programar fechas de sec
 ---
 
 <a id="modulo-7-finanzas"></a>
-## 7. Módulo 7: Financiero Operativo y Costos Directos (`TransaccionFinanciera`)
+## 8. Módulo 7: Financiero Operativo y Costos Directos (`TransaccionFinanciera`)
 
 ### 🎯 Propósito
 Proporcionar una radiografía clara del flujo de caja de la finca ganadera, integrando los ingresos automáticos por venta de leche y animales con los egresos operativos.
@@ -200,7 +301,7 @@ Proporcionar una radiografía clara del flujo de caja de la finca ganadera, inte
 ---
 
 <a id="matriz-interconexion"></a>
-## 8. Ciclo de Vida del Número de Hierro y Matriz de Interconexión
+## 9. Ciclo de Vida del Número de Hierro y Matriz de Interconexión
 
 El siguiente flujo resume cómo interactúan los módulos en la operación real de la finca:
 
