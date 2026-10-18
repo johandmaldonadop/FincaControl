@@ -19,6 +19,7 @@ FincaControl **no** es un software tributario ni de facturación fiscal electró
 
 | Tipo | Categoría | Conceptos Habituales |
 | :--- | :--- | :--- |
+<<<<<<< HEAD
 | **Ingreso** | Venta de Leche | Pagos quincenales/mensuales de quesera, receptoría o planta procesadora (a puerta de corral). |
 | **Ingreso** | Venta de Ganado / Canal | Venta por etapa fisiológica: becerros destetados, mautes para levante, novillos/toretes gordos en pie o canal, y vacas o toros de descarte (registrando su `ID_Numero` liberado e `Hierro`). |
 | **Ingreso** | Subproductos | Venta de queso artesanal, cuajada, natilla, suero, estiércol o pasto. |
@@ -26,13 +27,26 @@ FincaControl **no** es un software tributario ni de facturación fiscal electró
 | **Egreso** | Sanidad y Medicamentos | Antibióticos, desparasitantes, vacunas oficiales (Aftosa, Rabia, Brucelosis), pruebas serológicas, vitaminas. |
 | **Egreso** | Mano de Obra Operativa | Jornales de ordeño, vaquería, peones y limpieza de potreros. |
 | **Egreso** | Mantenimiento de Finca | Alambre de púas, cercas eléctricas, grapas, postes, mantenimiento de corrales/romanas y combustible. |
+=======
+| **Ingreso** | Venta de Leche | Pagos quincenales/mensuales de quesera o planta procesadora. |
+| **Ingreso** | Venta de Animales | Venta de novillos gordos, toros de descarte o terneros destetados. |
+| **Ingreso** | Subproductos | Venta de queso artesanal, cuajada, estiércol o pasto. |
+| **Egreso** | Alimentación y Suplementos | Concentrados, melaza, sal mineralizada, urea, silos o heno. |
+| **Egreso** | Sanidad y Medicamentos | Antibióticos, desparasitantes, vacunas, jeringas, vitaminas. |
+| **Egreso** | Mano de Obra Operativa | Jornales de ordeño, vaquería, peones y limpieza de potreros. |
+| **Egreso** | Mantenimiento de Finca | Alambre de púas, grapas, postes, combustible para plantas/tractores. |
+>>>>>>> origin/Jose
 
 ---
 
 ## 2. Indicadores Financieros Clave y Fórmulas
 
 ### Costo Directo por Litro de Leche Producido
+<<<<<<< HEAD
 Permite evaluar si el precio pagado por el centro de acopio o quesera supera el costo operativo:
+=======
+Permite evaluar si el precio pagado por el centro de acopio supera el costo operativo:
+>>>>>>> origin/Jose
 
 $$\text{Costo Unitario por Litro} = \frac{\sum \text{Egresos Atribuidos a Lechería en el Período}}{\text{Total Litros de Leche Producidos en el Período}}$$
 
@@ -51,5 +65,10 @@ $$\text{Margen Operativo (\%)} = \left( \frac{\text{Utilidad Operativa}}{\text{T
 
 ## 4. Checklist de Implementación
 - [ ] Validar que cada transacción financiera esté vinculada al `ID_Usuario` que la registró.
+<<<<<<< HEAD
 - [ ] Al vender un animal en canal, acreditar automáticamente el ingreso detallando el `ID_Numero` del animal, su condición fisiológica y su peso en pie/canal.
 - [ ] Soporte para registrar la unidad de medida y precio unitario (ej. Litros x Precio/Litro o Kg x Precio/Kg).
+=======
+- [ ] Exportación de balances semanales o mensuales en formato CSV o PDF local.
+- [ ] Soporte para registrar la unidad de medida y precio unitario (ej. Litros x Precio/Litro).
+>>>>>>> origin/Jose

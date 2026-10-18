@@ -2,9 +2,14 @@
 name: fincacontrol-offline-sync
 description: >-
   Use this skill when designing or implementing the Offline-First architecture,
+<<<<<<< HEAD
   local SQLite database schemas (including custom breeds catalog, animal ID number vs
   hierro description, physiological conditions, and pregnancy status), sync queue mechanisms,
   delta synchronization, and conflict resolution strategies for FincaControl in rural environments.
+=======
+  local SQLite database schemas, sync queue mechanisms, delta synchronization, and
+  conflict resolution strategies for FincaControl in rural environments.
+>>>>>>> origin/Jose
 ---
 
 # FincaControl - Offline-First & Sincronización
@@ -15,6 +20,7 @@ Esta guía define las mejores prácticas y procedimientos técnicos para garanti
 
 ## 1. Principios de la Arquitectura Offline-First
 
+<<<<<<< HEAD
 1. **Persistencia Local Primero:** Cualquier operación de creación, actualización o eliminación (CRUD) —incluyendo el alta de animales, eventos y la creación de **nuevas razas personalizadas** en el catálogo— se escribe y confirma inmediatamente en la base de datos local SQLite / almacenamiento local.
 2. **Latencia Cero en Campo:** La interfaz de usuario no debe bloquearse esperando respuestas de red.
 3. **Separación de Claves e Identificadores:**
@@ -59,6 +65,22 @@ CREATE TABLE animales (
 CREATE TABLE sync_queue (
     id TEXT PRIMARY KEY,               -- UUID de la operación en cola
     entity_name TEXT NOT NULL,         -- 'Animal', 'CatalogoRaza', 'RegistroOrdeno', 'EventoSanitario', etc.
+=======
+1. **Persistencia Local Primero:** Cualquier operación de creación, actualización o eliminación (CRUD) se escribe y confirma inmediatamente en la base de datos local SQLite/Room.
+2. **Latencia Cero en Campo:** La interfaz de usuario no debe bloquearse esperando respuestas de red.
+3. **Identificadores Únicos Universales (UUID):** Todas las claves primarias deben ser UUID v4 generadas en el dispositivo móvil, nunca enteros autoincrementales centralizados, para evitar colisiones entre dispositivos.
+
+---
+
+## 2. Estructura de la Cola de Sincronización (`sync_queue`)
+
+Cada mutación local debe registrar una entrada en la tabla interna de sincronización:
+
+```sql
+CREATE TABLE sync_queue (
+    id TEXT PRIMARY KEY,               -- UUID de la operación en cola
+    entity_name TEXT NOT NULL,         -- 'Animal', 'RegistroOrdeno', 'EventoSanitario', etc.
+>>>>>>> origin/Jose
     entity_id TEXT NOT NULL,           -- UUID del registro afectado
     operation_type TEXT NOT NULL,      -- 'INSERT', 'UPDATE', 'DELETE'
     payload_json TEXT NOT NULL,        -- Datos serializados de la entidad
@@ -98,17 +120,29 @@ sequenceDiagram
 ## 4. Estrategia de Resolución de Conflictos
 
 1. **Última Escritura Gana (Last-Write-Wins - LWW):** Basado en el campo `updated_at` (UTC) del registro.
+<<<<<<< HEAD
 2. **Catálogo de Razas (`CatalogoRaza`):** Unión aditiva sin pérdida (*Set Union* por nombre normalizado de raza), permitiendo que las razas registradas offline en cualquier dispositivo se integren al catálogo general de la finca.
 3. **Eventos Inmutables (Append-Only):**
    * Los pesajes (`RegistroPesaje`) y los ordeños (`RegistroOrdeno`) son registros históricos inmutables.
 4. **Control de Errores y Reintentos:**
+=======
+2. **Eventos Inmutables (Append-Only):**
+   * Los pesajes (`RegistroPesaje`) y los ordeños (`RegistroOrdeno`) son registros históricos inmutables. Nunca generan conflicto de edición: si existen dos registros con la misma fecha y jornada, se valida a nivel de negocio si es un duplicado accidental.
+3. **Control de Errores y Reintentos:**
+>>>>>>> origin/Jose
    * Backoff exponencial: 1s, 2s, 4s, 8s hasta un máximo de 5 reintentos antes de alertar al usuario.
 
 ---
 
 ## 5. Checklist de Verificación para el Desarrollador
+<<<<<<< HEAD
 - [ ] ¿Todas las entidades utilizan UUID v4 como llave primaria de sincronización?
 - [ ] ¿Se distingue claramente `id_numero` (identificador individual y clave de genealogía) de `hierro` (descripción de propiedad/procedencia)?
 - [ ] ¿Las nuevas razas registradas por el usuario se persisten localmente para futuros registros offline?
 - [ ] ¿Las consultas críticas tienen índices creados sobre `id_numero`, `condicion_fisiologica` y `hierro`?
+=======
+- [ ] ¿Todas las entidades utilizan UUID v4 como llave primaria?
+- [ ] ¿Los formularios responden inmediatamente al pulsar guardar en modo avión?
+- [ ] ¿Las consultas críticas (búsqueda por ID de hierro) tienen índices creados en SQLite?
+>>>>>>> origin/Jose
 - [ ] ¿Se maneja la encriptación de datos sensibles en el dispositivo (SQLCipher / Keystore)?
