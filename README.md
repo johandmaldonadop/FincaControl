@@ -21,9 +21,15 @@ Ofrecemos una **aplicación móvil con enfoque Offline-First** que cuenta con un
 ## 🎯 Características Principales (Alcance)
 
 ### Dentro del Alcance 📋
+<<<<<<< HEAD
+* **Gestión de Inventario, Condiciones Fisiológicas y Genealogía:** Registro detallado de animales separando el **Número Identificador** individual de la marca descriptiva del **Hierro** (propietario y procedencia), catálogo extensible de **razas** (predeterminadas y personalizadas), clasificación por **condiciones fisiológicas** (*Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida, Vaca escotera, Vaca seca*), estado de **preñez** e historial genealógico referenciado por el número identificador.
+* **Control de Producción:** Módulos específicos para el registro diario de ordeño (con gestión de tanque de leche) y pesajes periódicos con cálculo de GDP.
+* **Gestión Sanitaria y Reproductiva:** Calendarios de vacunación, seguimiento de servicios, gestaciones, secados, partos (con alta automática de crías) y tiempos de retiro de medicamentos.
+=======
 * **Gestión de Inventario y Genealogía:** Registro detallado de animales e historial genealógico.
 * **Control de Producción:** Módulos específicos para el registro diario de ordeño y pesajes.
 * **Gestión Sanitaria y Reproductiva:** Calendarios de vacunación, seguimiento de servicios, gestaciones, partos y tiempos de retiro de medicamentos.
+>>>>>>> origin/Jose
 * **Módulo Financiero Operativo:** Gestión de ingresos, egresos y cálculo de costos directos de producción de leche y carne.
 * **Capacidad Offline:** Almacenamiento local de datos para garantizar la operatividad continua en zonas rurales sin cobertura.
 
@@ -78,3 +84,18 @@ Asegúrate de tener instalado lo siguiente en tu entorno de desarrollo:
    ```bash
    [comando_para_ejecutar]
    ```
+<<<<<<< HEAD
+
+---
+
+## 📘 Guía de Usuario Orientada a Procesos y Verificación del Prototipo
+El proyecto incluye la **[Guía de Usuario Paso a Paso (`GUIA_DE_USUARIO.md`)](./GUIA_DE_USUARIO.md)** diseñada tanto para el cliente/productor como para los agentes de verificación sobre el **[Prototipo Interactivo (`agentes/prototipo/index.html`)](./agentes/prototipo/index.html)**:
+
+0. **Esquema de Procesos Soportados por el Sistema:** Mapa arquitectónico y flujo secuencial de extremo a extremo mostrado antes de cualquier funcionalidad.
+1. **(1) Configuración del Sistema:** Identidad de la finca, descripción del *Hierro* oficial por defecto, catálogo extensible de razas, parámetros comerciales/zootécnicos, roles RBAC y motor *Offline-First*.
+2. **(2) Carga Inicial del Inventario de Animales:** Registro separando `N° Identificador` único vs. `Hierro` descriptivo (propietario/procedencia), selección o alta de razas personalizadas, clasificación por condiciones fisiológicas venezolanas (*Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida, Vaca escotera, Vaca seca*), estado `¿Está Preñada?` y genealogía por `N° Identificador`.
+3. **(3) Proceso de Producción de Carne:** Pesajes periódicos en báscula, cálculo automático de Ganancia Diaria de Peso (`GDP`), control de tiempos de retiro en carne, liquidación/beneficio en canal, liberación del `N° Identificador` y asiento financiero automático.
+4. **(4) Proceso de Producción de Leche:** Ciclo reproductivo y parto (con alta automática de cría vinculada al `N° Identificador` de la madre y transición a *Vaca parida*), ordeño diario (Mañana/Tarde) con bloqueo por retiro sanitario en leche, gestión de inventario en tanque de enfriamiento, despacho comercial y cálculo de costo directo por litro.
+
+=======
+>>>>>>> origin/Jose

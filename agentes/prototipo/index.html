@@ -92,7 +92,7 @@
        ESTRUCTURA Y CONTENEDOR PRINCIPAL
        ========================================================================== */
     .app-shell {
-      max-width: 1180px;
+      max-width: 1220px;
       margin: 0 auto;
       min-height: 100vh;
       display: flex;
@@ -252,6 +252,8 @@
       justify-content: space-between;
       align-items: baseline;
       margin-bottom: -2px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .section-title {
@@ -356,7 +358,7 @@
       background-color: var(--bg-surface);
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 16px;
       box-shadow: var(--shadow-sm);
     }
 
@@ -431,6 +433,7 @@
       color: var(--text-main);
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     .input-hint {
@@ -439,13 +442,28 @@
       color: var(--color-primary);
     }
 
+    .link-inline-action {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--color-primary);
+      background: var(--color-primary-subtle);
+      border: 1px solid var(--color-primary-border);
+      padding: 1px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .link-inline-action:hover {
+      background: #DCFCE7;
+    }
+
     /* ESTILOS RESALTADOS DE INPUTS */
     .highlight-input {
       width: 100%;
       height: 48px;
       padding: 10px 14px;
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 500;
       color: var(--text-main);
       background-color: var(--input-bg);
@@ -459,6 +477,13 @@
       border-color: var(--input-focus-border);
       background-color: var(--input-active-fill);
       box-shadow: var(--shadow-highlight);
+    }
+
+    .highlight-input:disabled {
+      background-color: #F1F5F9;
+      color: #64748B;
+      border-color: #CBD5E1;
+      cursor: not-allowed;
     }
 
     textarea.highlight-input {
@@ -587,13 +612,13 @@
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border-subtle);
       white-space: nowrap;
     }
 
     .clean-table td {
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border-subtle);
       color: var(--text-main);
       vertical-align: middle;
@@ -616,6 +641,17 @@
       gap: 6px;
     }
 
+    .hierro-tag {
+      display: inline-block;
+      background-color: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      color: #334155;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
     /* Badges de Estado */
     .badge-status {
       display: inline-block;
@@ -626,7 +662,7 @@
       letter-spacing: 0.2px;
     }
 
-    .badge-status.normal { background-color: #F1F5F9; color: var(--text-muted); }
+    .badge-status.normal { background-color: #F1F5F9; color: var(--text-muted); border: 1px solid #E2E8F0; }
     .badge-status.success { background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
     .badge-status.warning { background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
     .badge-status.danger { background-color: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
@@ -697,7 +733,7 @@
     .modal-card {
       background-color: #FFFFFF;
       border-radius: var(--radius-lg);
-      max-width: 640px;
+      max-width: 680px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
@@ -735,7 +771,9 @@
     .subnav-tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
     }
     .subnav-btn {
       background-color: var(--bg-subtle);
@@ -751,6 +789,122 @@
       background-color: var(--color-primary);
       color: #FFFFFF;
       border-color: var(--color-primary);
+    }
+
+    /* Guía de Etapas Fisiológicas */
+    .etapas-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 768px) {
+      .etapas-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .etapa-box {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-size: 12.5px;
+    }
+    .etapa-box strong {
+      color: var(--color-primary);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    /* Esquema de Procesos Soportados por el Sistema */
+    .process-schema-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 900px) {
+      .process-schema-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .process-card {
+      background-color: var(--bg-surface);
+      border: 1.5px solid var(--border-medium);
+      border-top: 4px solid var(--color-primary);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .process-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .process-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .process-flow-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 6px;
+    }
+    .process-flow-steps li {
+      font-size: 13px;
+      color: var(--text-muted);
+      background-color: var(--bg-subtle);
+      border-left: 3px solid var(--color-primary);
+      padding: 7px 10px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .flow-diagram-banner {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .flow-node {
+      flex: 1;
+      min-width: 175px;
+      background-color: #FAFAF9;
+      border: 1.5px solid var(--color-primary-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+    .flow-node:hover {
+      background-color: var(--color-primary-subtle);
+    }
+    .flow-arrow {
+      font-weight: 700;
+      color: var(--color-primary);
+      font-size: 18px;
     }
 
     /* Notificación Toast */
@@ -787,14 +941,14 @@
         <span class="brand-badge">FC</span>
         <div>
           <h1 class="brand-title">FincaControl</h1>
-          <p class="brand-subtitle">Hda. La Esperanza • Doble Propósito</p>
+          <p class="brand-subtitle" id="header-finca-subtitle">Hda. La Esperanza (Hierro: Hda. La Esperanza - Iniciales HE) • Doble Propósito</p>
         </div>
       </div>
       
       <div class="top-actions">
         <div class="status-pill" title="Datos guardados en SQLite local">
           <span class="status-dot"></span>
-          <span>Offline-First (Local)</span>
+          <span id="header-sync-status">Offline-First (Local SQLite)</span>
         </div>
         <div class="role-badge" id="role-indicator" onclick="toggleRole()" title="Haz clic para alternar rol">
           Rol: Administrador
@@ -802,45 +956,352 @@
       </div>
     </header>
 
-    <!-- PESTAÑAS DE NAVEGACIÓN MODULAR COMPLETA -->
-    <nav class="nav-tabs" aria-label="Navegación por Módulos">
-      <button class="nav-tab-btn active" onclick="switchTab('dashboard')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h7v9H3V3zm11 0h7v5h-7V3zm0 9h7v9h-7v-9zM3 16h7v5H3v-5z"/></svg>
-        Dashboard
+    <!-- PESTAÑAS DE NAVEGACIÓN ORIENTADA A PROCESOS (ORDEN LÓGICO DE LA GUÍA DE USUARIO) -->
+    <nav class="nav-tabs" aria-label="Navegación por Procesos y Módulos">
+      <button class="nav-tab-btn active" onclick="switchTab('procesos', event)">
+        🗺️ Esquema de Procesos
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('censo')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        Censo Rebaño
+      <button class="nav-tab-btn" onclick="switchTab('configuracion', event)">
+        ⚙️ 1. Configuración
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('ordeno')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 3v6a6 6 0 0012 0V3M12 15v6m-4 0h8"/></svg>
-        Ordeño & Tanque
+      <button class="nav-tab-btn" onclick="switchTab('censo', event)">
+        🐄 2. Inventario (Censo)
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('pesaje')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        Pesajes & Carne
+      <button class="nav-tab-btn" onclick="switchTab('pesaje', event)">
+        ⚖️ 3. Producción Carne
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('sanidad')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
-        Sanidad & Retiro
+      <button class="nav-tab-btn" onclick="switchTab('ordeno', event)">
+        🥛 4. Producción Leche
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('reproduccion')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21a9 9 0 100-18 9 9 0 000 18z"/><path d="M12 7v10M8 12h8"/></svg>
-        Reproducción
+      <button class="nav-tab-btn" onclick="switchTab('sanidad', event)">
+        🩺 Sanidad & Retiro
       </button>
-      <button class="nav-tab-btn" onclick="switchTab('finanzas')">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-        Financiero Operativo
+      <button class="nav-tab-btn" onclick="switchTab('reproduccion', event)">
+        🧬 Reproducción
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('finanzas', event)">
+        💰 Financiero
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('dashboard', event)">
+        📊 Dashboard
       </button>
     </nav>
 
     <!-- CUERPO PRINCIPAL -->
     <main class="main-content">
-      
+
       <!-- ======================================================================
-           1. MÓDULO: DASHBOARD PRINCIPAL
+           0. ESQUEMA DE PROCESOS SOPORTADOS POR EL SISTEMA (VISTA INICIAL)
            ====================================================================== -->
-      <section id="view-dashboard" class="module-view active">
+      <section id="view-procesos" class="module-view active">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">0. Esquema General de Procesos Soportados por FincaControl</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+              Arquitectura de procesos de negocio desde la instalación y configuración inicial hasta la producción comercial de carne y leche bajo operación <strong>Offline-First</strong>.
+            </p>
+          </div>
+          <span class="badge-status success">Guía de Usuario & Verificación Activa</span>
+        </div>
+
+        <!-- Diagrama Secuencial Interactivo del Flujo Lógico -->
+        <div class="flow-diagram-banner">
+          <div class="flow-node" onclick="switchTab('configuracion')">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 1 • Parametrización</div>
+            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">⚙️ 1. Configuración del Sistema</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Hierro oficial de la finca, catálogo de razas, precios, tanque y roles RBAC.</div>
+          </div>
+          <span class="flow-arrow">➔</span>
+          <div class="flow-node" onclick="switchTab('censo')">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 2 • Censo Fundacional</div>
+            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">🐄 2. Carga Inicial de Inventario</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">N° Identificador único vs. Hierro, raza, etapa fisiológica, preñez y madre por N° ID.</div>
+          </div>
+          <span class="flow-arrow">➔</span>
+          <div class="flow-node" onclick="switchTab('pesaje')">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 3 • Línea Cárnica</div>
+            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">⚖️ 3. Proceso Producción Carne</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Pesaje en báscula, cálculo GDP, control de retiro en carne y beneficio en canal.</div>
+          </div>
+          <span class="flow-arrow">➔</span>
+          <div class="flow-node" onclick="switchTab('ordeno')">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 4 • Línea Láctea</div>
+            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">🥛 4. Proceso Producción Leche</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Parto y lactancia, ordeño diario, bloqueo por retiro, tanque y venta comercial.</div>
+          </div>
+        </div>
+
+        <!-- Detalle de los 4 Procesos Principales -->
+        <div class="process-schema-grid">
+          
+          <!-- Proceso 1 -->
+          <div class="process-card">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="process-step-num">Proceso 1</span>
+                <span class="badge-status info">Puesta en Marcha</span>
+              </div>
+              <h3 style="font-size: 16px; font-weight: 700;">1. Configuración del Sistema</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+                Define los parámetros maestros de la unidad de producción antes de cargar el rebaño.
+              </p>
+              <ul class="process-flow-steps">
+                <li><strong>1.1 Identidad y Hierro Oficial:</strong> Registra el nombre del hato y la descripción del <em>Hierro</em> propio (iniciales o figura), el cual se pre-carga por defecto en altas y partos.</li>
+                <li><strong>1.2 Catálogo Extensible de Razas:</strong> Carga razas predeterminadas y permite registrar nuevas razas/cruces personalizados de forma persistente.</li>
+                <li><strong>1.3 Parámetros Comerciales y Roles:</strong> Configura capacidad del tanque, precios de referencia ($/L leche, $/Kg carne), meta de GDP y control de acceso (Administrador / Operador).</li>
+              </ul>
+            </div>
+            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('configuracion')">
+              Ir al Proceso 1: Configuración del Sistema ➔
+            </button>
+          </div>
+
+          <!-- Proceso 2 -->
+          <div class="process-card">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="process-step-num">Proceso 2</span>
+                <span class="badge-status success">Trazabilidad Venezolana</span>
+              </div>
+              <h3 style="font-size: 16px; font-weight: 700;">2. Carga Inicial del Inventario de Animales</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+                Registro individual del rebaño separando identificación numérica, marca de propiedad y estado biológico.
+              </p>
+              <ul class="process-flow-steps">
+                <li><strong>2.1 N° Identificador vs. Hierro:</strong> El <strong>N° Identificador</strong> individualiza al animal (único en censo activo), mientras el <strong>Hierro</strong> describe propietario/procedencia (compartido por varios animales).</li>
+                <li><strong>2.2 Condición Fisiológica y Preñez:</strong> Clasifica en <em>Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida (primípara/multípara), Vaca escotera o Vaca seca</em>. Valida <code>¿Está Preñada?</code> solo en hembras aptas (bloqueado en machos y crías).</li>
+                <li><strong>2.3 Genealogía por N° Identificador:</strong> Vincula Madre y Padre mediante el <strong>N° Identificador</strong> del ejemplar (nunca por el hierro).</li>
+              </ul>
+            </div>
+            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('censo')">
+              Ir al Proceso 2: Inventario de Animales (Censo) ➔
+            </button>
+          </div>
+
+          <!-- Proceso 3 -->
+          <div class="process-card">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="process-step-num">Proceso 3</span>
+                <span class="badge-status warning">Levante, Ceba y Canal</span>
+              </div>
+              <h3 style="font-size: 16px; font-weight: 700;">3. Registro de Datos del Proceso de Producción de Carne</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+                Controla el desarrollo ponderal desde el destete hasta la liquidación en frigorífico o matadero.
+              </p>
+              <ul class="process-flow-steps">
+                <li><strong>3.1 Pesajes Periódicos y GDP:</strong> Registra el peso vivo en báscula por <code>N° Identificador</code> y calcula automáticamente la Ganancia Diaria de Peso (<strong>GDP</strong> en kg/día).</li>
+                <li><strong>3.2 Inocuidad Cárnica (Tiempo de Retiro):</strong> Verifica que el animal no tenga tratamientos veterinarios con retiro de carne vigente antes de autorizar su salida.</li>
+                <li><strong>3.3 Beneficio en Canal y Liberación de N° ID:</strong> Calcula el ingreso total en caja, desincorpora al ejemplar y <strong>libera su N° Identificador</strong> para futuras crías.</li>
+              </ul>
+            </div>
+            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('pesaje')">
+              Ir al Proceso 3: Producción de Carne y Pesajes ➔
+            </button>
+          </div>
+
+          <!-- Proceso 4 -->
+          <div class="process-card">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="process-step-num">Proceso 4</span>
+                <span class="badge-status info">Ordeño, Tanque y Costos</span>
+              </div>
+              <h3 style="font-size: 16px; font-weight: 700;">4. Registro de Datos del Proceso de Producción de Leche</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+                Integra reproducción, lactancia, control de inocuidad en vaquera, inventario en tanque y despacho comercial.
+              </p>
+              <ul class="process-flow-steps">
+                <li><strong>4.1 Ciclo Reproductivo y Parto:</strong> El registro de parto incorpora automáticamente al becerro/a (con su propio <code>N° Identificador</code> y madre vinculada por <code>N° ID</code>) y pasa a la madre a <strong>Vaca parida</strong>.</li>
+                <li><strong>4.2 Ordeño Diario e Inocuidad:</strong> Registra litros en jornada Mañana/Tarde. Si la vaca tiene retiro sanitario en leche, desvía los litros a <strong>Descarte</strong> sin contaminar el tanque.</li>
+                <li><strong>4.3 Tanque, Venta y Costo por Litro:</strong> Acumula leche apta en tanque, registra despachos comerciales generando ingresos en caja y calcula el costo directo por litro.</li>
+              </ul>
+            </div>
+            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('ordeno')">
+              Ir al Proceso 4: Producción de Leche y Tanque ➔
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Matriz Rápida de Procesos Transversales de Soporte -->
+        <div class="form-panel-plain" style="background-color: #FAFAF9;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <span class="panel-badge" style="margin-bottom: 4px;">🔄 Procesos Transversales Integrados</span>
+              <h3 style="font-size: 15px; font-weight: 700;">Módulos de Soporte Sanitario, Reproductivo y Financiero</h3>
+              <p style="font-size: 12.5px; color: var(--text-muted);">Estos módulos interactúan en tiempo real con los procesos de Carne (Proceso 3) y Leche (Proceso 4).</p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('sanidad')">🩺 Sanidad y Tiempos de Retiro</button>
+              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('reproduccion')">🧬 Reproducción y Partos</button>
+              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('finanzas')">💰 Flujo de Caja y Costos</button>
+              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('dashboard')">📊 Dashboard Operativo</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ======================================================================
+           1. MÓDULO (PROCESO 1): CONFIGURACIÓN DEL SISTEMA
+           ====================================================================== -->
+      <section id="view-configuracion" class="module-view">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Proceso 1: Configuración Inicial y Puesta en Producción del Sistema</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+              Parametrización de la unidad de producción, marca de <strong>Hierro oficial</strong> por defecto, catálogo extensible de razas, parámetros zootécnicos/comerciales y base de datos local <strong>Offline-First</strong>.
+            </p>
+          </div>
+          <span class="badge-status success">Paso 1 de 4</span>
+        </div>
+
+        <!-- Formulario Principal de Configuración de la Unidad de Producción -->
+        <div class="form-panel">
+          <span class="panel-badge">⚙️ 1.1 Identidad del Hato, Hierro Oficial y Parámetros Productivos</span>
+          <h3 class="panel-title">Parámetros Generales de la Finca</h3>
+          <p class="panel-desc">
+            Configura los datos maestros de la finca. El <strong>Hierro Oficial</strong> configurado aquí se asignará por defecto al registrar nuevos animales o partos, y los precios referenciales se usarán en las liquidaciones de leche y carne.
+          </p>
+
+          <form onsubmit="handleGuardarConfiguracion(event)">
+            <div class="form-grid-4">
+              
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-nombre-finca">
+                  <span>Nombre de la Finca / Hato *</span>
+                </label>
+                <input type="text" id="cfg-in-nombre-finca" class="highlight-input" value="Hda. La Esperanza" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-hierro-finca">
+                  <span>Hierro Oficial Predeterminado *</span>
+                  <span class="input-hint">Iniciales o Figura</span>
+                </label>
+                <input type="text" id="cfg-in-hierro-finca" class="highlight-input" value="Hda. La Esperanza (Iniciales HE)" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-proposito-finca">Propósito del Hato *</label>
+                <select id="cfg-in-proposito-finca" class="highlight-input">
+                  <option value="Doble Propósito">Doble Propósito (Leche y Carne)</option>
+                  <option value="Lechería Especializada">Lechería Especializada</option>
+                  <option value="Cría y Ceba (Carne)">Cría y Ceba (Carne)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-ubicacion">Ubicación / Municipio *</label>
+                <input type="text" id="cfg-in-ubicacion" class="highlight-input" value="Rosario de Perijá, Edo. Zulia" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-capacidad-tanque">
+                  <span>Capacidad Tanque Leche (L) *</span>
+                  <span class="input-hint">Enfriamiento</span>
+                </label>
+                <input type="number" step="50" min="100" max="50000" id="cfg-in-capacidad-tanque" class="highlight-input" value="2000" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-precio-leche">
+                  <span>Precio Ref. Leche ($ / L) *</span>
+                  <span class="input-hint">Puerta de corral</span>
+                </label>
+                <input type="number" step="0.01" min="0.05" max="5" id="cfg-in-precio-leche" class="highlight-input" value="0.45" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-precio-carne">
+                  <span>Precio Ref. Carne Pie ($ / Kg) *</span>
+                  <span class="input-hint">Venta canal/pie</span>
+                </label>
+                <input type="number" step="0.05" min="0.5" max="10" id="cfg-in-precio-carne" class="highlight-input" value="1.85" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="cfg-in-meta-gdp">
+                  <span>Meta GDP Ceba (kg/día) *</span>
+                  <span class="input-hint">Ganancia diaria</span>
+                </label>
+                <input type="number" step="0.05" min="0.2" max="2.5" id="cfg-in-meta-gdp" class="highlight-input" value="0.70" required>
+              </div>
+
+            </div>
+
+            <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <span style="font-size: 12.5px; color: var(--text-muted);">
+                💾 Los cambios actualizan inmediatamente el encabezado del sistema, los formularios de alta y los precios predeterminados de liquidación.
+              </span>
+              <div style="display: flex; gap: 10px;">
+                <button type="submit" class="btn-submit">
+                  Guardar Configuración del Sistema
+                </button>
+                <button type="button" class="btn-secondary" onclick="switchTab('censo')">
+                  Siguiente Paso: 2. Carga de Inventario ➔
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Configuración del Catálogo Extensible de Razas y Motor Offline-First -->
+        <div class="process-schema-grid">
+          
+          <!-- Catálogo de Razas -->
+          <div class="form-panel-plain">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="panel-badge" style="margin-bottom: 0;">🧬 1.2 Catálogo Maestro de Razas Bovinas</span>
+              <button class="btn-secondary" style="height: 32px; font-size: 12px; padding: 0 10px;" onclick="abrirModalNuevaRaza()">
+                + Agregar Nueva Raza
+              </button>
+            </div>
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Razas Disponibles en el Sistema</h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px;">
+              Además de las razas predeterminadas, cualquier raza que registres aquí o durante la carga de animales queda guardada permanentemente en el almacenamiento local.
+            </p>
+            <div id="cfg-chips-razas" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: var(--bg-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <!-- Renderizado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Estado Offline-First y Roles RBAC -->
+          <div class="form-panel-plain">
+            <span class="panel-badge" style="margin-bottom: 8px;">📡 1.3 Motor Offline-First y Seguridad por Roles (RBAC)</span>
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Estado de Almacenamiento Local y Permisos</h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px;">
+              El sistema opera 100% sin conexión a internet guardando las transacciones en SQLite/LocalStorage y encolando deltas de sincronización.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between;">
+                <span><strong>Motor Base de Datos Local:</strong></span>
+                <span class="badge-status success">Activo (0 ms latencia en campo)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span><strong>Rol Activo en Sesión:</strong></span>
+                <button type="button" class="btn-secondary" style="height: 30px; font-size: 12px; padding: 0 10px;" onclick="toggleRole()">
+                  Alternar Rol (<span id="cfg-rol-actual">Administrador</span>)
+                </button>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                <span><strong>Cola de Sincronización Delta:</strong></span>
+                <button type="button" class="btn-secondary" style="height: 30px; font-size: 12px; padding: 0 10px;" onclick="showToast('✅ Sincronización Delta completada con éxito. 0 conflictos detectados.')">
+                  🔄 Simular Sincronización con Nube
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ======================================================================
+           MÓDULO: DASHBOARD PRINCIPAL
+           ====================================================================== -->
+      <section id="view-dashboard" class="module-view">
         
         <!-- Indicadores Resumen -->
         <div>
@@ -864,8 +1325,8 @@
 
             <div class="metric-card">
               <span class="metric-label">🐄 Rebaño Activo</span>
-              <span class="metric-value" id="kpi-dash-censo">6 reses</span>
-              <span class="metric-meta" id="kpi-dash-desincorporados">0 canal / vendidas</span>
+              <span class="metric-value" id="kpi-dash-censo">7 reses</span>
+              <span class="metric-meta" id="kpi-dash-desincorporados">2 preñadas • 0 en canal</span>
             </div>
 
             <div class="metric-card danger">
@@ -886,21 +1347,21 @@
         <div class="form-panel">
           <span class="panel-badge">⚡ Captura Rápida en Vaquera</span>
           <h2 class="panel-title">Registro Directo de Ordeño</h2>
-          <p class="panel-desc">Ingresa el ID del animal y la medición para sumar automáticamente al tanque de leche disponible.</p>
+          <p class="panel-desc">Ingresa el <strong>N° Identificador</strong> de la vaca parida y los litros medidos para sumar automáticamente al tanque de leche disponible.</p>
 
           <form id="dash-quick-form" onsubmit="handleDashQuickMilk(event)">
             <div class="form-grid-4">
               
               <div class="input-group">
-                <label class="input-label" for="dash-in-hierro">
-                  <span>N° Hierro / Arete *</span>
+                <label class="input-label" for="dash-in-numero">
+                  <span>N° Identificador Animal *</span>
                   <span class="input-hint">Ej: 104, 042</span>
                 </label>
                 <input 
                   type="text" 
-                  id="dash-in-hierro" 
+                  id="dash-in-numero" 
                   class="highlight-input" 
-                  placeholder="ID de la res..." 
+                  placeholder="N° Identificador de la vaca..." 
                   required 
                   autocomplete="off"
                   oninput="checkRetiroInForm(this.value, 'dash-warning')"
@@ -976,11 +1437,11 @@
                 <div class="alert-header">
                   <div>
                     <span class="alert-badge">Secado Programado (~60 días)</span>
-                    <h3 class="alert-title">Vaca #078 (Rubia) • Preñez Confirmada</h3>
+                    <h3 class="alert-title">Vaca #078 (Rubia) • Vaca Seca (Preñada)</h3>
                   </div>
-                  <span class="alert-time">En 5 días</span>
+                  <span class="alert-time">Último tercio</span>
                 </div>
-                <p class="alert-desc">Gestación estimada en 222 días. Suspender ordeño para permitir descanso de ubre y desarrollo fetal.</p>
+                <p class="alert-desc">Gestación en último tercio antes del parto. Descanso de ubre activo.</p>
               </div>
             </div>
           </div>
@@ -996,7 +1457,7 @@
             <table class="clean-table">
               <thead>
                 <tr>
-                  <th>Hierro / Alias</th>
+                  <th>N° Identificador / Alias</th>
                   <th>Jornada</th>
                   <th>Volumen</th>
                   <th>Condición</th>
@@ -1020,39 +1481,109 @@
         
         <div class="section-header">
           <div>
-            <h2 class="section-title">Inventario Bovino y Genealogía</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Censo digital de animales activos, desincorporaciones y venta en canal.</p>
+            <h2 class="section-title">Inventario Bovino, Condiciones Fisiológicas y Genealogía</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Identificación por <strong>N° Identificador</strong> individual, marca descriptiva de <strong>Hierro</strong> (propietario/procedencia), catálogo extensible de razas y clasificación por etapa fisiológica y preñez.</p>
           </div>
-          <button class="btn-submit" onclick="toggleElement('form-nuevo-animal')" style="height: 38px; padding: 0 14px;">
-            + Nuevo Animal Manual
-          </button>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn-secondary" onclick="toggleElement('guia-etapas-fisiologicas')" style="height: 38px; padding: 0 12px; font-size: 12.5px;">
+              📖 Clasificación Fisiológica (VZLA)
+            </button>
+            <button class="btn-secondary" onclick="abrirModalNuevaRaza()" style="height: 38px; padding: 0 12px; font-size: 12.5px;">
+              + Registrar Nueva Raza
+            </button>
+            <button class="btn-submit" onclick="toggleElement('form-nuevo-animal')" style="height: 38px; padding: 0 14px;">
+              + Nuevo Animal Manual
+            </button>
+          </div>
         </div>
 
-        <!-- Sub-navegación entre Rebaño Activo y Beneficiados en Canal -->
+        <!-- Panel Desplegable: Guía de Etapas y Clasificación del Ganado Bovino en Venezuela -->
+        <div id="guia-etapas-fisiologicas" class="form-panel-plain" style="display: none; background-color: #FAFAF9;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="panel-badge" style="margin-bottom: 0;">🐄 Etapas y Clasificación del Ganado Bovino (Estándar Venezolano)</span>
+            <button onclick="toggleElement('guia-etapas-fisiologicas')" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-dim);">&times;</button>
+          </div>
+          <div class="etapas-grid">
+            <div class="etapa-box">
+              <strong>1. Becerro / Becerra</strong>
+              Desde el nacimiento hasta el destete (~4 a 10 meses de edad), con peso entre <strong>150 kg y 200 kg</strong>. Dependen inicialmente de leche materna y calostro, transitando a pastos y concentrados.
+            </div>
+            <div class="etapa-box">
+              <strong>2. Maute / Mauta</strong>
+              Animales jóvenes desde los 10 hasta los 18 meses de edad, alcanzando ~<strong>350 kg</strong>. Fase de levante o crecimiento intermedio tras el destete.
+            </div>
+            <div class="etapa-box">
+              <strong>3. Novillo / Novilla</strong>
+              Desde los 18 meses hasta alcanzar el peso mínimo para venta, engorde final o reproducción (~<strong>400 kg o más</strong>). En hembras para reproducción se denominan <em>novillas de vientre</em>.
+            </div>
+            <div class="etapa-box">
+              <strong>4. Toro / Toro Reproductor</strong>
+              Macho adulto destinado a la monta o reproducción, incorporado a partir de los 30 meses de vida con pesos <strong>superiores a 425 kg</strong>. (No aplica estado de preñez).
+            </div>
+            <div class="etapa-box" style="grid-column: span 2;">
+              <strong>5. Vaca (Hembra en etapa adulta)</strong>
+              Según su estado productivo y reproductivo en el hato venezolano se clasifica en:
+              <br>• <strong>Vaca parida:</strong> Ha tenido su cría y produce leche (<em>primípara</em> si es su 1er parto, o <em>multípara</em> si acumula varios).
+              <br>• <strong>Vaca escotera:</strong> Vaca que se encuentra <strong>preñada</strong> pero no está produciendo leche en ese momento.
+              <br>• <strong>Vaca seca:</strong> Ha finalizado su periodo de lactancia y se encuentra en el último tercio de gestación (<strong>preñada</strong>) antes del siguiente parto.
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-navegación y Filtros de Etapa Fisiológica / Preñez -->
         <div class="subnav-tabs">
-          <button class="subnav-btn active" id="btn-subnav-activos" onclick="switchSubnavCenso('activos')">
-            🐄 Rebaño Activo (<span id="count-censo-activos">6</span>)
-          </button>
-          <button class="subnav-btn" id="btn-subnav-canal" onclick="switchSubnavCenso('canal')">
-            🥩 Historial Canal & Ventas (<span id="count-censo-canal">0</span>)
-          </button>
+          <div style="display: flex; gap: 8px;">
+            <button class="subnav-btn active" id="btn-subnav-activos" onclick="switchSubnavCenso('activos')">
+              🐄 Rebaño Activo (<span id="count-censo-activos">7</span>)
+            </button>
+            <button class="subnav-btn" id="btn-subnav-canal" onclick="switchSubnavCenso('canal')">
+              🥩 Historial Canal & Ventas (<span id="count-censo-canal">0</span>)
+            </button>
+          </div>
+
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <select id="filtro-censo-etapa" class="highlight-input" style="height: 36px; width: auto; padding: 4px 10px; font-size: 12.5px;" onchange="renderizarCenso()">
+              <option value="TODAS">Todas las Etapas Fisiológicas</option>
+              <option value="Becerro">Becerro / Becerra</option>
+              <option value="Maute">Maute / Mauta</option>
+              <option value="Novillo">Novillo / Novilla</option>
+              <option value="Toro Reproductor">Toro Reproductor</option>
+              <option value="Vaca parida">Vaca parida (Primípara / Multípara)</option>
+              <option value="Vaca escotera">Vaca escotera</option>
+              <option value="Vaca seca">Vaca seca</option>
+            </select>
+
+            <select id="filtro-censo-prenez" class="highlight-input" style="height: 36px; width: auto; padding: 4px 10px; font-size: 12.5px;" onchange="renderizarCenso()">
+              <option value="TODAS">Preñez: Todos</option>
+              <option value="SI">🤰 Solo Preñadas (Sí)</option>
+              <option value="NO">Vacías / No Preñadas</option>
+            </select>
+          </div>
         </div>
 
         <!-- Formulario Desplegable para Alta de Animal -->
         <div id="form-nuevo-animal" class="form-panel" style="display: none;">
           <span class="panel-badge">🐄 Alta de Nuevo Bovino</span>
-          <h3 class="panel-title">Ficha de Identificación</h3>
-          <p class="panel-desc">Registra nacimientos o compras con datos de hierro y genealogía conocida. (Puedes usar hierros liberados tras una venta).</p>
+          <h3 class="panel-title">Ficha de Identificación, Hierro y Condición Fisiológica</h3>
+          <p class="panel-desc">Registra el <strong>N° Identificador</strong> único del ejemplar y la descripción de su <strong>Hierro</strong> (propietario/procedencia). La madre se vincula por su <strong>N° Identificador</strong>.</p>
 
           <form onsubmit="handleCrearAnimal(event)">
             <div class="form-grid-4">
               
               <div class="input-group">
-                <label class="input-label" for="censo-in-hierro">
-                  <span>N° Hierro / Arete *</span>
-                  <span class="input-hint">Debe ser único</span>
+                <label class="input-label" for="censo-in-numero">
+                  <span>N° Identificador *</span>
+                  <span class="input-hint">ID único del animal</span>
                 </label>
-                <input type="text" id="censo-in-hierro" class="highlight-input" placeholder="Ej: 112, 201" required>
+                <input type="text" id="censo-in-numero" class="highlight-input" placeholder="Ej: 112, 205" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-hierro">
+                  <span>Hierro (Descripción) *</span>
+                  <span class="input-hint">Propietario / Figura</span>
+                </label>
+                <input type="text" id="censo-in-hierro" class="highlight-input" placeholder="Ej: Iniciales HE, Herradura..." value="Hda. La Esperanza (HE)" required>
               </div>
 
               <div class="input-group">
@@ -1062,20 +1593,40 @@
 
               <div class="input-group">
                 <label class="input-label" for="censo-in-sexo">Sexo *</label>
-                <select id="censo-in-sexo" class="highlight-input">
+                <select id="censo-in-sexo" class="highlight-input" onchange="actualizarOpcionesCondicionFisiologica('censo')">
                   <option value="Hembra">Hembra</option>
                   <option value="Macho">Macho</option>
                 </select>
               </div>
 
               <div class="input-group">
-                <label class="input-label" for="censo-in-raza">Raza *</label>
-                <select id="censo-in-raza" class="highlight-input">
-                  <option value="Gyr Mestizo">Gyr Mestizo</option>
-                  <option value="Carora F1">Carora F1</option>
-                  <option value="Brahman">Brahman</option>
-                  <option value="Guzerá">Guzerá</option>
-                  <option value="Pardo Suizo">Pardo Suizo</option>
+                <label class="input-label" for="censo-in-condicion">
+                  <span>Condición Fisiológica *</span>
+                  <span class="input-hint">Etapa bovina</span>
+                </label>
+                <select id="censo-in-condicion" class="highlight-input" onchange="sincronizarPrenezPorCondicion('censo')">
+                  <!-- Se llena dinámicamente según el sexo -->
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-prenada">
+                  <span>¿Está Preñada? *</span>
+                  <span class="input-hint" id="censo-hint-prenada">Solo Vacas/Novillas</span>
+                </label>
+                <select id="censo-in-prenada" class="highlight-input">
+                  <option value="No">No (Vacía)</option>
+                  <option value="Sí">🤰 Sí (Preñada)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-raza">
+                  <span>Raza *</span>
+                  <button type="button" class="link-inline-action" onclick="abrirModalNuevaRaza('censo-in-raza')">+ Nueva Raza</button>
+                </label>
+                <select id="censo-in-raza" class="highlight-input" onchange="verificarSeleccionNuevaRaza(this)">
+                  <!-- Se llena desde catalogoRazas -->
                 </select>
               </div>
 
@@ -1089,18 +1640,28 @@
               </div>
 
               <div class="input-group">
-                <label class="input-label" for="censo-in-estado">Estado Actual *</label>
-                <select id="censo-in-estado" class="highlight-input">
-                  <option value="En Lactancia">En Lactancia</option>
-                  <option value="Seca">Seca</option>
-                  <option value="Levante / Ceba">Levante / Ceba</option>
-                  <option value="Reproductor">Reproductor</option>
-                </select>
+                <label class="input-label" for="censo-in-peso">
+                  <span>Peso Actual (Kg) *</span>
+                  <span class="input-hint" id="censo-hint-peso">Ref. etapa</span>
+                </label>
+                <input type="number" step="0.5" min="20" max="1100" id="censo-in-peso" class="highlight-input" placeholder="Ej: 420 Kg" value="420" required>
               </div>
 
               <div class="input-group">
-                <label class="input-label" for="censo-in-madre">Madre (ID Hierro)</label>
-                <input type="text" id="censo-in-madre" class="highlight-input" placeholder="Opcional: Madre...">
+                <label class="input-label" for="censo-in-madre">
+                  <span>Madre (N° Identificador)</span>
+                  <span class="input-hint">ID numérico madre</span>
+                </label>
+                <input type="text" id="censo-in-madre" list="datalist-madres" class="highlight-input" placeholder="Ej: 042, 010 (Opcional)">
+                <datalist id="datalist-madres"></datalist>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="censo-in-padre">
+                  <span>Padre (N° Identificador)</span>
+                  <span class="input-hint">Toro / Semen</span>
+                </label>
+                <input type="text" id="censo-in-padre" class="highlight-input" placeholder="Ej: 009">
               </div>
 
               <div class="input-group">
@@ -1118,12 +1679,13 @@
           <table class="clean-table">
             <thead>
               <tr>
-                <th>Hierro</th>
+                <th>N° Identificador</th>
+                <th>Hierro (Propietario / Figura)</th>
                 <th>Nombre / Alias</th>
-                <th>Sexo</th>
-                <th>Raza</th>
-                <th>Propósito</th>
-                <th>Estado Actual</th>
+                <th>Sexo & Raza</th>
+                <th>Condición Fisiológica (Etapa)</th>
+                <th>¿Preñada?</th>
+                <th>Madre (N° ID)</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -1138,11 +1700,12 @@
           <table class="clean-table">
             <thead>
               <tr>
-                <th>Hierro Liberado</th>
-                <th>Animal Vendido</th>
+                <th>N° Identificador Liberado</th>
+                <th>Hierro (Procedencia)</th>
+                <th>Animal Vendido / Etapa</th>
                 <th>Fecha Salida</th>
                 <th>Peso Vivo</th>
-                <th>Peso Canal Est.</th>
+                <th>Precio / Kg</th>
                 <th>Monto Venta</th>
                 <th>Destino / Matadero</th>
               </tr>
@@ -1164,7 +1727,7 @@
         <div class="section-header">
           <div>
             <h2 class="section-title">Control de Ordeño e Inventario de Tanque</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Carga de litros, balance del tanque de leche y despacho comercial.</p>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Carga de litros para vacas paridas (en lactancia), balance del tanque de leche y despacho comercial.</p>
           </div>
           <button class="btn-action-tank" onclick="abrirModalVentaLeche()">
             🥛 Vender / Despachar Leche
@@ -1201,15 +1764,15 @@
         <!-- Formulario Carga de Ordeño -->
         <div class="form-panel">
           <span class="panel-badge">🥛 Carga de Ordeño</span>
-          <h3 class="panel-title">Entrada de Litros por Vaca</h3>
+          <h3 class="panel-title">Entrada de Litros por Vaca (Por N° Identificador)</h3>
           <p class="panel-desc">Los campos resaltados validan automáticamente el estado sanitario del animal.</p>
 
           <form onsubmit="handleModuloMilk(event)">
             <div class="form-grid-4">
               
               <div class="input-group">
-                <label class="input-label" for="ordeno-in-hierro">Seleccionar Vaca *</label>
-                <select id="ordeno-in-hierro" class="highlight-input" onchange="checkRetiroInForm(this.value, 'ordeno-warning')">
+                <label class="input-label" for="ordeno-in-numero">Seleccionar Vaca (N° ID) *</label>
+                <select id="ordeno-in-numero" class="highlight-input" onchange="checkRetiroInForm(this.value, 'ordeno-warning')">
                   <!-- Se llena con las vacas registradas -->
                 </select>
               </div>
@@ -1248,7 +1811,7 @@
             <table class="clean-table">
               <thead>
                 <tr>
-                  <th>Hierro</th>
+                  <th>N° Identificador</th>
                   <th>Nombre Vaca</th>
                   <th>Jornada</th>
                   <th>Litros</th>
@@ -1289,29 +1852,29 @@
 
 
       <!-- ======================================================================
-           4. MÓDULO: PESAJE Y CARNE (GDP / GMD)
+           4. MÓDULO (PROCESO 3): PRODUCCIÓN DE CARNE (PESAJES, GDP Y CANAL)
            ====================================================================== -->
       <section id="view-pesaje" class="module-view">
         
         <div class="section-header">
           <div>
-            <h2 class="section-title">Control de Pesajes y Ganancia de Carne</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Cálculo automático e instantáneo de Ganancia Diaria de Peso (GDP).</p>
+            <h2 class="section-title">Proceso 3: Producción de Carne (Pesajes, Cálculo de GDP y Beneficio en Canal)</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Control ponderal por <strong>N° Identificador</strong>, cálculo automático de Ganancia Diaria de Peso (GDP), verificación de retiro en carne y liquidación en canal.</p>
           </div>
-          <span class="status-pill">Meta Ceba: <strong>+0.70 kg/día</strong></span>
+          <span class="status-pill">Meta Ceba: <strong id="pesaje-meta-gdp-pill">+0.70 kg/día</strong></span>
         </div>
 
         <div class="form-panel">
-          <span class="panel-badge">⚖️ Registro de Báscula</span>
+          <span class="panel-badge">⚖️ Paso 3.1 y 3.2: Registro de Báscula y Cálculo Automático de GDP</span>
           <h3 class="panel-title">Nuevo Pesaje Periódico</h3>
-          <p class="panel-desc">Al ingresar el peso actual, el sistema calcula de inmediato el incremento diario respecto al último pesaje registrado.</p>
+          <p class="panel-desc">Al ingresar el peso actual por <strong>N° Identificador</strong>, el sistema calcula de inmediato el incremento diario (<strong>GDP</strong>) respecto al último pesaje registrado.</p>
 
           <form onsubmit="handleRegistrarPesaje(event)">
             <div class="form-grid-4">
               
               <div class="input-group">
-                <label class="input-label" for="pesaje-in-hierro">Animal *</label>
-                <select id="pesaje-in-hierro" class="highlight-input" onchange="mostrarUltimoPeso(this.value)">
+                <label class="input-label" for="pesaje-in-numero">Animal (N° Identificador) *</label>
+                <select id="pesaje-in-numero" class="highlight-input" onchange="mostrarUltimoPeso(this.value)">
                   <!-- Se llena con los animales -->
                 </select>
               </div>
@@ -1326,12 +1889,12 @@
                   <span>Peso Actual (Kg) *</span>
                   <span class="input-hint" id="pesaje-prev-hint">Previo: -- kg</span>
                 </label>
-                <input type="number" step="0.5" min="25" max="950" id="pesaje-in-peso" class="highlight-input" placeholder="0.0 Kg" inputmode="decimal" required>
+                <input type="number" step="0.5" min="25" max="1100" id="pesaje-in-peso" class="highlight-input" placeholder="0.0 Kg" inputmode="decimal" required>
               </div>
 
               <div class="input-group">
                 <button type="submit" class="btn-submit" style="width: 100%;">
-                  Calcular y Guardar
+                  Calcular GDP y Guardar
                 </button>
               </div>
 
@@ -1339,20 +1902,24 @@
           </form>
         </div>
 
-        <!-- Tabla Historial Pesajes -->
+        <!-- Tabla Historial Pesajes y Acción de Salida a Canal -->
         <div>
-          <h3 class="section-title" style="margin-bottom: 10px;">Historial de Pesajes y Evaluación de GDP</h3>
+          <div class="section-header" style="margin-bottom: 10px;">
+            <h3 class="section-title">Historial de Pesajes, Evaluación de GDP y Salida a Canal</h3>
+            <span class="section-action" onclick="switchTab('censo'); switchSubnavCenso('canal');">Ver historial de animales vendidos en canal ➔</span>
+          </div>
           <div class="table-container">
             <table class="clean-table">
               <thead>
                 <tr>
-                  <th>Hierro</th>
-                  <th>Animal</th>
+                  <th>N° Identificador</th>
+                  <th>Animal / Etapa Fisiológica</th>
                   <th>Fecha</th>
                   <th>Peso Vivo</th>
                   <th>Peso Previo</th>
                   <th>GDP Calculada</th>
                   <th>Desempeño</th>
+                  <th>Paso 3.3: Salida / Canal</th>
                 </tr>
               </thead>
               <tbody id="pesaje-tbody">
@@ -1373,7 +1940,7 @@
         <div class="section-header">
           <div>
             <h2 class="section-title">Sanidad Animal y Tiempos de Retiro</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Protección de inocuidad: control de días de retiro para leche y carne.</p>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Protección de inocuidad: control de días de retiro para leche y carne por N° Identificador.</p>
           </div>
           <span class="badge-status danger" id="sanidad-badge-cuarentena">🚨 Animales en Cuarentena</span>
         </div>
@@ -1387,8 +1954,8 @@
             <div class="form-grid-4">
               
               <div class="input-group">
-                <label class="input-label" for="sanidad-in-hierro">Animal Tratado *</label>
-                <select id="sanidad-in-hierro" class="highlight-input">
+                <label class="input-label" for="sanidad-in-numero">Animal Tratado (N° ID) *</label>
+                <select id="sanidad-in-numero" class="highlight-input">
                   <!-- Se llena con animales -->
                 </select>
               </div>
@@ -1398,7 +1965,7 @@
                 <select id="sanidad-in-tipo" class="highlight-input">
                   <option value="Tratamiento Antibiótico">Tratamiento Antibiótico</option>
                   <option value="Desparasitación">Desparasitación</option>
-                  <option value="Vacunación Oficial">Vacunación Oficial</option>
+                  <option value="Vacunación Oficial (INSAI)">Vacunación Oficial (Aftosa/Rabia/Brucelosis)</option>
                   <option value="Vitaminización">Vitaminización</option>
                 </select>
               </div>
@@ -1440,7 +2007,7 @@
             <table class="clean-table">
               <thead>
                 <tr>
-                  <th>Hierro</th>
+                  <th>N° Identificador</th>
                   <th>Animal</th>
                   <th>Tipo Evento</th>
                   <th>Medicamento</th>
@@ -1466,8 +2033,8 @@
         
         <div class="section-header">
           <div>
-            <h2 class="section-title">Manejo Reproductivo y Ciclo de Cría</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Servicios, preñez, secado y registro completo de nacimientos de crías para el censo.</p>
+            <h2 class="section-title">Manejo Reproductivo, Preñez y Ciclo de Cría</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Servicios, diagnóstico de preñez, secado y alta automática de becerros/as vinculando a la madre por su <strong>N° Identificador</strong>.</p>
           </div>
           <span class="status-pill">Gestación Promedio: <strong>283 días</strong></span>
         </div>
@@ -1475,7 +2042,7 @@
         <div class="form-panel">
           <span class="panel-badge">🧬 Evento Reproductivo</span>
           <h3 class="panel-title">Registrar Evento de Ciclo</h3>
-          <p class="panel-desc">Si seleccionas <strong>Parto</strong>, podrás registrar todos los datos completos del nuevo becerro (Hierro, Nombre, Raza, Propósito, Peso al nacer).</p>
+          <p class="panel-desc">Si seleccionas <strong>Parto</strong>, podrás registrar el <strong>N° Identificador</strong> de la cría, la descripción de su <strong>Hierro</strong>, su raza (o agregar una nueva) y quedará vinculada automáticamente al <strong>N° Identificador de la Madre</strong>.</p>
 
           <form onsubmit="handleRegistrarReproduccion(event)">
             
@@ -1483,9 +2050,9 @@
             <div class="form-grid-4">
               
               <div class="input-group">
-                <label class="input-label" for="repro-in-hembra">Hembra (Vaca / Novilla) *</label>
-                <select id="repro-in-hembra" class="highlight-input">
-                  <!-- Se llena con hembras -->
+                <label class="input-label" for="repro-in-hembra">Hembra (N° Identificador) *</label>
+                <select id="repro-in-hembra" class="highlight-input" onchange="prellenarHierroMadreParto()">
+                  <!-- Se llena con hembras en edad reproductiva -->
                 </select>
               </div>
 
@@ -1495,15 +2062,18 @@
                   <option value="Celo">Detección de Celo</option>
                   <option value="Inseminación / Monta">Inseminación / Monta con Toro</option>
                   <option value="Diagnóstico Preñez">Diagnóstico Preñez (Palpación)</option>
-                  <option value="Secado">Secado de Vaca</option>
+                  <option value="Secado">Secado de Vaca (Pasa a Vaca Seca)</option>
                   <option value="Parto">Parto (Nacimiento de Cría)</option>
                   <option value="Aborto">Aborto</option>
                 </select>
               </div>
 
               <div class="input-group">
-                <label class="input-label" for="repro-in-macho">Macho / Toro / Semen</label>
-                <input type="text" id="repro-in-macho" class="highlight-input" placeholder="Ej: Toro #009 (Titan)">
+                <label class="input-label" for="repro-in-macho">
+                  <span>Toro (N° ID) / Semen</span>
+                  <span class="input-hint">Padre</span>
+                </label>
+                <input type="text" id="repro-in-macho" class="highlight-input" placeholder="Ej: 009 (Toro Titán)" value="009">
               </div>
 
               <div class="input-group">
@@ -1514,10 +2084,10 @@
               <div class="input-group" id="repro-grupo-resultado">
                 <label class="input-label" for="repro-in-resultado">Resultado / Diagnóstico *</label>
                 <select id="repro-in-resultado" class="highlight-input">
-                  <option value="Exitoso / Normal">Exitoso / Normal</option>
-                  <option value="Preñada Confirmada">Preñada Confirmada</option>
-                  <option value="Vacía">Vacía</option>
-                  <option value="Dudosa">Dudosa</option>
+                  <option value="Preñada Confirmada">🤰 Preñada Confirmada (Preñada = Sí)</option>
+                  <option value="Exitoso / Normal">Servicio Exitoso / Normal</option>
+                  <option value="Vacía">Vacía (Preñada = No)</option>
+                  <option value="Preñada Escotera">Preñada Escotera (Sin ordeño actual)</option>
                 </select>
               </div>
 
@@ -1525,19 +2095,29 @@
 
             <!-- SUB-PANEL DESTACADO: DATOS COMPLETOS DE LA CRÍA AL REGISTRAR PARTO -->
             <div id="panel-parto-completo" style="display: none; margin-top: 16px; padding: 16px; background-color: var(--color-primary-subtle); border: 2px dashed var(--color-primary-border); border-radius: var(--radius-md);">
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span class="panel-badge" style="margin-bottom: 0;">🐄 Ficha Completa del Nuevo Becerro (Censo)</span>
-                <span style="font-size: 12px; color: var(--color-primary); font-weight: 600;">(Puedes asignar un hierro liberado o uno nuevo)</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="panel-badge" style="margin-bottom: 0;">🐄 Ficha Completa del Nuevo Becerro/a (Censo)</span>
+                  <span style="font-size: 12px; color: var(--color-primary); font-weight: 600;">Etapa inicial automática: <strong>Becerro / Becerra</strong> • Madre asignada por <strong>N° Identificador</strong></span>
+                </div>
               </div>
 
               <div class="form-grid-4">
                 
                 <div class="input-group">
-                  <label class="input-label" for="repro-in-cria-hierro">
-                    <span>N° Hierro Cría *</span>
-                    <span class="input-hint">Identificación</span>
+                  <label class="input-label" for="repro-in-cria-numero">
+                    <span>N° Identificador Cría *</span>
+                    <span class="input-hint">ID único del animal</span>
                   </label>
-                  <input type="text" id="repro-in-cria-hierro" class="highlight-input" placeholder="Ej: 115, 202">
+                  <input type="text" id="repro-in-cria-numero" class="highlight-input" placeholder="Ej: 115, 202">
+                </div>
+
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-cria-hierro">
+                    <span>Hierro (Descripción) *</span>
+                    <span class="input-hint">Propietario / Figura</span>
+                  </label>
+                  <input type="text" id="repro-in-cria-hierro" class="highlight-input" placeholder="Ej: Hda. La Esperanza (HE)" value="Hda. La Esperanza (HE)">
                 </div>
 
                 <div class="input-group">
@@ -1549,21 +2129,20 @@
                 </div>
 
                 <div class="input-group">
-                  <label class="input-label" for="repro-in-cria-sexo">Sexo de la Cría *</label>
+                  <label class="input-label" for="repro-in-cria-sexo">Sexo (Etapa Inicial) *</label>
                   <select id="repro-in-cria-sexo" class="highlight-input">
-                    <option value="Hembra">Hembra (Becerra)</option>
-                    <option value="Macho">Macho (Torete)</option>
+                    <option value="Hembra">Hembra (Etapa: Becerra)</option>
+                    <option value="Macho">Macho (Etapa: Becerro)</option>
                   </select>
                 </div>
 
                 <div class="input-group">
-                  <label class="input-label" for="repro-in-cria-raza">Raza *</label>
-                  <select id="repro-in-cria-raza" class="highlight-input">
-                    <option value="Gyr Mestizo">Gyr Mestizo</option>
-                    <option value="Carora F1">Carora F1</option>
-                    <option value="Brahman">Brahman</option>
-                    <option value="Guzerá">Guzerá</option>
-                    <option value="Pardo Suizo">Pardo Suizo</option>
+                  <label class="input-label" for="repro-in-cria-raza">
+                    <span>Raza *</span>
+                    <button type="button" class="link-inline-action" onclick="abrirModalNuevaRaza('repro-in-cria-raza')">+ Nueva Raza</button>
+                  </label>
+                  <select id="repro-in-cria-raza" class="highlight-input" onchange="verificarSeleccionNuevaRaza(this)">
+                    <!-- Se llena desde catalogoRazas -->
                   </select>
                 </div>
 
@@ -1584,13 +2163,21 @@
                   <input type="number" step="0.5" min="20" max="65" id="repro-in-cria-peso" class="highlight-input" placeholder="Ej: 36.5 Kg" value="35.0">
                 </div>
 
+                <div class="input-group">
+                  <label class="input-label" for="repro-in-tipo-parto-madre">Clasificación Madre *</label>
+                  <select id="repro-in-tipo-parto-madre" class="highlight-input">
+                    <option value="Vaca parida (Multípara)">Vaca parida (Multípara)</option>
+                    <option value="Vaca parida (Primípara)">Vaca parida (Primípara - 1er parto)</option>
+                  </select>
+                </div>
+
               </div>
             </div>
 
             <!-- Botón de Envío -->
             <div style="margin-top: 14px;">
               <button type="submit" class="btn-submit" style="width: 100%;">
-                Guardar Evento y Procesar Impacto en Censo
+                Guardar Evento y Actualizar Condición Fisiológica / Censo
               </button>
             </div>
 
@@ -1604,12 +2191,12 @@
             <table class="clean-table">
               <thead>
                 <tr>
-                  <th>Hembra</th>
+                  <th>Hembra (N° Identificador)</th>
                   <th>Tipo Evento</th>
-                  <th>Macho / Semen</th>
+                  <th>Padre (N° ID / Semen)</th>
                   <th>Fecha</th>
                   <th>Resultado</th>
-                  <th>Impacto Operativo</th>
+                  <th>Impacto en Condición Fisiológica y Censo</th>
                 </tr>
               </thead>
               <tbody id="repro-tbody">
@@ -1747,28 +2334,30 @@
         <div class="modal-header">
           <div>
             <span class="badge-status success" id="modal-badge-estado">Activo</span>
-            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;" id="modal-titulo">Hoja de Vida: Vaca #042</h3>
+            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;" id="modal-titulo">Hoja de Vida: Animal #042</h3>
           </div>
           <button onclick="cerrarModal('modal-hoja-vida')" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-dim);">&times;</button>
         </div>
 
         <div class="modal-body">
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-sm);">
+            <div><strong>N° Identificador:</strong> <span id="modal-numero">#042</span></div>
+            <div><strong>Hierro (Propietario/Procedencia):</strong> <span id="modal-hierro">Hda. La Esperanza (HE)</span></div>
+            <div><strong>Condición Fisiológica:</strong> <span id="modal-condicion">Vaca parida (Multípara)</span></div>
+            <div><strong>¿Está Preñada?:</strong> <span id="modal-prenada">No (Vacía)</span></div>
             <div><strong>Raza:</strong> <span id="modal-raza">Guzerá</span></div>
             <div><strong>Sexo:</strong> <span id="modal-sexo">Hembra</span></div>
             <div><strong>Propósito:</strong> <span id="modal-proposito">Doble Propósito</span></div>
             <div><strong>Último Peso:</strong> <span id="modal-peso">465 Kg</span></div>
-            <div><strong>Madre (Línea):</strong> <span id="modal-madre">#010 (Paloma)</span></div>
-            <div><strong>Padre:</strong> <span id="modal-padre">#009 (Titan)</span></div>
           </div>
 
           <div>
-            <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;">Árbol de Genealogía</h4>
+            <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;">Árbol de Genealogía (Por N° Identificador del Animal)</h4>
             <div style="border: 1px dashed var(--border-medium); padding: 12px; border-radius: var(--radius-sm); font-size: 13px; background: #FAFAF9;">
-              <div>🌲 <strong>Ascendencia Directa:</strong></div>
-              <div style="margin-left: 14px; margin-top: 4px;">• Padre: <strong>#009 Titan (Brahman Puro)</strong></div>
-              <div style="margin-left: 14px;">• Madre: <strong>#010 Paloma (Guzerá F1)</strong></div>
-              <div style="margin-top: 6px; color: #166534; font-size: 12px;">✅ <em>Sin consanguinidad detectada con los toros reproductores activos.</em></div>
+              <div>🌲 <strong>Ascendencia Directa (Referenciada por N° Identificador, no por Hierro):</strong></div>
+              <div style="margin-left: 14px; margin-top: 4px;">• Madre (N° Identificador): <strong id="modal-madre">#010</strong></div>
+              <div style="margin-left: 14px;">• Padre (N° Identificador / Semen): <strong id="modal-padre">#009 (Toro Reproductor Titán)</strong></div>
+              <div style="margin-top: 6px; color: #166534; font-size: 12px;">✅ <em>Trazabilidad materno-filial validada mediante el Número Identificador único del ejemplar.</em></div>
             </div>
           </div>
 
@@ -1878,7 +2467,7 @@
 
 
     <!-- ======================================================================
-         MODAL 3: BENEFICIO EN CANAL / VENTA DE CARNE (DESINCORPORACIÓN Y LIBERACIÓN DE HIERRO)
+         MODAL 3: BENEFICIO EN CANAL / VENTA DE CARNE (LIBERA N° IDENTIFICADOR)
          ====================================================================== -->
     <div id="modal-venta-canal" class="modal-overlay" onclick="cerrarModalExterno(event, 'modal-venta-canal')">
       <div class="modal-card">
@@ -1902,11 +2491,12 @@
             </div>
 
             <div style="background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6;">
-              <div><strong>Animal Seleccionado:</strong> <span id="canal-det-nombre">--</span></div>
-              <div><strong>Raza / Propósito:</strong> <span id="canal-det-raza">--</span></div>
+              <div><strong>Animal (N° Identificador):</strong> <span id="canal-det-nombre">--</span></div>
+              <div><strong>Hierro (Propietario / Procedencia):</strong> <span id="canal-det-hierro">--</span></div>
+              <div><strong>Etapa Fisiológica / Raza:</strong> <span id="canal-det-raza">--</span></div>
               <div><strong>Último Peso Vivo Registrado:</strong> <span id="canal-det-peso">-- Kg</span></div>
               <div style="margin-top: 4px; color: #166534; font-weight: 600;">
-                ℹ️ <em>Al confirmar, el animal se desincorporará del censo y <strong>su número de hierro quedará liberado</strong> para futuras crías.</em>
+                ℹ️ <em>Al confirmar, el animal se desincorporará del censo y <strong>su Número Identificador quedará liberado</strong> para futuras crías.</em>
               </div>
             </div>
 
@@ -1927,28 +2517,8 @@
               </div>
 
               <div class="input-group">
-                <label class="input-label" for="canal-in-rendimiento">
-                  <span>Rendimiento Canal (%) *</span>
-                  <span class="input-hint">Est. 52-56%</span>
-                </label>
-                <input 
-                  type="number" 
-                  step="0.5" 
-                  min="40" 
-                  max="65" 
-                  id="canal-in-rendimiento" 
-                  class="highlight-input" 
-                  value="53.5" 
-                  required
-                  oninput="calcularTotalVentaCanal()"
-                >
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-              <div class="input-group">
                 <label class="input-label" for="canal-in-preciokg">
-                  <span>Precio por Kg en Pie/Canal ($) *</span>
+                  <span>Precio por Kg ($) *</span>
                 </label>
                 <input 
                   type="number" 
@@ -1961,12 +2531,12 @@
                   oninput="calcularTotalVentaCanal()"
                 >
               </div>
+            </div>
 
-              <div class="input-group">
-                <label class="input-label">Total Liquidación ($)</label>
-                <div style="height: 48px; background-color: #F0FDF4; border: 2px solid #BBF7D0; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #166534;" id="canal-total-display">
-                  $ 0.00
-                </div>
+            <div class="input-group">
+              <label class="input-label">Total Liquidación ($)</label>
+              <div style="height: 48px; background-color: #F0FDF4; border: 2px solid #BBF7D0; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #166534;" id="canal-total-display">
+                $ 0.00
               </div>
             </div>
 
@@ -1985,8 +2555,53 @@
           <div class="modal-footer">
             <button type="button" class="btn-secondary" onclick="cerrarModal('modal-venta-canal')">Cancelar</button>
             <button type="submit" class="btn-submit" id="canal-btn-confirmar" style="background-color: #991B1B;">
-              🥩 Confirmar Venta, Desincorporar y Liberar Hierro
+              🥩 Confirmar Venta, Desincorporar y Liberar N° Identificador
             </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ======================================================================
+         MODAL 4: REGISTRAR NUEVA RAZA EN EL CATÁLOGO PERSISTENTE
+         ====================================================================== -->
+    <div id="modal-nueva-raza" class="modal-overlay" onclick="cerrarModalExterno(event, 'modal-nueva-raza')">
+      <div class="modal-card" style="max-width: 480px;">
+        <div class="modal-header">
+          <div>
+            <span class="panel-badge" style="margin-bottom: 0;">🧬 Catálogo de Razas Bovinas</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;">Registrar Nueva Raza</h3>
+          </div>
+          <button onclick="cerrarModal('modal-nueva-raza')" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-dim);">&times;</button>
+        </div>
+
+        <form onsubmit="handleGuardarNuevaRaza(event)">
+          <input type="hidden" id="raza-target-select-id">
+          <div class="modal-body">
+            <p style="font-size: 13px; color: var(--text-muted);">
+              Ingresa el nombre de la raza o cruce zootécnico. Quedará <strong>guardada permanentemente</strong> en el catálogo local para que puedas seleccionarla al registrar cualquier otro animal.
+            </p>
+
+            <div class="input-group">
+              <label class="input-label" for="input-nombre-nueva-raza">
+                <span>Nombre de la Raza o Cruce *</span>
+                <span class="input-hint">Ej: Girolando F1, Nelore, Carora Puro</span>
+              </label>
+              <input type="text" id="input-nombre-nueva-raza" class="highlight-input" placeholder="Escribe la nueva raza..." required autocomplete="off">
+            </div>
+
+            <div>
+              <div style="font-size: 12px; font-weight: 600; color: var(--text-dim); margin-bottom: 6px;">Razas actualmente disponibles en el catálogo:</div>
+              <div id="lista-chips-razas" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <!-- Chips de razas -->
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="cerrarModal('modal-nueva-raza')">Cancelar</button>
+            <button type="submit" class="btn-submit">Guardar Raza en Catálogo</button>
           </div>
         </form>
       </div>
@@ -2002,24 +2617,73 @@
   </div>
 
   <!-- ==========================================================================
-       LÓGICA DEL PROTOTIPO: ESTADO COMPLETO Y REACTIVO EN MEMORIA
+       LÓGICA DEL PROTOTIPO: ESTADO COMPLETO Y REACTIVO EN MEMORIA + LOCALSTORAGE
        ========================================================================== -->
   <script>
     // --------------------------------------------------------------------------
-    // BASE DE DATOS LOCAL SIMULADA (MODELO DE DOMINIO FINCACONTROL)
+    // CATÁLOGO EXTENSIBLE DE RAZAS (PREDETERMINADAS + PERSONALIZADAS DEL USUARIO)
     // --------------------------------------------------------------------------
-    
-    // 1. Entidad Animal (Censo Activo)
-    let animales = [
-      { id: "042", nombre: "Mariposa", sexo: "Hembra", raza: "Guzerá", proposito: "Doble Propósito", estado: "En Lactancia", peso: 465, madre: "010", padre: "009" },
-      { id: "088", nombre: "Gitana", sexo: "Hembra", raza: "Brahman", proposito: "Doble Propósito", estado: "En Lactancia", peso: 490, madre: "021", padre: "009" },
-      { id: "104", nombre: "Canela", sexo: "Hembra", raza: "Carora F1", proposito: "Leche", estado: "En Lactancia", peso: 510, madre: "033", padre: "002" },
-      { id: "015", nombre: "Paloma", sexo: "Hembra", raza: "Pardo Suizo", proposito: "Doble Propósito", estado: "En Lactancia", peso: 480, madre: "001", padre: "009" },
-      { id: "078", nombre: "Rubia", sexo: "Hembra", raza: "Gyr Mestizo", proposito: "Doble Propósito", estado: "Seca", peso: 475, madre: "014", padre: "009" },
-      { id: "201", nombre: "Campeón", sexo: "Macho", raza: "Brahman Rojo", proposito: "Carne / Ceba", estado: "Levante / Ceba", peso: 340, madre: "042", padre: "009" }
+    const RAZAS_POR_DEFECTO = [
+      "Gyr Mestizo",
+      "Carora F1",
+      "Brahman",
+      "Brahman Rojo",
+      "Guzerá",
+      "Pardo Suizo",
+      "Senepol",
+      "Romosinuano"
     ];
 
-    // Historial de Animales Desincorporados / Beneficiados en Canal (Hierros Liberados)
+    let catalogoRazas = [...RAZAS_POR_DEFECTO];
+    try {
+      const razasGuardadas = JSON.parse(localStorage.getItem("fincacontrol_catalogo_razas"));
+      if (Array.isArray(razasGuardadas)) {
+        razasGuardadas.forEach(r => {
+          if (r && !catalogoRazas.some(existente => existente.toLowerCase() === r.toLowerCase())) {
+            catalogoRazas.push(r);
+          }
+        });
+      }
+    } catch (e) {
+      // Ignorar si localStorage está restringido
+    }
+
+    // Condiciones fisiológicas según el sexo en el hato venezolano
+    const CONDICIONES_POR_SEXO = {
+      Hembra: [
+        { valor: "Vaca parida (Multípara)", label: "Vaca parida (Multípara - En lactancia)", permitePrenez: true, pesoRef: "420 - 520 Kg" },
+        { valor: "Vaca parida (Primípara)", label: "Vaca parida (Primípara - 1er parto)", permitePrenez: true, pesoRef: "400 - 460 Kg" },
+        { valor: "Vaca escotera", label: "Vaca escotera (Preñada sin producir leche)", permitePrenez: true, forzarPrenez: "Sí", pesoRef: "430 - 500 Kg" },
+        { valor: "Vaca seca", label: "Vaca seca (Último tercio gestación, sin ordeño)", permitePrenez: true, forzarPrenez: "Sí", pesoRef: "450 - 530 Kg" },
+        { valor: "Novilla de vientre", label: "Novilla de vientre (>18m, ~400 Kg+)", permitePrenez: true, pesoRef: "360 - 420 Kg" },
+        { valor: "Mauta", label: "Mauta (Levante 10-18m, ~350 Kg)", permitePrenez: false, pesoRef: "200 - 350 Kg" },
+        { valor: "Becerra", label: "Becerra (Nacimiento a destete 4-10m, 150-200 Kg)", permitePrenez: false, pesoRef: "35 - 200 Kg" }
+      ],
+      Macho: [
+        { valor: "Becerro", label: "Becerro (Nacimiento a destete 4-10m, 150-200 Kg)", permitePrenez: false, pesoRef: "35 - 200 Kg" },
+        { valor: "Maute", label: "Maute (Levante 10-18m, ~350 Kg)", permitePrenez: false, pesoRef: "200 - 350 Kg" },
+        { valor: "Novillo / Torete", label: "Novillo / Torete (>18m, ~400 Kg+ engorde/ceba)", permitePrenez: false, pesoRef: "360 - 480 Kg" },
+        { valor: "Toro Reproductor", label: "Toro / Toro Reproductor (>30m, >425 Kg monta)", permitePrenez: false, pesoRef: "> 425 Kg" }
+      ]
+    };
+
+    // --------------------------------------------------------------------------
+    // 1. ENTIDAD ANIMAL (CENSO ACTIVO)
+    // id = Número Identificador Único del Animal
+    // hierro = Descripción del Hierro (Propietario / Procedencia: iniciales o figura)
+    // madre / padre = N° Identificador de los progenitores
+    // --------------------------------------------------------------------------
+    let animales = [
+      { id: "042", hierro: "Hda. La Esperanza (Iniciales HE)", nombre: "Mariposa", sexo: "Hembra", raza: "Guzerá", proposito: "Doble Propósito", condicion: "Vaca parida (Multípara)", prenada: "No", peso: 465, madre: "010", padre: "009" },
+      { id: "088", hierro: "Hda. La Esperanza (Iniciales HE)", nombre: "Gitana", sexo: "Hembra", raza: "Brahman", proposito: "Doble Propósito", condicion: "Vaca parida (Primípara)", prenada: "No", peso: 440, madre: "021", padre: "009" },
+      { id: "104", hierro: "Agropecuaria El Samán (Figura Herradura)", nombre: "Canela", sexo: "Hembra", raza: "Carora F1", proposito: "Leche", condicion: "Vaca parida (Multípara)", prenada: "No", peso: 510, madre: "033", padre: "002" },
+      { id: "015", hierro: "Hda. La Esperanza (Iniciales HE)", nombre: "Paloma", sexo: "Hembra", raza: "Pardo Suizo", proposito: "Doble Propósito", condicion: "Vaca escotera", prenada: "Sí", peso: 480, madre: "001", padre: "009" },
+      { id: "078", hierro: "Finca San José (Iniciales SJ)", nombre: "Rubia", sexo: "Hembra", raza: "Gyr Mestizo", proposito: "Doble Propósito", condicion: "Vaca seca", prenada: "Sí", peso: 495, madre: "014", padre: "009" },
+      { id: "201", hierro: "Hda. La Esperanza (Iniciales HE)", nombre: "Campeón", sexo: "Macho", raza: "Brahman Rojo", proposito: "Carne / Ceba", condicion: "Maute", prenada: "No aplica", peso: 340, madre: "042", padre: "009" },
+      { id: "009", hierro: "Centro Genético Los Llanos (Figura Corona)", nombre: "Titán", sexo: "Macho", raza: "Brahman", proposito: "Doble Propósito", condicion: "Toro Reproductor", prenada: "No aplica", peso: 680, madre: "--", padre: "--" }
+    ];
+
+    // Historial de Animales Desincorporados / Beneficiados en Canal (N° Identificador Liberado)
     let historialVentasCanal = [];
 
     // Inventario de Leche en Tanque (Litros disponibles para venta comercial)
@@ -2030,36 +2694,36 @@
       { fecha: "2026-10-09", litros: 850.0, precio: 0.45, total: 382.50, comprador: "Quesera Don Pedro" }
     ];
 
-    // IDs de animales con retiro sanitario activo
+    // N° Identificador de animales con retiro sanitario activo
     let animalesEnRetiro = ["104"];
 
     // 2. Entidad RegistroOrdeno
     let registrosOrdeno = [
-      { hierro: "042", nombre: "Mariposa", jornada: "Mañana", litros: 11.4, esRetiro: false, hora: "05:42 AM", fecha: "2026-10-11" },
-      { hierro: "088", nombre: "Gitana", jornada: "Mañana", litros: 8.2, esRetiro: false, hora: "05:45 AM", fecha: "2026-10-11" },
-      { hierro: "104", nombre: "Canela", jornada: "Mañana", litros: 12.0, esRetiro: true, hora: "05:48 AM", fecha: "2026-10-11" },
-      { hierro: "015", nombre: "Paloma", jornada: "Mañana", litros: 10.5, esRetiro: false, hora: "05:51 AM", fecha: "2026-10-11" }
+      { numero: "042", nombre: "Mariposa", jornada: "Mañana", litros: 11.4, esRetiro: false, hora: "05:42 AM", fecha: "2026-10-11" },
+      { numero: "088", nombre: "Gitana", jornada: "Mañana", litros: 8.2, esRetiro: false, hora: "05:45 AM", fecha: "2026-10-11" },
+      { numero: "104", nombre: "Canela", jornada: "Mañana", litros: 12.0, esRetiro: true, hora: "05:48 AM", fecha: "2026-10-11" },
+      { numero: "042", nombre: "Mariposa", jornada: "Tarde", litros: 10.5, esRetiro: false, hora: "03:15 PM", fecha: "2026-10-11" }
     ];
 
     // 3. Entidad RegistroPesaje
     let registrosPesaje = [
-      { hierro: "201", nombre: "Campeón", fecha: "2026-10-10", peso: 340, pesoPrevio: 320, gdp: 0.67, evaluacion: "Óptimo" },
-      { hierro: "042", nombre: "Mariposa", fecha: "2026-09-28", peso: 465, pesoPrevio: 450, gdp: 0.50, evaluacion: "Normal" },
-      { hierro: "104", nombre: "Canela", fecha: "2026-09-25", peso: 510, pesoPrevio: 505, gdp: 0.16, evaluacion: "Estancado" }
+      { numero: "201", nombre: "Campeón", etapa: "Maute", fecha: "2026-10-10", peso: 340, pesoPrevio: 320, gdp: 0.67, evaluacion: "Óptimo" },
+      { numero: "042", nombre: "Mariposa", etapa: "Vaca parida (Multípara)", fecha: "2026-09-28", peso: 465, pesoPrevio: 450, gdp: 0.50, evaluacion: "Normal" },
+      { numero: "104", nombre: "Canela", etapa: "Vaca parida (Multípara)", fecha: "2026-09-25", peso: 510, pesoPrevio: 505, gdp: 0.16, evaluacion: "Estancado" }
     ];
 
     // 4. Entidad EventoSanitario
     let eventosSanitarios = [
-      { hierro: "104", nombre: "Canela", tipo: "Tratamiento Antibiótico", producto: "Oxitetraciclina L.A.", retiroLeche: 5, retiroCarne: 28, fecha: "2026-10-09", activo: true },
-      { hierro: "088", nombre: "Gitana", tipo: "Vacunación Oficial", producto: "Aftosa y Rabia", retiroLeche: 0, retiroCarne: 0, fecha: "2026-09-15", activo: false },
-      { hierro: "042", nombre: "Mariposa", tipo: "Desparasitación", producto: "Albendazol 10%", retiroLeche: 3, retiroCarne: 14, fecha: "2026-09-01", activo: false }
+      { numero: "104", nombre: "Canela", tipo: "Tratamiento Antibiótico", producto: "Oxitetraciclina L.A.", retiroLeche: 5, retiroCarne: 28, fecha: "2026-10-09", activo: true },
+      { numero: "088", nombre: "Gitana", tipo: "Vacunación Oficial (INSAI)", producto: "Aftosa y Rabia", retiroLeche: 0, retiroCarne: 0, fecha: "2026-09-15", activo: false },
+      { numero: "042", nombre: "Mariposa", tipo: "Desparasitación", producto: "Albendazol 10%", retiroLeche: 3, retiroCarne: 14, fecha: "2026-09-01", activo: false }
     ];
 
     // 5. Entidad EventoReproductivo
     let eventosReproductivos = [
-      { hembra: "078", tipo: "Diagnóstico Preñez", macho: "Toro #009", fecha: "2026-07-20", resultado: "Preñada Confirmada", impacto: "Secado en 5 días" },
-      { hembra: "042", tipo: "Inseminación / Monta", macho: "Pajuela Gyr F1", fecha: "2026-08-14", resultado: "Exitoso / Normal", impacto: "Palpación en 15 días" },
-      { hembra: "015", tipo: "Celo", macho: "--", fecha: "2026-10-02", resultado: "Detectado", impacto: "Servicio programado" }
+      { hembra: "078", tipo: "Secado", macho: "009", fecha: "2026-10-05", resultado: "Preñada (Último tercio)", impacto: "Pasó a Vaca seca (Preñada = Sí)" },
+      { hembra: "015", tipo: "Diagnóstico Preñez", macho: "009", fecha: "2026-09-18", resultado: "Preñada Escotera", impacto: "Clasificada como Vaca escotera (Preñada = Sí)" },
+      { hembra: "042", tipo: "Inseminación / Monta", macho: "009", fecha: "2026-10-02", resultado: "Servicio Exitoso / Normal", impacto: "Pendiente palpación a los 45 días" }
     ];
 
     // 6. Entidad TransaccionFinanciera
@@ -2072,8 +2736,18 @@
       { id: "TRX-06", tipo: "Ingreso", categoria: "Venta de Leche", concepto: "Anticipo de quesera", monto: 157.50, fecha: "2026-10-01", usuario: "Johan M." }
     ];
 
-    // Rol actual
+    // Rol actual y Configuración del Sistema (Proceso 1)
     let rolActual = "Administrador";
+    let configSistema = {
+      nombreFinca: "Hda. La Esperanza",
+      hierroFinca: "Hda. La Esperanza (Iniciales HE)",
+      propositoFinca: "Doble Propósito",
+      ubicacion: "Rosario de Perijá, Edo. Zulia",
+      capacidadTanque: 2000,
+      precioRefLeche: 0.45,
+      precioRefCarne: 1.85,
+      metaGdp: 0.70
+    };
 
     // --------------------------------------------------------------------------
     // INICIALIZACIÓN
@@ -2082,6 +2756,8 @@
       const todayStr = new Date().toISOString().split('T')[0];
       document.querySelectorAll('input[type="date"]').forEach(el => el.value = todayStr);
 
+      renderizarSelectoresRazas();
+      actualizarOpcionesCondicionFisiologica('censo');
       refrescarSelectoresAnimales();
       renderizarDashboard();
       renderizarCenso();
@@ -2093,11 +2769,52 @@
     });
 
     // --------------------------------------------------------------------------
+    // GUARDAR CONFIGURACIÓN DEL SISTEMA (PROCESO 1)
+    // --------------------------------------------------------------------------
+    function handleGuardarConfiguracion(e) {
+      e.preventDefault();
+      configSistema.nombreFinca = document.getElementById("cfg-in-nombre-finca").value.trim();
+      configSistema.hierroFinca = document.getElementById("cfg-in-hierro-finca").value.trim();
+      configSistema.propositoFinca = document.getElementById("cfg-in-proposito-finca").value;
+      configSistema.ubicacion = document.getElementById("cfg-in-ubicacion").value.trim();
+      configSistema.capacidadTanque = parseFloat(document.getElementById("cfg-in-capacidad-tanque").value) || 2000;
+      configSistema.precioRefLeche = parseFloat(document.getElementById("cfg-in-precio-leche").value) || 0.45;
+      configSistema.precioRefCarne = parseFloat(document.getElementById("cfg-in-precio-carne").value) || 1.85;
+      configSistema.metaGdp = parseFloat(document.getElementById("cfg-in-meta-gdp").value) || 0.70;
+
+      // Actualizar barra superior
+      const subtitle = document.getElementById("header-finca-subtitle");
+      if (subtitle) {
+        subtitle.textContent = `${configSistema.nombreFinca} (Hierro: ${configSistema.hierroFinca}) • ${configSistema.propositoFinca}`;
+      }
+
+      // Actualizar Hierro predeterminado en Censo y precios de referencia en Modales
+      const inputHierroCenso = document.getElementById("censo-in-hierro");
+      if (inputHierroCenso) inputHierroCenso.value = configSistema.hierroFinca;
+
+      const inputPrecioLeche = document.getElementById("vleche-in-precio");
+      if (inputPrecioLeche) inputPrecioLeche.value = configSistema.precioRefLeche.toFixed(2);
+
+      const inputPrecioCarne = document.getElementById("canal-in-preciokg");
+      if (inputPrecioCarne) inputPrecioCarne.value = configSistema.precioRefCarne.toFixed(2);
+
+      const pillMetaGdp = document.getElementById("pesaje-meta-gdp-pill");
+      if (pillMetaGdp) pillMetaGdp.textContent = `+${configSistema.metaGdp.toFixed(2)} kg/día`;
+
+      showToast(`⚙️ Configuración guardada: ${configSistema.nombreFinca} (Hierro: ${configSistema.hierroFinca}).`);
+    }
+
+    // --------------------------------------------------------------------------
     // NAVEGACIÓN ENTRE PESTAÑAS
     // --------------------------------------------------------------------------
-    function switchTab(tabId) {
+    function switchTab(tabId, ev) {
       document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      if (ev && ev.currentTarget) {
+        ev.currentTarget.classList.add('active');
+      } else {
+        const matchingBtn = document.querySelector(`.nav-tab-btn[onclick*="'${tabId}'"]`);
+        if (matchingBtn) matchingBtn.classList.add('active');
+      }
 
       document.querySelectorAll('.module-view').forEach(view => view.classList.remove('active'));
       const targetView = document.getElementById(`view-${tabId}`);
@@ -2114,6 +2831,8 @@
     function toggleRole() {
       rolActual = (rolActual === "Administrador") ? "Operador" : "Administrador";
       document.getElementById("role-indicator").textContent = `Rol: ${rolActual}`;
+      const cfgRol = document.getElementById("cfg-rol-actual");
+      if (cfgRol) cfgRol.textContent = rolActual;
       showToast(`Cambiado a rol: ${rolActual}. Permisos actualizados.`);
     }
 
@@ -2137,30 +2856,214 @@
     }
 
     // --------------------------------------------------------------------------
-    // RENDERIZADO: SELECTORES Y LISTAS DE ANIMALES
+    // GESTIÓN DEL CATÁLOGO DINÁMICO DE RAZAS (PERSISTENTE)
+    // --------------------------------------------------------------------------
+    function renderizarSelectoresRazas(seleccionarRaza = null, targetSelectId = null) {
+      const idsSelects = ["censo-in-raza", "repro-in-cria-raza"];
+      idsSelects.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const valorPrevio = (targetSelectId === id && seleccionarRaza) ? seleccionarRaza : (seleccionarRaza && !targetSelectId ? seleccionarRaza : sel.value);
+        sel.innerHTML = "";
+
+        catalogoRazas.forEach(r => {
+          const opt = document.createElement("option");
+          opt.value = r;
+          opt.textContent = r;
+          sel.appendChild(opt);
+        });
+
+        const optNueva = document.createElement("option");
+        optNueva.value = "__NUEVA_RAZA__";
+        optNueva.textContent = "➕ Registrar nueva raza...";
+        sel.appendChild(optNueva);
+
+        if (valorPrevio && catalogoRazas.includes(valorPrevio)) {
+          sel.value = valorPrevio;
+        } else if (catalogoRazas.length > 0) {
+          sel.value = catalogoRazas[0];
+        }
+      });
+
+      // Renderizar chips en el modal de razas y en el módulo de Configuración
+      ["lista-chips-razas", "cfg-chips-razas"].forEach(containerId => {
+        const chipsContainer = document.getElementById(containerId);
+        if (chipsContainer) {
+          chipsContainer.innerHTML = "";
+          catalogoRazas.forEach(r => {
+            const span = document.createElement("span");
+            span.className = "badge-status normal";
+            span.textContent = `🧬 ${r}`;
+            chipsContainer.appendChild(span);
+          });
+        }
+      });
+    }
+
+    function verificarSeleccionNuevaRaza(selectElem) {
+      if (selectElem.value === "__NUEVA_RAZA__") {
+        selectElem.value = catalogoRazas[0];
+        abrirModalNuevaRaza(selectElem.id);
+      }
+    }
+
+    function abrirModalNuevaRaza(targetSelectId = "") {
+      document.getElementById("raza-target-select-id").value = targetSelectId;
+      document.getElementById("input-nombre-nueva-raza").value = "";
+      renderizarSelectoresRazas();
+      document.getElementById("modal-nueva-raza").classList.add("open");
+      setTimeout(() => document.getElementById("input-nombre-nueva-raza").focus(), 80);
+    }
+
+    function handleGuardarNuevaRaza(e) {
+      e.preventDefault();
+      const input = document.getElementById("input-nombre-nueva-raza");
+      const targetId = document.getElementById("raza-target-select-id").value;
+      const nuevaRaza = input.value.trim();
+
+      if (!nuevaRaza) return;
+
+      const yaExiste = catalogoRazas.find(r => r.toLowerCase() === nuevaRaza.toLowerCase());
+      const razaFinal = yaExiste || nuevaRaza;
+
+      if (!yaExiste) {
+        catalogoRazas.push(nuevaRaza);
+        try {
+          localStorage.setItem("fincacontrol_catalogo_razas", JSON.stringify(catalogoRazas));
+        } catch (err) {
+          // Continuar en memoria si localStorage no está disponible
+        }
+      }
+
+      renderizarSelectoresRazas(razaFinal, targetId);
+      cerrarModal("modal-nueva-raza");
+      showToast(`🧬 Raza "${razaFinal}" guardada en el catálogo y disponible para futuros animales.`);
+    }
+
+    // --------------------------------------------------------------------------
+    // LÓGICA DE CONDICIONES FISIOLÓGICAS Y VALIDACIÓN DE PREÑEZ
+    // --------------------------------------------------------------------------
+    function actualizarOpcionesCondicionFisiologica(prefijo) {
+      const sexo = document.getElementById(`${prefijo}-in-sexo`).value;
+      const selectCondicion = document.getElementById(`${prefijo}-in-condicion`);
+      if (!selectCondicion) return;
+
+      selectCondicion.innerHTML = "";
+      const opciones = CONDICIONES_POR_SEXO[sexo] || [];
+      opciones.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item.valor;
+        opt.textContent = item.label;
+        selectCondicion.appendChild(opt);
+      });
+
+      sincronizarPrenezPorCondicion(prefijo);
+    }
+
+    function sincronizarPrenezPorCondicion(prefijo) {
+      const sexo = document.getElementById(`${prefijo}-in-sexo`).value;
+      const condicionVal = document.getElementById(`${prefijo}-in-condicion`).value;
+      const selectPrenada = document.getElementById(`${prefijo}-in-prenada`);
+      const hintPrenada = document.getElementById(`${prefijo}-hint-prenada`);
+      const hintPeso = document.getElementById(`${prefijo}-hint-peso`);
+
+      const opciones = CONDICIONES_POR_SEXO[sexo] || [];
+      const metaCondicion = opciones.find(x => x.valor === condicionVal);
+
+      if (hintPeso && metaCondicion) {
+        hintPeso.textContent = `Ref: ${metaCondicion.pesoRef}`;
+      }
+
+      if (!metaCondicion || !metaCondicion.permitePrenez) {
+        // Es macho (Toro, Novillo, Maute, Becerro) o Becerra/Mauta: No aplica preñez
+        selectPrenada.innerHTML = `<option value="No aplica">No aplica (${sexo === 'Macho' ? 'Macho' : condicionVal})</option>`;
+        selectPrenada.value = "No aplica";
+        selectPrenada.disabled = true;
+        if (hintPrenada) hintPrenada.textContent = "Bloqueado en Machos/Crías";
+      } else {
+        selectPrenada.disabled = false;
+        selectPrenada.innerHTML = `
+          <option value="No">No (Vacía)</option>
+          <option value="Sí">🤰 Sí (Preñada)</option>
+        `;
+        if (metaCondicion.forzarPrenez === "Sí") {
+          selectPrenada.value = "Sí";
+          if (hintPrenada) hintPrenada.textContent = "Preñada por etapa";
+        } else {
+          selectPrenada.value = "No";
+          if (hintPrenada) hintPrenada.textContent = "Hembra reproductora";
+        }
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // RENDERIZADO: SELECTORES Y LISTAS DE ANIMALES (POR N° IDENTIFICADOR)
     // --------------------------------------------------------------------------
     function refrescarSelectoresAnimales() {
-      const selects = [
-        document.getElementById("ordeno-in-hierro"),
-        document.getElementById("pesaje-in-hierro"),
-        document.getElementById("sanidad-in-hierro"),
-        document.getElementById("repro-in-hembra")
-      ];
+      const selectOrdeno = document.getElementById("ordeno-in-numero");
+      const selectPesaje = document.getElementById("pesaje-in-numero");
+      const selectSanidad = document.getElementById("sanidad-in-numero");
+      const selectRepro = document.getElementById("repro-in-hembra");
+      const datalistMadres = document.getElementById("datalist-madres");
 
-      selects.forEach(sel => {
+      // Ordeño: Vacas paridas (en lactancia)
+      if (selectOrdeno) {
+        selectOrdeno.innerHTML = "";
+        animales.filter(a => a.sexo === "Hembra" && a.condicion.startsWith("Vaca parida")).forEach(a => {
+          const opt = document.createElement("option");
+          opt.value = a.id;
+          opt.textContent = `#${a.id} ${a.nombre} (${a.condicion})`;
+          selectOrdeno.appendChild(opt);
+        });
+      }
+
+      // Pesaje y Sanidad: Todos los animales activos
+      [selectPesaje, selectSanidad].forEach(sel => {
         if (!sel) return;
         sel.innerHTML = "";
         animales.forEach(a => {
-          if ((sel.id === "ordeno-in-hierro" || sel.id === "repro-in-hembra") && a.sexo !== "Hembra") return;
           const opt = document.createElement("option");
           opt.value = a.id;
-          opt.textContent = `#${a.id} ${a.nombre} (${a.raza})`;
+          opt.textContent = `#${a.id} ${a.nombre} • ${a.condicion} (${a.raza})`;
           sel.appendChild(opt);
         });
       });
 
-      if (selects[1] && selects[1].value) {
-        mostrarUltimoPeso(selects[1].value);
+      // Reproducción: Hembras reproductoras (Vacas y Novillas de vientre)
+      if (selectRepro) {
+        selectRepro.innerHTML = "";
+        animales.filter(a => a.sexo === "Hembra" && (a.condicion.startsWith("Vaca") || a.condicion.startsWith("Novilla"))).forEach(a => {
+          const opt = document.createElement("option");
+          opt.value = a.id;
+          opt.textContent = `#${a.id} ${a.nombre} • ${a.condicion} (Preñada: ${a.prenada})`;
+          selectRepro.appendChild(opt);
+        });
+        prellenarHierroMadreParto();
+      }
+
+      // Datalist de Madres por N° Identificador
+      if (datalistMadres) {
+        datalistMadres.innerHTML = "";
+        animales.filter(a => a.sexo === "Hembra" && a.condicion.startsWith("Vaca")).forEach(a => {
+          const opt = document.createElement("option");
+          opt.value = a.id;
+          opt.label = `Vaca #${a.id} ${a.nombre} (${a.raza})`;
+          datalistMadres.appendChild(opt);
+        });
+      }
+
+      if (selectPesaje && selectPesaje.value) {
+        mostrarUltimoPeso(selectPesaje.value);
+      }
+    }
+
+    function prellenarHierroMadreParto() {
+      const selHembra = document.getElementById("repro-in-hembra");
+      const inputHierroCria = document.getElementById("repro-in-cria-hierro");
+      if (!selHembra || !inputHierroCria) return;
+      const madre = animales.find(a => a.id === selHembra.value);
+      if (madre) {
+        inputHierroCria.value = madre.hierro;
       }
     }
 
@@ -2169,11 +3072,12 @@
     // --------------------------------------------------------------------------
     function renderizarDashboard() {
       let litrosOrdeñadosHoy = registrosOrdeno.filter(r => !r.esRetiro).reduce((sum, r) => sum + r.litros, 0);
+      let totalPrenadas = animales.filter(a => a.prenada === "Sí").length;
 
       document.getElementById("kpi-dash-tanque").textContent = `${lecheDisponibleTanque.toFixed(1)} L`;
       document.getElementById("kpi-dash-ordeñado-hoy").textContent = `Ordeñado hoy (apto): ${litrosOrdeñadosHoy.toFixed(1)} L`;
       document.getElementById("kpi-dash-censo").textContent = `${animales.length} reses`;
-      document.getElementById("kpi-dash-desincorporados").textContent = `${historialVentasCanal.length} canal / vendidas`;
+      document.getElementById("kpi-dash-desincorporados").textContent = `${totalPrenadas} preñada(s) • ${historialVentasCanal.length} en canal`;
       document.getElementById("kpi-dash-retiros").textContent = `${animalesEnRetiro.length} Vaca(s)`;
 
       const tbody = document.getElementById("dash-records-tbody");
@@ -2181,7 +3085,7 @@
       registrosOrdeno.slice(0, 5).forEach(r => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><span class="animal-id">#${r.hierro}</span> ${r.nombre}</td>
+          <td><span class="animal-id">#${r.numero}</span> ${r.nombre}</td>
           <td>${r.jornada}</td>
           <td><strong>${r.litros.toFixed(1)} L</strong></td>
           <td>
@@ -2196,58 +3100,101 @@
     }
 
     // --------------------------------------------------------------------------
-    // RENDERIZADO: CENSO Y BENEFICIO EN CANAL
+    // RENDERIZADO: CENSO, CONDICIONES FISIOLÓGICAS Y BENEFICIO EN CANAL
     // --------------------------------------------------------------------------
     function renderizarCenso() {
-      // Contador subnavegación
       document.getElementById("count-censo-activos").textContent = animales.length;
       document.getElementById("count-censo-canal").textContent = historialVentasCanal.length;
 
-      // Tabla Censo Activo
+      const filtroEtapa = document.getElementById("filtro-censo-etapa") ? document.getElementById("filtro-censo-etapa").value : "TODAS";
+      const filtroPrenez = document.getElementById("filtro-censo-prenez") ? document.getElementById("filtro-censo-prenez").value : "TODAS";
+
+      const animalesFiltrados = animales.filter(a => {
+        let cumpleEtapa = true;
+        if (filtroEtapa !== "TODAS") {
+          if (filtroEtapa === "Becerro") cumpleEtapa = (a.condicion === "Becerro" || a.condicion === "Becerra");
+          else if (filtroEtapa === "Maute") cumpleEtapa = (a.condicion === "Maute" || a.condicion === "Mauta");
+          else if (filtroEtapa === "Novillo") cumpleEtapa = (a.condicion.startsWith("Novillo") || a.condicion.startsWith("Novilla"));
+          else if (filtroEtapa === "Vaca parida") cumpleEtapa = a.condicion.startsWith("Vaca parida");
+          else cumpleEtapa = (a.condicion === filtroEtapa);
+        }
+
+        let cumplePrenez = true;
+        if (filtroPrenez === "SI") cumplePrenez = (a.prenada === "Sí");
+        else if (filtroPrenez === "NO") cumplePrenez = (a.prenada === "No");
+
+        return cumpleEtapa && cumplePrenez;
+      });
+
       const tbodyActivos = document.getElementById("censo-tbody");
       tbodyActivos.innerHTML = "";
-      animales.forEach(a => {
-        const esRetiro = animalesEnRetiro.includes(a.id);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><span class="animal-id">#${a.id}</span></td>
-          <td><strong>${a.nombre}</strong></td>
-          <td>${a.sexo}</td>
-          <td>${a.raza}</td>
-          <td>${a.proposito}</td>
-          <td>
-            <span class="badge-status ${esRetiro ? 'danger' : (a.estado === 'En Lactancia' ? 'success' : 'normal')}">
-              ${esRetiro ? '⚠️ En Retiro Sanitario' : a.estado}
-            </span>
-          </td>
-          <td>
-            <div style="display: flex; gap: 6px;">
-              <button class="btn-secondary" style="height: 32px; font-size: 12px; padding: 0 10px;" onclick="abrirHojaVida('${a.id}')">
-                Hoja de Vida
-              </button>
-              <button class="btn-danger-outline" onclick="abrirModalVentaCanal('${a.id}')" title="Pasar animal a canal y liberar número de hierro">
-                🥩 Vender en Canal
-              </button>
-            </div>
-          </td>
-        `;
-        tbodyActivos.appendChild(tr);
-      });
+
+      if (animalesFiltrados.length === 0) {
+        tbodyActivos.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-dim); padding: 18px;">No hay animales que coincidan con el filtro seleccionado.</td></tr>`;
+      } else {
+        animalesFiltrados.forEach(a => {
+          const esRetiro = animalesEnRetiro.includes(a.id);
+          let badgeCondicion = "normal";
+          if (esRetiro) badgeCondicion = "danger";
+          else if (a.condicion.startsWith("Vaca parida")) badgeCondicion = "success";
+          else if (a.condicion === "Vaca escotera" || a.condicion === "Vaca seca") badgeCondicion = "warning";
+          else if (a.condicion === "Toro Reproductor") badgeCondicion = "info";
+
+          let badgePrenada = `<span class="badge-status normal">N/A (${a.sexo === 'Macho' ? 'Macho' : 'Cría'})</span>`;
+          if (a.prenada === "Sí") {
+            badgePrenada = `<span class="badge-status warning">🤰 Sí (Preñada)</span>`;
+          } else if (a.prenada === "No") {
+            badgePrenada = `<span class="badge-status normal">No (Vacía)</span>`;
+          }
+
+          const madreObj = animales.find(m => m.id === a.madre);
+          const textoMadre = (a.madre && a.madre !== "--")
+            ? `<strong>#${a.madre}</strong> ${madreObj ? `(${madreObj.nombre})` : ''}`
+            : `<span style="color: var(--text-dim);">--</span>`;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><span class="animal-id">#${a.id}</span></td>
+            <td><span class="hierro-tag" title="Hierro de propietario/procedencia">🔥 ${a.hierro}</span></td>
+            <td><strong>${a.nombre}</strong></td>
+            <td>${a.sexo} • <strong>${a.raza}</strong></td>
+            <td>
+              <span class="badge-status ${badgeCondicion}">
+                ${esRetiro ? `⚠️ ${a.condicion} (Retiro)` : a.condicion}
+              </span>
+            </td>
+            <td>${badgePrenada}</td>
+            <td>${textoMadre}</td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-secondary" style="height: 32px; font-size: 12px; padding: 0 10px;" onclick="abrirHojaVida('${a.id}')">
+                  Hoja de Vida
+                </button>
+                <button class="btn-danger-outline" onclick="abrirModalVentaCanal('${a.id}')" title="Pasar animal a canal y liberar N° Identificador">
+                  🥩 Vender en Canal
+                </button>
+              </div>
+            </td>
+          `;
+          tbodyActivos.appendChild(tr);
+        });
+      }
 
       // Tabla Censo Canal (Desincorporados)
       const tbodyCanal = document.getElementById("censo-canal-tbody");
       tbodyCanal.innerHTML = "";
       if (historialVentasCanal.length === 0) {
-        tbodyCanal.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-dim); padding: 18px;">No hay animales beneficiados en canal aún.</td></tr>`;
+        tbodyCanal.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-dim); padding: 18px;">No hay animales beneficiados en canal aún.</td></tr>`;
       } else {
         historialVentasCanal.forEach(c => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td><span class="badge-status success">Hierro #${c.hierro} Liberado</span></td>
-            <td><strong>${c.nombre}</strong> (${c.raza})</td>
+            <td><span class="badge-status success">N° #${c.numero} Liberado</span></td>
+            <td><span class="hierro-tag">🔥 ${c.hierro}</span></td>
+            <td><strong>${c.nombre}</strong> (${c.condicion} • ${c.raza})</td>
             <td>${c.fecha}</td>
             <td>${c.pesoVivo} Kg</td>
-            <td><strong>${c.pesoCanal.toFixed(1)} Kg</strong> (${c.rendimiento}%)</td>
+            <td>$ ${(c.precioKg || 1.85).toFixed(2)} / Kg</td>
             <td style="font-weight: 700; color: #166534;">$ ${c.totalVenta.toFixed(2)}</td>
             <td>${c.comprador}</td>
           `;
@@ -2269,13 +3216,12 @@
       document.getElementById("ordeno-kpi-vendida").textContent = `${totalVendida.toFixed(1)} L`;
       document.getElementById("ordeno-kpi-descarte").textContent = `${litrosDescarteHoy.toFixed(1)} L`;
 
-      // Tabla Registros de Ordeño
       const tbody = document.getElementById("ordeno-tbody");
       tbody.innerHTML = "";
       registrosOrdeno.forEach(r => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><span class="animal-id">#${r.hierro}</span></td>
+          <td><span class="animal-id">#${r.numero}</span></td>
           <td>${r.nombre}</td>
           <td>${r.jornada}</td>
           <td><strong>${r.litros.toFixed(1)} L</strong></td>
@@ -2289,7 +3235,6 @@
         tbody.appendChild(tr);
       });
 
-      // Tabla Ventas de Leche
       const tbodyVentas = document.getElementById("ordeno-ventas-tbody");
       tbodyVentas.innerHTML = "";
       historialVentasLeche.forEach(v => {
@@ -2307,7 +3252,7 @@
     }
 
     // --------------------------------------------------------------------------
-    // RENDERIZADO: PESAJES
+    // RENDERIZADO: PESAJES (PROCESO 3)
     // --------------------------------------------------------------------------
     function renderizarPesajes() {
       const tbody = document.getElementById("pesaje-tbody");
@@ -2315,21 +3260,27 @@
       registrosPesaje.forEach(p => {
         const tr = document.createElement("tr");
         const badgeClass = p.gdp >= 0.6 ? 'success' : (p.gdp >= 0.3 ? 'normal' : 'danger');
+        const sigueActivo = animales.some(a => a.id === p.numero);
+        const btnCanalHtml = sigueActivo
+          ? `<button class="btn-danger-outline" onclick="abrirModalVentaCanal('${p.numero}')" title="Pasar animal a canal y liberar N° Identificador">🥩 Vender en Canal</button>`
+          : `<span class="badge-status normal">Vendido en Canal (N° Libre)</span>`;
+
         tr.innerHTML = `
-          <td><span class="animal-id">#${p.hierro}</span></td>
-          <td>${p.nombre}</td>
+          <td><span class="animal-id">#${p.numero}</span></td>
+          <td><strong>${p.nombre}</strong> <span style="font-size: 12px; color: var(--text-dim);">(${p.etapa || 'Res'})</span></td>
           <td>${p.fecha}</td>
           <td><strong>${p.peso} Kg</strong></td>
           <td>${p.pesoPrevio} Kg</td>
           <td><strong>${p.gdp > 0 ? '+' : ''}${p.gdp.toFixed(2)} kg/día</strong></td>
           <td><span class="badge-status ${badgeClass}">${p.evaluacion}</span></td>
+          <td>${btnCanalHtml}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function mostrarUltimoPeso(hierro) {
-      const a = animales.find(x => x.id === hierro);
+    function mostrarUltimoPeso(numero) {
+      const a = animales.find(x => x.id === numero);
       const hint = document.getElementById("pesaje-prev-hint");
       if (a && hint) {
         hint.textContent = `Previo: ${a.peso} Kg`;
@@ -2348,7 +3299,7 @@
       eventosSanitarios.forEach(s => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><span class="animal-id">#${s.hierro}</span></td>
+          <td><span class="animal-id">#${s.numero}</span></td>
           <td>${s.nombre}</td>
           <td>${s.tipo}</td>
           <td><strong>${s.producto}</strong></td>
@@ -2372,12 +3323,12 @@
       tbody.innerHTML = "";
       eventosReproductivos.forEach(e => {
         const hAnimal = animales.find(a => a.id === e.hembra);
-        const nombreH = hAnimal ? hAnimal.nombre : `Vaca #${e.hembra}`;
+        const nombreH = hAnimal ? `${hAnimal.nombre} (${hAnimal.condicion})` : `Vaca #${e.hembra}`;
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td><span class="animal-id">#${e.hembra}</span> ${nombreH}</td>
           <td><strong>${e.tipo}</strong></td>
-          <td>${e.macho || '--'}</td>
+          <td>#${e.macho || '--'}</td>
           <td>${e.fecha}</td>
           <td><span class="badge-status info">${e.resultado}</span></td>
           <td>${e.impacto}</td>
@@ -2392,6 +3343,7 @@
       if (tipo === "Parto") {
         panelParto.style.display = "block";
         if (grupoResultado) grupoResultado.style.display = "none";
+        prellenarHierroMadreParto();
       } else {
         panelParto.style.display = "none";
         if (grupoResultado) grupoResultado.style.display = "flex";
@@ -2416,7 +3368,6 @@
       document.getElementById("fin-margen-pct").textContent = `${margen}% Margen Bruto`;
       document.getElementById("fin-costo-litro").textContent = `$ ${costoLitro}`;
 
-      // Dashboard
       document.getElementById("kpi-dash-utilidad").textContent = `$ ${utilidad.toFixed(2)}`;
 
       const tbody = document.getElementById("fin-tbody");
@@ -2465,8 +3416,8 @@
     // --------------------------------------------------------------------------
     // VALIDACIÓN INTERACTIVA DE RETIRO EN FORMULARIOS
     // --------------------------------------------------------------------------
-    function checkRetiroInForm(hierroVal, warningId) {
-      const cleanVal = hierroVal.trim();
+    function checkRetiroInForm(numeroVal, warningId) {
+      const cleanVal = numeroVal.trim();
       const warningBox = document.getElementById(warningId);
       if (!warningBox) return;
 
@@ -2482,17 +3433,17 @@
     // --------------------------------------------------------------------------
     function handleDashQuickMilk(e) {
       e.preventDefault();
-      const hierro = document.getElementById("dash-in-hierro").value.trim();
+      const numero = document.getElementById("dash-in-numero").value.trim();
       const jornada = document.getElementById("dash-in-jornada").value;
       const litros = parseFloat(document.getElementById("dash-in-litros").value);
 
-      const a = animales.find(x => x.id === hierro);
+      const a = animales.find(x => x.id === numero);
       const nombre = a ? a.nombre : "Vaca";
-      const esRetiro = animalesEnRetiro.includes(hierro);
+      const esRetiro = animalesEnRetiro.includes(numero);
       const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
       registrosOrdeno.unshift({
-        hierro, nombre, jornada, litros, esRetiro, hora: timeStr, fecha: new Date().toISOString().split('T')[0]
+        numero, nombre, jornada, litros, esRetiro, hora: timeStr, fecha: new Date().toISOString().split('T')[0]
       });
 
       if (!esRetiro) {
@@ -2502,30 +3453,30 @@
       renderizarDashboard();
       renderizarOrdeno();
 
-      document.getElementById("dash-in-hierro").value = "";
+      document.getElementById("dash-in-numero").value = "";
       document.getElementById("dash-in-litros").value = "";
       document.getElementById("dash-warning").style.display = "none";
-      document.getElementById("dash-in-hierro").focus();
+      document.getElementById("dash-in-numero").focus();
 
       showToast(esRetiro 
-        ? `⚠️ Guardado #${hierro}. ¡Marcado como descarte médico (No sumó al tanque)!` 
-        : `✅ Ordeño #${hierro} (+${litros} L) sumado al tanque disponible.`
+        ? `⚠️ Guardado N° #${numero}. ¡Marcado como descarte médico (No sumó al tanque)!` 
+        : `✅ Ordeño N° #${numero} (+${litros} L) sumado al tanque disponible.`
       );
     }
 
     function handleModuloMilk(e) {
       e.preventDefault();
-      const hierro = document.getElementById("ordeno-in-hierro").value;
+      const numero = document.getElementById("ordeno-in-numero").value;
       const jornada = document.getElementById("ordeno-in-jornada").value;
       const litros = parseFloat(document.getElementById("ordeno-in-litros").value);
 
-      const a = animales.find(x => x.id === hierro);
+      const a = animales.find(x => x.id === numero);
       const nombre = a ? a.nombre : "Vaca";
-      const esRetiro = animalesEnRetiro.includes(hierro);
+      const esRetiro = animalesEnRetiro.includes(numero);
       const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
       registrosOrdeno.unshift({
-        hierro, nombre, jornada, litros, esRetiro, hora: timeStr, fecha: new Date().toISOString().split('T')[0]
+        numero, nombre, jornada, litros, esRetiro, hora: timeStr, fecha: new Date().toISOString().split('T')[0]
       });
 
       if (!esRetiro) {
@@ -2537,8 +3488,8 @@
       document.getElementById("ordeno-in-litros").value = "";
 
       showToast(esRetiro
-        ? `⚠️ Ordeño registrado para #${hierro}. Leche enviada a descarte.`
-        : `🥛 Ordeño #${hierro} registrado. Se agregaron ${litros} L al tanque.`
+        ? `⚠️ Ordeño registrado para #${numero}. Leche enviada a descarte.`
+        : `🥛 Ordeño #${numero} registrado. Se agregaron ${litros} L al tanque.`
       );
     }
 
@@ -2575,15 +3526,12 @@
 
       const totalVenta = litros * precio;
 
-      // 1. Disminuir litros del tanque
       lecheDisponibleTanque -= litros;
 
-      // 2. Guardar en historial de ventas de leche
       historialVentasLeche.unshift({
         fecha, litros, precio, total: totalVenta, comprador
       });
 
-      // 3. Generar automáticamente transacción financiera de Ingreso
       transaccionesFinancieras.unshift({
         id: `TRX-${Date.now().toString().slice(-4)}`,
         tipo: "Ingreso",
@@ -2603,7 +3551,7 @@
     }
 
     // --------------------------------------------------------------------------
-    // PASAR A CANAL / VENDER CARNE (DESINCORPORAR DEL CENSO Y LIBERAR HIERRO)
+    // PASAR A CANAL / VENDER CARNE (DESINCORPORAR DEL CENSO Y LIBERAR N° IDENTIFICADOR)
     // --------------------------------------------------------------------------
     function abrirModalVentaCanal(id) {
       const a = animales.find(x => x.id === id);
@@ -2611,9 +3559,10 @@
 
       const esRetiro = animalesEnRetiro.includes(a.id);
       document.getElementById("canal-hidden-id").value = a.id;
-      document.getElementById("canal-modal-titulo").textContent = `Pasar a Canal: #${a.id} ${a.nombre}`;
+      document.getElementById("canal-modal-titulo").textContent = `Pasar a Canal: N° #${a.id} ${a.nombre}`;
       document.getElementById("canal-det-nombre").textContent = `#${a.id} ${a.nombre}`;
-      document.getElementById("canal-det-raza").textContent = `${a.raza} (${a.proposito})`;
+      document.getElementById("canal-det-hierro").textContent = a.hierro;
+      document.getElementById("canal-det-raza").textContent = `${a.condicion} • ${a.raza} (${a.proposito})`;
       document.getElementById("canal-det-peso").textContent = `${a.peso} Kg`;
       document.getElementById("canal-in-pesovivo").value = a.peso;
 
@@ -2638,10 +3587,8 @@
 
     function calcularTotalVentaCanal() {
       const pesoVivo = parseFloat(document.getElementById("canal-in-pesovivo").value) || 0;
-      const rendimiento = parseFloat(document.getElementById("canal-in-rendimiento").value) || 53.5;
       const precioKg = parseFloat(document.getElementById("canal-in-preciokg").value) || 1.85;
 
-      const pesoCanal = pesoVivo * (rendimiento / 100);
       const total = pesoVivo * precioKg;
       document.getElementById("canal-total-display").textContent = `$ ${total.toFixed(2)}`;
     }
@@ -2658,28 +3605,27 @@
       }
 
       const pesoVivo = parseFloat(document.getElementById("canal-in-pesovivo").value);
-      const rendimiento = parseFloat(document.getElementById("canal-in-rendimiento").value);
       const precioKg = parseFloat(document.getElementById("canal-in-preciokg").value);
       const comprador = document.getElementById("canal-in-comprador").value.trim();
       const fecha = document.getElementById("canal-in-fecha").value;
 
-      const pesoCanal = pesoVivo * (rendimiento / 100);
       const totalVenta = pesoVivo * precioKg;
 
       // 1. Guardar en historial de ventas / canal
       historialVentasCanal.unshift({
-        hierro: a.id,
+        numero: a.id,
+        hierro: a.hierro,
         nombre: a.nombre,
+        condicion: a.condicion,
         raza: a.raza,
         pesoVivo,
-        rendimiento,
-        pesoCanal,
+        precioKg,
         totalVenta,
         comprador,
         fecha
       });
 
-      // 2. DESINCORPORAR DEL CENSO DE REBAÑO ACTIVO (LIBERA EL NÚMERO DE HIERRO)
+      // 2. DESINCORPORAR DEL CENSO DE REBAÑO ACTIVO (LIBERA EL N° IDENTIFICADOR)
       animales = animales.filter(x => x.id !== id);
 
       // 3. Generar Ingreso Financiero automático
@@ -2689,86 +3635,122 @@
         categoria: "Venta de Ganado / Canal",
         monto: totalVenta,
         fecha,
-        concepto: `Venta en canal #${a.id} ${a.nombre} (${pesoVivo} kg pie, ${pesoCanal.toFixed(1)} kg canal) a ${comprador}`,
+        concepto: `Venta en canal N° #${a.id} ${a.nombre} (${a.condicion}, ${pesoVivo} kg pie) a ${comprador}`,
         usuario: "Johan M."
       });
 
       cerrarModal("modal-venta-canal");
       refrescarSelectoresAnimales();
       renderizarCenso();
+      renderizarPesajes();
       renderizarDashboard();
       renderizarFinanzas();
 
-      showToast(`🥩 #${a.id} ${a.nombre} desincorporado por canal. ¡Hierro #${a.id} liberado para nuevas crías! +$${totalVenta.toFixed(2)} en caja.`);
+      showToast(`🥩 Animal N° #${a.id} (${a.nombre}) desincorporado por canal. ¡N° Identificador #${a.id} liberado! +$${totalVenta.toFixed(2)} en caja.`);
     }
 
     // --------------------------------------------------------------------------
-    // REGISTRO DE PARTO COMPLETO (ALTA COMPLETA DE CRÍA EN CENSO)
+    // REGISTRO DE PARTO COMPLETO (ALTA DE CRÍA CON N° IDENTIFICADOR, HIERRO Y MADRE POR N°)
     // --------------------------------------------------------------------------
     function handleRegistrarReproduccion(e) {
       e.preventDefault();
       const hembra = document.getElementById("repro-in-hembra").value;
       const tipo = document.getElementById("repro-in-tipo").value;
-      const macho = document.getElementById("repro-in-macho").value.trim() || "--";
+      const macho = document.getElementById("repro-in-macho").value.trim().replace(/^#/, "") || "--";
       const fecha = document.getElementById("repro-in-fecha").value;
 
       let resultado = "Normal";
       let impacto = "Registro en bitácora";
 
+      const madreObj = animales.find(a => a.id === hembra);
+
       if (tipo === "Parto") {
+        const criaNumero = document.getElementById("repro-in-cria-numero").value.trim().replace(/^#/, "");
         const criaHierro = document.getElementById("repro-in-cria-hierro").value.trim();
         const criaNombre = document.getElementById("repro-in-cria-nombre").value.trim();
         const criaSexo = document.getElementById("repro-in-cria-sexo").value;
         const criaRaza = document.getElementById("repro-in-cria-raza").value;
         const criaProposito = document.getElementById("repro-in-cria-proposito").value;
         const criaPeso = parseFloat(document.getElementById("repro-in-cria-peso").value) || 35.0;
+        const condicionMadrePostParto = document.getElementById("repro-in-tipo-parto-madre").value;
 
-        if (!criaHierro || !criaNombre) {
-          alert("Por favor ingresa el número de hierro y el nombre completo de la cría para el censo.");
+        if (!criaNumero || !criaHierro || !criaNombre) {
+          alert("Por favor ingresa el N° Identificador de la cría, la descripción de su Hierro y el Nombre para el censo.");
           return;
         }
 
-        // Validar si el hierro ya está en uso en el rebaño activo
-        if (animales.some(a => a.id === criaHierro)) {
-          alert(`El hierro #${criaHierro} ya está en uso por otro animal activo en el censo. (Si fue vendido a canal, ya estaría libre).`);
+        if (animales.some(a => a.id === criaNumero)) {
+          alert(`El N° Identificador #${criaNumero} ya está en uso por otro animal activo en el censo. (Si fue vendido a canal, ya estaría libre).`);
           return;
         }
 
-        // ALTA COMPLETA DE LA CRÍA EN EL CENSO
+        const etapaInicialCria = (criaSexo === "Hembra") ? "Becerra" : "Becerro";
+
+        // ALTA COMPLETA DE LA CRÍA EN EL CENSO (Madre guardada con N° Identificador)
         animales.push({
-          id: criaHierro,
+          id: criaNumero,
+          hierro: criaHierro,
           nombre: criaNombre,
           sexo: criaSexo,
           raza: criaRaza,
           proposito: criaProposito,
-          estado: "Cría / Lactante",
+          condicion: etapaInicialCria,
+          prenada: "No aplica",
           peso: criaPeso,
-          madre: hembra,
-          padre: macho
+          madre: hembra,   // N° Identificador de la vaca madre
+          padre: macho     // N° Identificador del toro padre
         });
 
-        // La vaca madre pasa a En Lactancia
-        const madreObj = animales.find(a => a.id === hembra);
-        if (madreObj) madreObj.estado = "En Lactancia";
+        // La vaca madre pasa a Vaca parida (en lactancia) y Preñada = No
+        if (madreObj) {
+          madreObj.condicion = condicionMadrePostParto;
+          madreObj.prenada = "No";
+        }
 
-        resultado = `Nació ${criaSexo === 'Hembra' ? 'Becerra' : 'Torete'} #${criaHierro} ${criaNombre}`;
-        impacto = `Cría #${criaHierro} ${criaNombre} dada de alta con ficha completa en el Censo`;
+        resultado = `Nació ${etapaInicialCria} #${criaNumero} ${criaNombre}`;
+        impacto = `Alta de ${etapaInicialCria} #${criaNumero} (Madre #${hembra}) • Madre pasa a ${condicionMadrePostParto}`;
 
-        // Limpiar campos de cría
-        document.getElementById("repro-in-cria-hierro").value = "";
+        document.getElementById("repro-in-cria-numero").value = "";
         document.getElementById("repro-in-cria-nombre").value = "";
 
         refrescarSelectoresAnimales();
         renderizarCenso();
       } else if (tipo === "Secado") {
-        const madreObj = animales.find(a => a.id === hembra);
-        if (madreObj) madreObj.estado = "Seca";
+        if (madreObj) {
+          madreObj.condicion = "Vaca seca";
+          madreObj.prenada = "Sí";
+        }
         resultado = "Secado confirmado";
-        impacto = "Vaca pasa a estado Seca (descanso de ubre)";
+        impacto = "Condición fisiológica actualizada a Vaca seca (Preñada = Sí)";
+        refrescarSelectoresAnimales();
+        renderizarCenso();
+      } else if (tipo === "Aborto") {
+        if (madreObj) {
+          madreObj.prenada = "No";
+        }
+        resultado = "Aborto registrado";
+        impacto = "Estado de preñez actualizado a No (Vacía)";
+        refrescarSelectoresAnimales();
         renderizarCenso();
       } else {
         resultado = document.getElementById("repro-in-resultado").value;
-        impacto = `Evento ${tipo} registrado`;
+        if (madreObj) {
+          if (resultado.includes("Preñada Escotera")) {
+            madreObj.condicion = "Vaca escotera";
+            madreObj.prenada = "Sí";
+            impacto = "Actualizada a Vaca escotera (Preñada = Sí)";
+          } else if (resultado.includes("Preñada Confirmada")) {
+            madreObj.prenada = "Sí";
+            impacto = `Preñez confirmada (Preñada = Sí en ${madreObj.condicion})`;
+          } else if (resultado.includes("Vacía")) {
+            madreObj.prenada = "No";
+            impacto = "Actualizada a Preñada = No (Vacía)";
+          } else {
+            impacto = `Evento ${tipo} registrado`;
+          }
+        }
+        refrescarSelectoresAnimales();
+        renderizarCenso();
       }
 
       eventosReproductivos.unshift({
@@ -2777,7 +3759,7 @@
 
       renderizarReproduccion();
       renderizarDashboard();
-      showToast(`🧬 Evento reproductivo guardado: ${tipo} en vaca #${hembra}.`);
+      showToast(`🧬 Evento reproductivo guardado: ${tipo} en hembra #${hembra}.`);
     }
 
     // --------------------------------------------------------------------------
@@ -2785,26 +3767,46 @@
     // --------------------------------------------------------------------------
     function handleCrearAnimal(e) {
       e.preventDefault();
-      const id = document.getElementById("censo-in-hierro").value.trim();
+      const id = document.getElementById("censo-in-numero").value.trim().replace(/^#/, "");
+      const hierro = document.getElementById("censo-in-hierro").value.trim();
       const nombre = document.getElementById("censo-in-nombre").value.trim();
       const sexo = document.getElementById("censo-in-sexo").value;
+      const condicion = document.getElementById("censo-in-condicion").value;
+      const prenada = document.getElementById("censo-in-prenada").value;
       const raza = document.getElementById("censo-in-raza").value;
       const proposito = document.getElementById("censo-in-proposito").value;
-      const estado = document.getElementById("censo-in-estado").value;
-      const madre = document.getElementById("censo-in-madre").value.trim() || "--";
+      const peso = parseFloat(document.getElementById("censo-in-peso").value) || 250;
+      const madre = document.getElementById("censo-in-madre").value.trim().replace(/^#/, "") || "--";
+      const padre = document.getElementById("censo-in-padre").value.trim().replace(/^#/, "") || "--";
 
       if (animales.some(a => a.id === id)) {
-        alert("¡Ya existe un animal ACTIVO con este número de hierro! (Si fue vendido a canal, ya estaría libre).");
+        alert("¡Ya existe un animal ACTIVO con este N° Identificador! (El hierro sí puede repetirse porque indica propietario/procedencia, pero el N° Identificador debe ser único por animal).");
         return;
       }
 
-      animales.push({ id, nombre, sexo, raza, proposito, estado, peso: 250, madre, padre: "--" });
+      animales.push({
+        id,
+        hierro,
+        nombre,
+        sexo,
+        raza,
+        proposito,
+        condicion,
+        prenada: (sexo === "Macho" || condicion === "Becerra" || condicion === "Mauta") ? "No aplica" : prenada,
+        peso,
+        madre,
+        padre
+      });
+
       refrescarSelectoresAnimales();
       renderizarCenso();
       renderizarDashboard();
 
+      document.getElementById("censo-in-numero").value = "";
+      document.getElementById("censo-in-nombre").value = "";
+      document.getElementById("censo-in-madre").value = "";
       document.getElementById("form-nuevo-animal").style.display = "none";
-      showToast(`🐄 Animal #${id} ${nombre} registrado en el censo.`);
+      showToast(`🐄 Animal N° #${id} (${nombre} • ${condicion}) registrado con hierro "${hierro}".`);
     }
 
     // --------------------------------------------------------------------------
@@ -2812,11 +3814,11 @@
     // --------------------------------------------------------------------------
     function handleRegistrarPesaje(e) {
       e.preventDefault();
-      const hierro = document.getElementById("pesaje-in-hierro").value;
+      const numero = document.getElementById("pesaje-in-numero").value;
       const fecha = document.getElementById("pesaje-in-fecha").value;
       const pesoActual = parseFloat(document.getElementById("pesaje-in-peso").value);
 
-      const a = animales.find(x => x.id === hierro);
+      const a = animales.find(x => x.id === numero);
       const pesoPrevio = a ? a.peso : pesoActual;
 
       const diffKg = pesoActual - pesoPrevio;
@@ -2824,8 +3826,9 @@
       const evaluacion = gdp >= 0.6 ? "Excelente" : (gdp >= 0.3 ? "Aceptable" : "Estancado");
 
       registrosPesaje.unshift({
-        hierro,
+        numero,
         nombre: a ? a.nombre : "Res",
+        etapa: a ? a.condicion : "Res",
         fecha,
         peso: pesoActual,
         pesoPrevio,
@@ -2836,9 +3839,10 @@
       if (a) a.peso = pesoActual;
 
       renderizarPesajes();
+      renderizarCenso();
       document.getElementById("pesaje-in-peso").value = "";
-      mostrarUltimoPeso(hierro);
-      showToast(`⚖️ Pesaje de #${hierro} guardado. GDP: +${gdp.toFixed(2)} kg/día.`);
+      mostrarUltimoPeso(numero);
+      showToast(`⚖️ Pesaje de N° #${numero} guardado. GDP: +${gdp.toFixed(2)} kg/día.`);
     }
 
     // --------------------------------------------------------------------------
@@ -2846,18 +3850,18 @@
     // --------------------------------------------------------------------------
     function handleRegistrarSanidad(e) {
       e.preventDefault();
-      const hierro = document.getElementById("sanidad-in-hierro").value;
+      const numero = document.getElementById("sanidad-in-numero").value;
       const tipo = document.getElementById("sanidad-in-tipo").value;
       const producto = document.getElementById("sanidad-in-producto").value.trim();
       const retiroLeche = parseInt(document.getElementById("sanidad-in-retiro-leche").value) || 0;
       const retiroCarne = parseInt(document.getElementById("sanidad-in-retiro-carne").value) || 0;
       const fecha = document.getElementById("sanidad-in-fecha").value;
 
-      const a = animales.find(x => x.id === hierro);
+      const a = animales.find(x => x.id === numero);
       const tieneRetiro = (retiroLeche > 0 || retiroCarne > 0);
 
       eventosSanitarios.unshift({
-        hierro,
+        numero,
         nombre: a ? a.nombre : "Res",
         tipo,
         producto,
@@ -2867,8 +3871,8 @@
         activo: tieneRetiro
       });
 
-      if (tieneRetiro && !animalesEnRetiro.includes(hierro)) {
-        animalesEnRetiro.push(hierro);
+      if (tieneRetiro && !animalesEnRetiro.includes(numero)) {
+        animalesEnRetiro.push(numero);
       }
 
       renderizarSanidad();
@@ -2880,8 +3884,8 @@
       document.getElementById("sanidad-in-retiro-carne").value = "";
 
       showToast(tieneRetiro 
-        ? `🚨 Tratamiento guardado. ¡Vaca #${hierro} en cuarentena activa!` 
-        : `🩺 Evento sanitario de #${hierro} guardado.`);
+        ? `🚨 Tratamiento guardado. ¡Animal N° #${numero} en cuarentena activa!` 
+        : `🩺 Evento sanitario de N° #${numero} guardado.`);
     }
 
     // --------------------------------------------------------------------------
@@ -2920,20 +3924,33 @@
       if (!a) return;
 
       const esRetiro = animalesEnRetiro.includes(a.id);
-      document.getElementById("modal-titulo").textContent = `Hoja de Vida: #${a.id} ${a.nombre}`;
-      document.getElementById("modal-badge-estado").textContent = esRetiro ? "⚠️ Retiro Activo" : a.estado;
+      const madreObj = animales.find(m => m.id === a.madre);
+      const padreObj = animales.find(p => p.id === a.padre);
+
+      document.getElementById("modal-titulo").textContent = `Hoja de Vida: N° #${a.id} ${a.nombre}`;
+      document.getElementById("modal-badge-estado").textContent = esRetiro ? "⚠️ Retiro Sanitario Activo" : a.condicion;
       document.getElementById("modal-badge-estado").className = `badge-status ${esRetiro ? 'danger' : 'success'}`;
+      document.getElementById("modal-numero").textContent = `#${a.id}`;
+      document.getElementById("modal-hierro").textContent = a.hierro;
+      document.getElementById("modal-condicion").textContent = a.condicion;
+      document.getElementById("modal-prenada").textContent = (a.prenada === "Sí") ? "🤰 Sí (Preñada)" : (a.prenada === "No" ? "No (Vacía)" : "No aplica (Macho / Cría)");
       document.getElementById("modal-raza").textContent = a.raza;
       document.getElementById("modal-sexo").textContent = a.sexo;
       document.getElementById("modal-proposito").textContent = a.proposito;
       document.getElementById("modal-peso").textContent = `${a.peso} Kg`;
-      document.getElementById("modal-madre").textContent = `#${a.madre}`;
-      document.getElementById("modal-padre").textContent = `#${a.padre}`;
+
+      document.getElementById("modal-madre").textContent = (a.madre && a.madre !== "--")
+        ? `#${a.madre} ${madreObj ? `(${madreObj.nombre} - ${madreObj.raza})` : '(Registro histórico)'}`
+        : "Sin registro (Compra / Fundadora)";
+
+      document.getElementById("modal-padre").textContent = (a.padre && a.padre !== "--")
+        ? `#${a.padre} ${padreObj ? `(${padreObj.nombre} - ${padreObj.raza})` : ''}`
+        : "Sin registro";
 
       const histDiv = document.getElementById("modal-historial");
-      const ultimoOrdeño = registrosOrdeno.find(r => r.hierro === a.id);
-      const ultimoPesaje = registrosPesaje.find(p => p.hierro === a.id);
-      const ultimoSanitario = eventosSanitarios.find(s => s.hierro === a.id);
+      const ultimoOrdeño = registrosOrdeno.find(r => r.numero === a.id);
+      const ultimoPesaje = registrosPesaje.find(p => p.numero === a.id);
+      const ultimoSanitario = eventosSanitarios.find(s => s.numero === a.id);
 
       histDiv.innerHTML = `
         <div>🥛 <strong>Último Ordeño:</strong> ${ultimoOrdeño ? `${ultimoOrdeño.litros} L (${ultimoOrdeño.jornada})` : 'Sin registros hoy'}</div>
@@ -2964,7 +3981,7 @@
       toast.classList.add("show");
       setTimeout(() => {
         toast.classList.remove("show");
-      }, 3500);
+      }, 3800);
     }
   </script>
 </body>
