@@ -12,8 +12,7 @@
 1. [🗺️ 0. Esquema General de los Procesos Soportados por el Sistema](#esquema-procesos)
    * [0.1. Mapa Integral de Procesos de FincaControl](#mapa-procesos)
    * [0.2. Secuencia Lógica de Puesta en Producción](#secuencia-logica)
-2. [🚀 Fase Preliminar: Instalación, Acceso y Verificación Offline-First](#instalacion-acceso)
-3. [⚙️ Proceso 1: Configuración del Sistema (Puesta a Punto de la Finca)](#proceso-1-configuracion)
+1. [⚙️ Proceso 1: Configuración del Sistema (Puesta a Punto de la Finca)](#proceso-1-configuracion)
    * [1.1. Identidad de la Finca y Hierro Oficial de Propiedad](#config-finca-hierro)
    * [1.2. Gestión del Catálogo Personalizable de Razas Bovinas](#config-catalogo-razas)
    * [1.3. Parámetros Productivos, Comerciales y Control de Acceso (RBAC)](#config-parametros-rbac)
@@ -31,7 +30,6 @@
    * [4.2. Paso a Paso: Ciclo Reproductivo, Secado y Parto (Alta de Cría y Pase a Lactancia)](#paso-parto-lactancia)
    * [4.3. Paso a Paso: Registro de Ordeño Diario (Mañana y Tarde) e Inocuidad](#paso-ordeno-diario)
    * [4.4. Paso a Paso: Gestión del Tanque de Enfriamiento, Despacho y Costo por Litro](#paso-tanque-venta-leche)
-7. [✅ Matriz de Verificación del Prototipo (Para Clientes, Humanos y Agentes IA)](#matriz-verificacion)
 
 ---
 
@@ -61,8 +59,8 @@ flowchart TD
         K3 --> K4["3.4 Venta / Beneficio en Canal:\nDesincorpora Res + Libera N° Identificador + Ingreso a Caja"]
     end
 
-    subgraph P4["🥛 PROCESO 4: PRODUCCIÓN DE LECHE (REPRODUCCIÓN, ORDEÑO Y TANQUE)"]
-        L1["4.1 Ciclo Reproductivo:\nMonta/IA -> Preñez -> Vaca Seca (-60d) -> Parto"] --> L2["4.2 Efecto del Parto:\nAlta de Becerro/a en Censo + Madre pasa a Vaca Parida"]
+    subgraph P4["🥛 PROCESO 4: PRODUCCIÓN DE LECHE (REPRODUCCIÓN, ORDEÑO)"]
+        L1["4.1 Ciclo Reproductivo:\nMonta/ -> Preñez -> Vaca Seca (-60d) -> Parto"] --> L2["4.2 Efecto del Parto:\nAlta de Becerro/a en Censo + Madre pasa a Vaca Parida"]
         L2 --> L3["4.3 Ordeño Diario (Mañana y Tarde)\ncon Filtro Sanitario de Retiro en Leche"]
         L3 --> L4["4.4 Acopio en Tanque de Leche,\nVenta a Quesera y Cálculo de Costo/Litro"]
     end
@@ -70,8 +68,6 @@ flowchart TD
     P1 ==> P2
     P2 ==> P3
     P2 ==> P4
-    L2 -.->|Nuevo Becerro/a ingresa a Cría/Levante| K1
-    K4 -.->|N° Identificador liberado disponible para nuevas crías| L2
 
     style P1 fill:#f1f5f9,stroke:#475569,stroke-width:2px
     style P2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
@@ -93,26 +89,7 @@ Para que el sistema opere sin inconsistencias desde el primer día en campo, el 
 
 [⬆ Volver al Índice](#indice)
 
----
 
-<a id="instalacion-acceso"></a>
-## 🚀 Fase Preliminar: Instalación, Acceso y Verificación Offline-First
-
-**FincaControl** ha sido diseñado bajo una arquitectura **Offline-First (Local)**, lo que significa que funciona al 100% en potreros, corrales y vaqueras sin necesidad de conexión a internet.
-
-### Paso a Paso de Instalación y Arranque
-1. **Descarga o Ubicación de Archivos:**
-   * Ubique la carpeta del proyecto en su equipo o dispositivo móvil.
-   * El ejecutable interactivo se encuentra en: [`agentes/prototipo/index.html`](./agentes/prototipo/index.html).
-2. **Ejecución del Sistema:**
-   * Abra el archivo `index.html` en cualquier navegador moderno (Google Chrome, Edge, Safari o WebView móvil Android/iOS). No requiere instalar servidores externos ni conexión a internet para operar.
-3. **Verificación de Estado Operativo (Pre-Flight Check):**
-   * Al abrir la aplicación, verifique en la esquina superior derecha el indicador verde **`● Offline-First (Local)`**, el cual confirma que la base de datos local y el catálogo persistente (`localStorage` / SQLite) están activos.
-   * Verifique que la primera vista muestre el **Esquema de Procesos Soportados por el Sistema**, desde donde podrá navegar en orden lógico hacia los 4 procesos principales.
-
-[⬆ Volver al Índice](#indice)
-
----
 
 <a id="proceso-1-configuracion"></a>
 ## ⚙️ Proceso 1: Configuración del Sistema (Puesta a Punto de la Finca)
@@ -235,8 +212,8 @@ flowchart LR
    * **Peso Actual (Kg) \*:** Digite el nuevo peso vivo en kilogramos (*Ej: `362 Kg`*).
 3. Presione **"Calcular y Guardar"**.
 4. **Resultado Automático:**
-   * El sistema calcula la **Ganancia Diaria de Peso ($\text{GDP}$)** en $\text{kg/día}$:
-     $$\text{GDP} = \frac{\text{Peso Actual} - \text{Peso Previo}}{\text{Días transcurridos}}$$
+   * El sistema calcula la **Ganancia Diaria de Peso (GDP)** en `kg/día`:
+     > **Fórmula:** `GDP = (Peso Actual - Peso Previo) / Días transcurridos`
    * Clasifica el desempeño del animal con un semáforo visual:
      * 🟢 **Excelente / Óptimo (`≥ 0.60 kg/día`):** Crecimiento ideal en levante/ceba.
      * ⚪ **Aceptable / Normal (`0.30 a 0.59 kg/día`):** Ganancia moderada a pastoreo.
@@ -258,10 +235,10 @@ Cuando un *Novillo*, *Torete* o animal de descarte alcanza su peso final y está
 2. Presione el botón rojo **`🥩 Vender en Canal`**.
 3. En la ventana de liquidación:
    * Verifique que el animal no tenga alertas rojas de bloqueo sanitario.
-   * Confirme el **Peso Vivo en Báscula (Kg)**, el **Rendimiento en Canal (%)** (*típicamente entre 52% y 56%*), el **Precio por Kg ($)** y el **Destino / Matadero / Frigorífico**.
+   * Confirme el **Peso Vivo en Báscula (Kg)**, el **Precio por Kg ($)** y el **Destino / Matadero / Frigorífico**.
 4. Presione **"🥩 Confirmar Venta, Desincorporar y Liberar N° Identificador"**.
 5. **Impacto Triple Automatizado:**
-   * **En Inventario:** El animal sale del rebaño activo y pasa a la sub-pestaña **`🥩 Historial Canal & Ventas`** conservando el registro de su Hierro y peso en canal.
+   * **En Inventario:** El animal sale del rebaño activo y pasa a la sub-pestaña **`🥩 Historial Canal & Ventas`** conservando el registro de su Hierro y peso de salida.
    * **En Identificadores:** Su **N° Identificador queda formalmente liberado**, pudiendo asignarse a un nuevo becerro recién nacido.
    * **En Finanzas:** El monto total de la liquidación se acredita automáticamente como un **Ingreso** en el libro de caja bajo la categoría *"Venta de Ganado / Canal"*.
 
@@ -340,24 +317,4 @@ Cuando el camión receptor o la quesera acude a retirar la leche acumulada en el
 
 [⬆ Volver al Índice](#indice)
 
----
 
-<a id="matriz-verificacion"></a>
-## ✅ Matriz de Verificación del Prototipo (Para Clientes, Humanos y Agentes IA)
-
-Esta tabla permite a cualquier evaluador humano o agente automatizado comprobar paso a paso que el prototipo [`agentes/prototipo/index.html`](./agentes/prototipo/index.html) cumple fielmente con todos los requerimientos especificados:
-
-| # | Requerimiento / Proceso a Verificar | Acción de Prueba en el Prototipo (`index.html`) | Resultado Esperado de Verificación | Estado |
-| :---: | :--- | :--- | :--- | :---: |
-| **V1** | **Esquema de Procesos previo a las funcionalidades** | Abrir `index.html` y observar la vista inicial **`🗺️ Esquema de Procesos`**. | Se visualiza el diagrama interactivo con los 4 procesos principales en orden lógico antes de operar los módulos. | ✅ Cumple |
-| **V2** | **Módulo (1) Configuración del Sistema** | Ir a **`⚙️ 1. Configuración`**, cambiar el Hierro oficial de la finca o el precio de referencia y guardar. | El sistema actualiza el subtítulo de la finca, precarga el nuevo hierro por defecto en los formularios de alta/parto y actualiza precios base. | ✅ Cumple |
-| **V3** | **Registro personalizado y persistente de Razas** | Hacer clic en **`+ Nueva Raza`** (en Configuración, Censo o Parto), escribir `"Girolando F1"` y guardar. | La raza `"Girolando F1"` se guarda en `catalogoRazas` (`localStorage`) y aparece disponible en todos los selectores de raza para futuros animales. | ✅ Cumple |
-| **V4** | **Separación entre N° Identificador e Hierro (Venezuela)** | Ir a **`🐄 2. Inventario (Censo)`** -> `+ Nuevo Animal Manual`. | Existen dos campos separados: **N° Identificador** (ID único numérico del ejemplar) y **Hierro (Descripción)** (iniciales o figura de propietario/procedencia). | ✅ Cumple |
-| **V5** | **Genealogía vinculada por N° Identificador (no por Hierro)** | Registrar un animal o un parto y abrir su **Hoja de Vida** en el Censo. | La **Madre** y el **Padre** se guardan y muestran con el **N° Identificador del animal** (`#042`, `#009`) y no con la marca del hierro. | ✅ Cumple |
-| **V6** | **Condiciones Fisiológicas y bloqueo de Preñez en Machos** | En `+ Nuevo Animal Manual`, alternar `Sexo` entre `Hembra` y `Macho` y revisar `Condición Fisiológica` y `¿Está Preñada?`. | En `Hembra` ofrece *Becerra, Mauta, Novilla de vientre, Vaca parida (Primípara/Multípara), Vaca escotera, Vaca seca*. En `Macho` ofrece *Becerro, Maute, Novillo/Torete, Toro Reproductor* y **bloquea** `¿Está Preñada?` como `No aplica`. | ✅ Cumple |
-| **V7** | **Proceso (3) Producción de Carne (Pesaje, GDP y Canal)** | Ir a **`⚖️ 3. Producción Carne`**, pesar al Maute `#201` con `360 Kg`. Luego en Censo pulsar **`🥩 Vender en Canal`** en `#201`. | Calcula la **GDP** (`+0.67 kg/día`), y al vender en canal desincorpora a `#201`, **libera el N° Identificador `#201`** y acredita el ingreso en Finanzas. | ✅ Cumple |
-| **V8** | **Proceso (4) Producción de Leche (Parto, Ordeño, Retiro y Tanque)** | 1) En **`🧬 Reproducción`** registrar un `Parto` a la vaca `#078`. 2) En **`🥛 4. Producción Leche`** ordeñar a `#042` (sana) y a `#104` (en retiro). 3) Pulsar **`🥛 Vender / Despachar Leche`**. | 1) Da de alta al becerro/a y pasa a `#078` a *Vaca parida*. 2) Suma los litros de `#042` al tanque y envía los de `#104` a descarte. 3) Resta los litros vendidos del tanque y suma el ingreso en Caja. | ✅ Cumple |
-
----
-
-[⬆ Volver al Índice](#indice)
