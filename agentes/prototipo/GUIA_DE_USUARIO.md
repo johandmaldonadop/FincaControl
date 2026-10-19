@@ -235,8 +235,8 @@ flowchart LR
    * **Peso Actual (Kg) \*:** Digite el nuevo peso vivo en kilogramos (*Ej: `362 Kg`*).
 3. Presione **"Calcular y Guardar"**.
 4. **Resultado Automático:**
-   * El sistema calcula la **Ganancia Diaria de Peso ($\text{GDP}$)** en $\text{kg/día}$:
-     $$\text{GDP} = \frac{\text{Peso Actual} - \text{Peso Previo}}{\text{Días transcurridos}}$$
+   * El sistema calcula la **Ganancia Diaria de Peso (GDP)** en `kg/día`:
+     > **Fórmula:** `GDP = (Peso Actual - Peso Previo) / Días transcurridos`
    * Clasifica el desempeño del animal con un semáforo visual:
      * 🟢 **Excelente / Óptimo (`≥ 0.60 kg/día`):** Crecimiento ideal en levante/ceba.
      * ⚪ **Aceptable / Normal (`0.30 a 0.59 kg/día`):** Ganancia moderada a pastoreo.
@@ -258,10 +258,10 @@ Cuando un *Novillo*, *Torete* o animal de descarte alcanza su peso final y está
 2. Presione el botón rojo **`🥩 Vender en Canal`**.
 3. En la ventana de liquidación:
    * Verifique que el animal no tenga alertas rojas de bloqueo sanitario.
-   * Confirme el **Peso Vivo en Báscula (Kg)**, el **Rendimiento en Canal (%)** (*típicamente entre 52% y 56%*), el **Precio por Kg ($)** y el **Destino / Matadero / Frigorífico**.
+   * Confirme el **Peso Vivo en Báscula (Kg)**, el **Precio por Kg ($)** y el **Destino / Matadero / Frigorífico**.
 4. Presione **"🥩 Confirmar Venta, Desincorporar y Liberar N° Identificador"**.
 5. **Impacto Triple Automatizado:**
-   * **En Inventario:** El animal sale del rebaño activo y pasa a la sub-pestaña **`🥩 Historial Canal & Ventas`** conservando el registro de su Hierro y peso en canal.
+   * **En Inventario:** El animal sale del rebaño activo y pasa a la sub-pestaña **`🥩 Historial Canal & Ventas`** conservando el registro de su Hierro y peso de salida.
    * **En Identificadores:** Su **N° Identificador queda formalmente liberado**, pudiendo asignarse a un nuevo becerro recién nacido.
    * **En Finanzas:** El monto total de la liquidación se acredita automáticamente como un **Ingreso** en el libro de caja bajo la categoría *"Venta de Ganado / Canal"*.
 
