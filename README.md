@@ -21,15 +21,9 @@ Ofrecemos una **aplicación móvil con enfoque Offline-First** que cuenta con un
 ## 🎯 Características Principales (Alcance)
 
 ### Dentro del Alcance 📋
-<<<<<<< HEAD
 * **Gestión de Inventario, Condiciones Fisiológicas y Genealogía:** Registro detallado de animales separando el **Número Identificador** individual de la marca descriptiva del **Hierro** (propietario y procedencia), catálogo extensible de **razas** (predeterminadas y personalizadas), clasificación por **condiciones fisiológicas** (*Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida, Vaca escotera, Vaca seca*), estado de **preñez** e historial genealógico referenciado por el número identificador.
 * **Control de Producción:** Módulos específicos para el registro diario de ordeño (con gestión de tanque de leche) y pesajes periódicos con cálculo de GDP.
 * **Gestión Sanitaria y Reproductiva:** Calendarios de vacunación, seguimiento de servicios, gestaciones, secados, partos (con alta automática de crías) y tiempos de retiro de medicamentos.
-=======
-* **Gestión de Inventario y Genealogía:** Registro detallado de animales e historial genealógico.
-* **Control de Producción:** Módulos específicos para el registro diario de ordeño y pesajes.
-* **Gestión Sanitaria y Reproductiva:** Calendarios de vacunación, seguimiento de servicios, gestaciones, partos y tiempos de retiro de medicamentos.
->>>>>>> origin/Jose
 * **Módulo Financiero Operativo:** Gestión de ingresos, egresos y cálculo de costos directos de producción de leche y carne.
 * **Capacidad Offline:** Almacenamiento local de datos para garantizar la operatividad continua en zonas rurales sin cobertura.
 
@@ -48,10 +42,20 @@ Ofrecemos una **aplicación móvil con enfoque Offline-First** que cuenta con un
 ---
 
 ## 🛠️ Tecnologías Utilizadas
-*(Completa este apartado con las tecnologías exactas de tu proyecto)*
-* **Frontend Móvil:** [Ej: Flutter / React Native / Android Studio]
-* **Base de Datos Local:** [Ej: SQLite / Hive / Room]
-* **Backend / API (Si aplica):** [Ej: Node.js / Firebase]
+* **Frontend Móvil (Cross-Platform):** **Flutter (Dart 3+)** con arquitectura limpia en capas y controles táctiles ergonómicos para uso en corral.
+* **Base de Datos Local (Offline-First en el Móvil):** **SQLite** (`sqflite` / `drift`), donde el trabajador registra toda su jornada de campo sin conexión a internet y encola los cambios en `sync_queue`.
+* **Backend / API y Base de Datos Remota:** **API RESTful (`/api/v1`)** con autenticación JWT y sincronización Delta (`push` / `pull`) conectada a una base de datos relacional central (**PostgreSQL** en plataforma cloud a definir), permitiendo que cuando el trabajador tenga conexión a internet la información se actualice automáticamente para que el **Administrador** pueda visualizarla en tiempo real.
+
+---
+
+## 📂 Documentación Técnica y Entregables de Análisis
+* 📘 **[Guía de Usuario Orientada a Procesos (`GUIA_DE_USUARIO.md`)](./GUIA_DE_USUARIO.md)** y **[Versión Ejecutiva en PDF (`GUIA_DE_USUARIO.pdf`)](./GUIA_DE_USUARIO.pdf)**
+* ✅ **[Informe de Validación: Prototipo vs. Guía de Usuario (`informe_de_validacion.md`)](./informe_de_validacion.md)**
+* 📋 **[Historias de Usuario y Criterios de Aceptación BDD (`historias_de_usuario.md`)](./historias_de_usuario.md)**
+* 🗂️ **[Planificación de Módulos, Modelo de Base de Datos SQLite y Endpoints API (`PLANIFICACION_MODULOS.md`)](./PLANIFICACION_MODULOS.md)**
+* 📖 **[Manual de Especificación de Módulos (`agentes/DOCUMENTACION_MODULOS.md`)](./agentes/DOCUMENTACION_MODULOS.md)**
+* 🔄 **[Skill de Arquitectura Offline-First Flutter + SQLite & Sync (`.agents/skills/fincacontrol-offline-sync/SKILL.md`)](./.agents/skills/fincacontrol-offline-sync/SKILL.md)**
+* 🖥️ **[Prototipo Interactivo Verificable (`agentes/prototipo/index.html`)](./agentes/prototipo/index.html)**
 
 ---
 
@@ -60,7 +64,7 @@ Ofrecemos una **aplicación móvil con enfoque Offline-First** que cuenta con un
 ### Prerrequisitos
 Asegúrate de tener instalado lo siguiente en tu entorno de desarrollo:
 * Git
-* [Herramienta o SDK según la tecnología elegida]
+* Flutter SDK (v3.x+) y Android Studio / VS Code
 
 ### Pasos para ejecutar el proyecto
 
@@ -74,17 +78,15 @@ Asegúrate de tener instalado lo siguiente en tu entorno de desarrollo:
    cd FincaControl
    ```
 
-3. **Instalar dependencias:**
+3. **Instalar dependencias de Flutter:**
    ```bash
-   # Cambia este comando según el framework (ej: npm install, flutter pub get, etc.)
-   [comando_de_instalacion]
+   flutter pub get
    ```
 
-4. **Ejecutar la aplicación:**
+4. **Ejecutar la aplicación móvil (o abrir `agentes/prototipo/index.html` en el navegador):**
    ```bash
-   [comando_para_ejecutar]
+   flutter run
    ```
-<<<<<<< HEAD
 
 ---
 
@@ -96,6 +98,3 @@ El proyecto incluye la **[Guía de Usuario Paso a Paso (`GUIA_DE_USUARIO.md`)](.
 2. **(2) Carga Inicial del Inventario de Animales:** Registro separando `N° Identificador` único vs. `Hierro` descriptivo (propietario/procedencia), selección o alta de razas personalizadas, clasificación por condiciones fisiológicas venezolanas (*Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida, Vaca escotera, Vaca seca*), estado `¿Está Preñada?` y genealogía por `N° Identificador`.
 3. **(3) Proceso de Producción de Carne:** Pesajes periódicos en báscula, cálculo automático de Ganancia Diaria de Peso (`GDP`), control de tiempos de retiro en carne, liquidación/beneficio en canal, liberación del `N° Identificador` y asiento financiero automático.
 4. **(4) Proceso de Producción de Leche:** Ciclo reproductivo y parto (con alta automática de cría vinculada al `N° Identificador` de la madre y transición a *Vaca parida*), ordeño diario (Mañana/Tarde) con bloqueo por retiro sanitario en leche, gestión de inventario en tanque de enfriamiento, despacho comercial y cálculo de costo directo por litro.
-
-=======
->>>>>>> origin/Jose
