@@ -84,7 +84,7 @@ Para que el sistema opere sin inconsistencias desde el primer día en campo, el 
 | :---: | :--- | :--- | :--- |
 | **1°** | **Configuración del Sistema** | Define las reglas base de la finca: su marca de hierro predeterminada, las razas que maneja el productor, la capacidad del tanque y los precios de referencia. | Finca parametrizada y catálogo de razas listo en memoria local (*Offline-First*). |
 | **2°** | **Carga Inicial del Inventario** | Ningún evento productivo (ordeño, pesaje, vacuna o parto) puede registrarse si el animal no existe previamente en el censo con su **N° Identificador** y **Condición Fisiológica**. | Padrón activo de animales clasificados por etapa, estado de preñez y genealogía. |
-| **3°** | **Proceso de Producción de Carne** | Con los animales en censo (*Becerros, Mautes, Novillos y animales de descarte*), se inicia el control de pesajes periódicos ($\text{GDP}$), vigilancia de retiro en carne y ventas en canal. | Historial de pesajes con $\text{GDP}$, ventas en canal liquidadas y números identificadores liberados. |
+| **3°** | **Proceso de Producción de Carne** | Con los animales en censo (*Becerros, Mautes, Novillos y animales de descarte*), se inicia el control de pesajes periódicos (**GDP**), vigilancia de retiro en carne y ventas en canal. | Historial de pesajes con **GDP**, ventas en canal liquidadas y números identificadores liberados. |
 | **4°** | **Proceso de Producción de Leche** | Con las hembras reproductoras (*Novillas y Vacas*), se gestionan preñeces, secados y partos que habilitan a las **Vacas paridas** para el ordeño diario, acopio en tanque y despacho comercial. | Leche apta en tanque, descartes sanitarios aislados, despachos cobrados y costo por litro calculado. |
 
 [⬆ Volver al Índice](#indice)

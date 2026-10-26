@@ -1,7 +1,7 @@
 # 📖 Manual de Funcionamiento y Especificación de Módulos: FincaControl
 > **Sistema Integral de Gestión Ganadera para Fincas de Doble Propósito (Leche y Carne)**  
 > **Equipo de Desarrollo:** Johan Maldonado – José Chacón  
-> **Ubicación del Prototipo:** [`https://github.com/johandmaldonadop/FincaControl/blob/main/agentes/prototipo/index.html`](./index.html)
+> **Ubicación del Prototipo:** [`./prototipo/index.html`](./prototipo/index.html)
 
 ---
 
@@ -125,12 +125,12 @@ Permitir que las fincas ganaderas de doble propósito transformen su recolecció
 ---
 
 <a id="modulo-1-dashboard"></a>
-## 2. Módulo 1: Tablero General (Dashboard) y Arquitectura Base
+## 2. Módulo 1: Tablero General (Dashboard), Arquitectura Base (Flutter + SQLite) y Sincronización Backend
 
 ### 🎯 Propósito
-Consolidar el estado productivo, sanitario y financiero de la finca en una sola pantalla de alta visibilidad, permitiendo la captura rápida de datos durante las faenas de campo sin cambiar de vista.
+Consolidar el estado productivo, sanitario y financiero de la finca en una sola pantalla de alta visibilidad y establecer la arquitectura técnica **Offline-First** basada en **Flutter + SQLite local** sincronizada con un **Backend API REST + Base de Datos Central**. Esto permite que el trabajador de campo registre datos durante toda su jornada sin conexión a internet y que, al recuperar señal, la información se sincronice automáticamente para que el Administrador pueda visualizarla y auditarla.
 
-### ⚙️ Funcionamiento Operativo
+### ⚙️ Funcionamiento Operativo y Arquitectura de Datos
 1. **Tarjetas de Métricas en Tiempo Real (KPIs):**
    * **Disponible en Tanque:** Muestra el volumen acumulado de leche apta para venta comercial (descontando ventas y descartes).
    * **Rebaño Activo:** Censo de animales vivos en producción, indicando cuántas hembras están preñadas y cuántas reses han sido desincorporadas por venta en canal.
@@ -144,10 +144,14 @@ Consolidar el estado productivo, sanitario y financiero de la finca en una sola 
    * Muestra notificaciones críticas agrupadas por urgencia:
      * 🔴 *Alerta Roja:* Animales con tiempo de retiro activo (con fecha exacta de fin de carencia).
      * 🟡 *Alerta Ámbar:* Vacas preñadas que cumplen ~220 días de gestación para programar secado inmediato (pase a condición *Vaca seca*).
-4. **Persistencia Local (Offline-First):**
-   * El indicador superior *"Offline-First (Local)"* certifica que todas las transacciones se almacenan de inmediato en la base de datos local del dispositivo, garantizando latencia cero en zonas sin cobertura celular.
-5. **Selector de Rol (RBAC):**
-   * Alterna entre `Administrador` y `Operador`. Los operadores tienen restringido el acceso a balances financieros y precios de venta.
+4. **Arquitectura Móvil en Flutter + Base de Datos Local SQLite (Offline-First):**
+   * **Persistencia Local durante la Jornada del Trabajador:** La aplicación móvil desarrollada en **Flutter** utiliza **SQLite (`sqflite` / `drift`)** como motor relacional local con 12 tablas normalizadas (`configuracion_finca`, `usuarios`, `catalogo_razas`, `animales`, `registros_pesaje`, `ventas_canal`, `registros_ordeno`, `ventas_leche`, `eventos_sanitarios`, `eventos_reproductivos`, `transacciones_financieras` y `sync_queue`).
+   * Cada registro capturado por el trabajador durante su jornada en el potrero o vaquera se almacena inmediatamente en SQLite (`< 50 ms`) con llave primaria `UUID v4` y encola un delta en `sync_queue` (`status = 'PENDING'`).
+5. **Sincronización Delta con el Backend (API REST) para el Administrador:**
+   * Cuando el dispositivo móvil del trabajador recupera conexión a internet (WiFi o datos móviles), el servicio `SyncEngine` envía los lotes pendientes al endpoint `POST /api/v1/sync/push` del Backend y descarga novedades mediante `GET /api/v1/sync/pull`.
+   * El **Administrador** recibe automáticamente las actualizaciones desde la base de datos central del servidor, contando con visibilidad completa de la jornada de trabajo.
+6. **Selector de Rol (RBAC):**
+   * Alterna entre `Administrador` y `Operador`. Los operadores registran toda la actividad de campo pero tienen restringido el acceso a balances financieros y configuración de precios.
 
 [⬆ Volver al Índice](#indice)
 
@@ -187,7 +191,7 @@ El sistema clasifica y valida cada ejemplar según las etapas zootécnicas del h
 5. **Beneficio en Canal y Desincorporación por Carne:**
    * Cada fila cuenta con el botón **"🥩 Vender en Canal"**:
      * **Control de Inocuidad Obligatorio:** Si la res tiene un tratamiento médico con *Retiro de Carne Activo*, el sistema **bloquea el botón de confirmación** y emite una alerta roja prohibiendo el beneficio hasta que venza el plazo residual.
-     * **Captura de Liquidación:** Solicita Peso Vivo en báscula, Rendimiento en Canal (% estimado entre 52% y 56%), Precio por Kg en pie/canal, Fecha y Comprador/Frigorífico.
+     * **Captura de Liquidación:** Solicita Peso Vivo en báscula (Kg), Precio por Kg ($), Fecha y Comprador/Frigorífico.
      * **Efectos al Confirmar:**
        1. **Desincorpora el animal del rebaño activo:** Ya no figura en listas de ordeño, pesaje o reproducción.
        2. **Libera el Número Identificador del Animal:** El `ID_Numero` queda formalmente desocupado en el inventario activo, permitiendo que sea asignado a un nuevo becerro recién nacido.
