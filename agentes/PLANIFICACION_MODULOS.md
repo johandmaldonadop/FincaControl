@@ -10,88 +10,96 @@
 
 Haga clic en cualquiera de los módulos para consultar su desglose detallado de planificación:
 
-1. [Fase 1: Módulo 1 - Arquitectura Base, Seguridad y Motor Offline-First](#modulo-1-arquitectura-base)
-2. [Fase 2: Módulo 2 - Gestión de Inventario Bovino y Trazabilidad Genealógica](#modulo-2-inventario-genealogia)
+1. [Fase 1: Módulo 1 - Arquitectura Primero Online + Extensión Offline de Campo, Roles (Propuesta A) y Modelo de Datos](#modulo-1-arquitectura-base)
+2. [Fase 2: Módulo 2 - Gestión de Inventario Bovino, Condiciones Fisiológicas y Trazabilidad Genealógica](#modulo-2-inventario-genealogia)
 3. [Fase 3: Módulo 3 - Control de Producción de Doble Propósito (Leche y Carne)](#modulo-3-control-produccion)
 4. [Fase 4: Módulo 4 - Gestión Sanitaria, Tratamientos y Tiempos de Retiro](#modulo-4-gestion-sanitaria)
 5. [Fase 5: Módulo 5 - Gestión Reproductiva y Trazabilidad Materno-Filial](#modulo-5-gestion-reproductiva)
 6. [Fase 6: Módulo 6 - Control Financiero Operativo y Costos Directos](#modulo-6-financiero-operativo)
-7. [Fase 7: Módulo 7 - Tablero de Control (Dashboard), Métricas y Reportes](#modulo-7-dashboard-reportes)
+7. [Fase 7: Módulo 7 - Vista Rápida Ejecutiva, Terminal de Carga e Historial Inmutable de Acciones](#modulo-7-dashboard-reportes)
 8. [Matriz de Dependencias y Ruta Crítica de Desarrollo](#matriz-dependencias)
 
 ---
 
 <a id="modulo-1-arquitectura-base"></a>
-## 1. Módulo 1: Arquitectura Base, Seguridad y Motor Offline-First
+## 1. Módulo 1: Arquitectura Primero Online + Extensión Offline de Campo, Roles (Propuesta A) y Modelo de Datos
 
 ### 🎯 Propósito del Módulo
-Establecer la infraestructura de software, la base de datos local embebida y los mecanismos de autenticación y sincronización en segundo plano. En una finca de doble propósito, el acceso a internet suele ser nulo o inestable en los potreros y vaqueras; este módulo garantiza que la aplicación sea 100% operativa sin conexión (*Offline-First*).
+Establecer la arquitectura base de **FincaControl** en **Flutter** bajo un enfoque **Primero Online con Extensión Offline Táctica de Campo** y una **Experiencia Dual por Rol (Propuesta A)**. En lugar de replicar toda la base de datos histórica y financiera en cada teléfono, la **Base de Datos Relacional Central** actúa como Fuente Única de Verdad para saldos, tanque de leche, inventario oficial, ventas, caja e **Historial Inmutable de Acciones**, mientras que el teléfono del trabajador en campo utiliza una base de datos **SQLite ligera de solo 3 tablas** (caché de padrón activo, caché de referencia y cola FIFO de envíos) para operar sin interrupciones en vaqueras o potreros sin señal.
 
-### 🧩 Entidades del Modelo de Dominio
-* **`Rol`**: `ID_Rol`, `Nombre_Rol`, `Nivel_Acceso`.
-* **`Usuario`**: `ID_Usuario`, `Nombre`, `Correo`, `Contrasena_Hash`, `Estado_Activo`.
+> 📄 **Especificación Completa de Base de Datos y API Lógica:** Consultar el documento formal [`modelo_base_de_datos.md`](./modelo_base_de_datos.md) (12 tablas relacionales centrales + 3 tablas SQLite móviles + contrato REST `/api/v1`).
 
-### 📝 Desglose de Funcionalidades Paso a Paso
-1. **Definición del Almacenamiento Local (SQLite / Room / Hive):**
-   * Configuración de esquema relacional local con soporte a identificadores universales (UUID) para evitar colisiones de ID durante la creación de registros sin conexión.
-   * Mecanismo de migraciones de base de datos local.
-2. **Control de Acceso Basado en Roles (RBAC):**
-   * **Administrador (Propietario / Administrador de Finca):** Acceso total a finanzas, configuración, usuarios y altas/bajas.
-   * **Operador (Mayordomo / Ordeñador / Vaquero):** Entrada rápida a registros de pesaje, ordeño diario y aplicaciones sanitarias, sin acceso a módulos financieros restringidos.
-3. **Mecanismo de Autenticación Híbrida:**
-   * Validación local mediante tokens con expiración extendida para permitir inicio de sesión en campo sin cobertura celular.
-4. **Cola de Sincronización (Sync Engine):**
-   * Registro de auditoría local (`pending_sync`, `timestamp`, `operation_type`: INSERT/UPDATE/DELETE).
-   * Detección de conectividad (WiFi / Datos) y sincronización delta en segundo plano.
-   * Estrategia de resolución de conflictos (*Last-Write-Wins* o validación transaccional por marca de tiempo).
+### 🛠️ Definiciones Arquitectónicas Aprobadas (Agnósticas de Proveedor Backend)
+* **Aplicación Móvil (Cross-Platform):** **Flutter (Dart 3+)** implementando la **Propuesta A** (una sola aplicación que adapta su interfaz a *Terminal Ligera de Carga* para el `Trabajador / Operador` y a *Vista Rápida, Control Online y Auditoría* para el `Administrador`).
+* **Persistencia Local Táctica en el Móvil (Offline de Campo):** **SQLite** ligero (`cache_padron_activo`, `cache_referencia_resumen` y `cola_envios_campo` FIFO) exclusivamente para consulta rápida en corral y captura de *Ordeño, Pesaje, Sanidad y Reproducción/Parto* sin señal.
+* **Backend y Base de Datos Relacional Central (Tecnología e infraestructura a definir en fase posterior):** **API REST Lógica (`/api/v1`)** conectada a un esquema relacional estándar SQL de **12 tablas** que gobierna las operaciones **100% Online** (*Configuración, Catálogo de Razas, Carga Inicial y Compras Manuales de Animales, Venta de Leche, Venta en Canal, Finanzas e Historial de Acciones*).
 
-### ⚠️ Consideraciones de Campo (Offline)
-* Todas las transacciones deben persistirse primero en el almacenamiento local con respuesta inmediata (<100ms) para no demorar la faena del operario.
-* Cifrado local de datos sensibles (contraseñas y balances financieros).
+### 🔄 Flujo Operativo: Servidor Central (Online) ➔ Terminal de Campo (Offline Táctico) ➔ Vista Rápida & Auditoría
+1. **Gobierno Online del Administrador:** El `Administrador` configura la finca, razas, precios e inventario inicial directamente en línea contra la Base de Datos Central.
+2. **Captura Rápida en Campo (En Línea o Sin Señal):** El `Trabajador` opera desde su `📱 Terminal de Carga`. Si hay señal, impacta directo el servidor; si no hay señal, valida el `N° Identificador` y el semáforo de retiro contra `cache_padron_activo` y guarda el evento en `cola_envios_campo` conservando la hora real de captura en campo. Al recuperar red, el lote se sincroniza en orden FIFO (`POST /api/v1/campo/sincronizar-lote`).
+3. **Vista Rápida e Historial Inmutable (`historial_acciones`):** El `Administrador` supervisa los KPIs al instante en su `📊 Vista Rápida` y audita cualquier acción realizada tanto por él como por los trabajadores en el **`📜 Historial de Acciones`** inmutable (con doble marca de tiempo: hora real de campo y hora de recepción en servidor).
 
-### 📌 Checklist de Planificación
-- [ ] Especificación de endpoints y contratos de sincronización.
-- [ ] Definición formal de permisos para la matriz Rol vs. Pantalla.
-- [ ] Diagrama de estados del motor de sincronización.
-
-[⬆ Volver al Índice](#indice)
 
 ---
 
 <a id="modulo-2-inventario-genealogia"></a>
-## 2. Módulo 2: Gestión de Inventario Bovino y Trazabilidad Genealógica
+## 2. Módulo 2: Gestión de Inventario Bovino, Condiciones Fisiológicas y Trazabilidad Genealógica
 
 ### 🎯 Propósito del Módulo
-Digitalizar el censo del rebaño bovino, constituyendo el núcleo del sistema. Permite identificar de manera individual cada res, gestionar su estado productivo y consultar su genealogía para evitar consanguinidad (endogamia) en futuros empadres.
+Digitalizar el censo del rebaño bovino, constituyendo el núcleo del sistema. Permite identificar de manera individual cada res mediante su **Número Identificador**, registrar la descripción de su **Hierro** (propietario y procedencia conforme a la tradición ganadera venezolana), clasificar a los animales según su **condición fisiológica / etapa de desarrollo** y estado de **preñez**, gestionar un catálogo extensible de **razas** y consultar su genealogía para evitar consanguinidad (endogamia) en futuros empadres.
 
 ### 🧩 Entidades del Modelo de Dominio
-* **`Animal`**: `ID_Hierro`, `Nombre_Alias`, `Fecha_Nacimiento`, `Sexo`, `Raza`, `Proposito` (*Leche*, *Carne*, *Doble Propósito*), `Estado_Actual` (*Activo*, *Vendido*, *Muerto*, *Descarte*).
-* **Relaciones Genealógicas:** Relación reflexiva con `Madre (0..1)` y `Padre (0..1)`.
+* **`Animal`**:
+  * `ID_Numero`: Número identificador único del animal dentro del rebaño activo (ej. `042`, `104`, `201`).
+  * `Hierro`: Descripción de la marca de hierro quemado/frío que en Venezuela indica **propietario y procedencia** del animal (puede consistir en iniciales, monogramas o figuras como *"Iniciales JM"*, *"Hda. La Esperanza (HE)"*, *"Herradura con estrella"*).
+  * `Nombre_Alias`: Nombre o apodo del ejemplar.
+  * `Fecha_Nacimiento` / `Edad_Estimada`.
+  * `Sexo`: *Hembra* o *Macho*.
+  * `Raza`: Referencia al catálogo de razas (permite razas por defecto y razas personalizadas registradas por el usuario).
+  * `Proposito`: *Leche*, *Carne / Ceba*, *Doble Propósito*.
+  * `Condicion_Fisiologica`: Etapa productiva/fisiológica del bovino (*Becerro / Becerra*, *Maute / Mauta*, *Novillo / Novilla*, *Toro / Toro Reproductor*, *Vaca parida*, *Vaca escotera*, *Vaca seca*).
+  * `Esta_Prenada`: Booleano (`Sí` / `No`), aplicable **únicamente a hembras en etapa reproductiva** (*Vacas* y *Novillas*); no aplica en machos (*Toro*, *Novillo*, *Maute*, *Becerro*) ni en crías (*Becerra*).
+  * `Tipo_Parto_Vaca`: Opcional para vacas paridas (*Primípara* si es su primer parto, o *Multípara* si acumula varios).
+  * `Estado_Actual`: *Activo*, *Vendido / Canal*, *Muerto*, *Descarte*.
+* **`CatalogoRaza`**: `ID_Raza`, `Nombre_Raza`, `Es_Personalizada`. Permite que el productor agregue nuevas razas y queden guardadas permanentemente para registrar futuros animales.
+* **Relaciones Genealógicas:** Relación reflexiva con `Madre (0..1)` y `Padre (0..1)` vinculada a través del **Número Identificador del Animal (`ID_Numero`)**, garantizando trazabilidad unívoca incluso cuando todos los animales nacidos en la finca comparten el mismo hierro de propiedad.
+
+### 🐄 Etapas y Clasificación Fisiológica del Ganado Bovino (Estándar Venezolano)
+1. **Becerro / Becerra:** Desde el nacimiento hasta el destete (aproximadamente entre los 4 y 10 meses de edad), con un peso que oscila entre los 150 kg y 200 kg al destete. Dependen inicialmente de la leche materna y el calostro, transitando gradualmente hacia el consumo de pastos y concentrados.
+2. **Maute / Mauta:** Animales jóvenes que van desde los 10 hasta los 18 meses de edad, alcanzando un peso aproximado de 350 kg (rango desde el destete 150–250 kg hasta los 350 kg PV). Corresponde a la fase de levante o crecimiento intermedio tras el destete e inicio de actividad sexual.
+3. **Novillo / Novilla (y Torete):** Desde los 18 meses hasta alcanzar el peso mínimo requerido para la venta, el engorde final o la reproducción (aproximadamente 400 kg o más). En las hembras, las destinadas a reproducción suelen llamarse *novillas de vientre* (entre el inicio de actividad sexual y el primer parto). En los machos jóvenes se distingue entre *torete* (entero pospubertad) y *novillo* (castrado para ceba).
+4. **Toro / Toro Reproductor:** Macho adulto destinado a la monta o reproducción, generalmente incorporado a partir de los 30 meses de vida con pesos superiores a los 425 kg.
+5. **Vaca:** Hembra en etapa adulta (considerada así a partir de su primer parto). Según su estado productivo y reproductivo en el hato venezolano, se clasifica en:
+   * **Vaca parida:** Aquella que ha tenido su cría y se encuentra en lactancia (*primípara* si es su primer parto, o *multípara* si acumula varios).
+   * **Vaca escotera:** Vaca que se encuentra preñada pero no está produciendo leche en ese momento (no lactante).
+   * **Vaca seca:** Aquella que ha finalizado su periodo de lactancia y se encuentra en el último tercio de gestación (~60 días previos) antes del siguiente parto.
 
 ### 📝 Desglose de Funcionalidades Paso a Paso
-1. **Registro Rápido de Animales (Alta):**
-   * Captura por nacimiento en finca (asignación automática de madre conocida).
-   * Registro por compra o ingreso externo (con datos de procedencia).
-   * Identificación obligatoria por `ID_Hierro` / número de caravana / arete y alias opcional.
-2. **Hoja de Vida Digital (Perfil del Animal):**
-   * Vista consolidada con edad en meses/años, etapa de desarrollo (ternera/o, mauta/novillo, vaca, toro).
-   * Línea de tiempo interactiva: pesajes históricos, curva de ordeño, historial de vacunación y partos.
-3. **Árbol Genealógico y Trazabilidad de Linaje:**
-   * Vista jerárquica de ascendencia (padre, madre, abuelos maternos y paternos).
-   * Validación preventiva al planificar montas para advertir sobre parentesco cercano.
-4. **Módulo de Bajas y Salidas del Rebaño:**
-   * Registro de causas de baja: venta (enlace opcional a ingreso financiero), muerte (causa clínica) o descarte productivo.
-5. **Motor de Búsqueda y Filtros de Rebaño:**
-   * Filtrado dinámico por lote/potrero, sexo, propósito, raza y estado reproductivo actual.
+1. **Registro de Animales con Distinción entre Número Identificador, Hierro y Regla de Altas:**
+   * **Número Identificador (`numero_identificador`):** Campo obligatorio y único en el rebaño activo que identifica individualmente a la res (preservando además un `id_animal` interno inmutable).
+   * **Descripción del Hierro (`hierro`):** Campo descriptivo para registrar las iniciales, letras o figura del hierro que acredita propietario y procedencia del animal.
+   * **Gobernanza de Incorporación:** La carga inicial del censo y las compras externas son **exclusivas del `Administrador` en modo `Online`**; los trabajadores en campo únicamente incorporan nuevos animales de forma automática cuando nace una cría al registrar un **Parto** (con asignación automática del `numero_identificador` de la madre y prellenado del hierro oficial).
+2. **Registro Personalizado y Persistente de Razas:**
+   * Selector con razas predeterminadas (*Gyr Mestizo*, *Carora F1*, *Brahman*, *Guzerá*, *Pardo Suizo*, *Senepol*, *Romosinuano*) e interfaz integrada para **registrar nuevas razas personalizadas**, las cuales quedan almacenadas en el catálogo local para ser reutilizadas en el registro de otros animales.
+3. **Clasificación por Condición Fisiológica y Validación de Preñez:**
+   * Selección dinámica de la condición fisiológica coherente con el sexo del animal (si es `Macho`: *Becerro*, *Maute*, *Novillo / Torete*, *Toro Reproductor*; si es `Hembra`: *Becerra*, *Mauta*, *Novilla de vientre*, *Vaca parida*, *Vaca escotera*, *Vaca seca*).
+   * Control explícito **¿Está Preñada? (`Sí / No`)**: Se habilita exclusivamente para hembras aptas (*Novilla* y *Vaca*). Si se selecciona un macho o una becerra/mauta, el sistema bloquea o marca automáticamente como *"No aplica"*. Asimismo, en *Vaca escotera* y *Vaca seca* se preselecciona `Preñada = Sí` según su definición zootécnica.
+4. **Hoja de Vida Digital y Árbol Genealógico (Por Número Identificador):**
+   * Vista consolidada con `ID_Numero`, descripción del `Hierro`, condición fisiológica, estado de preñez, raza y último peso.
+   * Vista jerárquica de ascendencia donde la **Madre** y el **Padre** se guardan y muestran por su **Número Identificador (`#ID_Numero`)**.
+5. **Módulo de Bajas, Venta en Canal y Liberación del Número Identificador:**
+   * Al desincorporar un animal por venta en canal, se conserva su registro histórico (con su número y hierro) y se libera su **Número Identificador (`ID_Numero`)** para que pueda asignarse a nuevas crías.
+6. **Motor de Búsqueda y Filtros de Rebaño:**
+   * Filtrado dinámico por condición fisiológica, estado de preñez (preñadas vs. vacías), raza, sexo, hierro de procedencia y propósito.
 
 ### ⚠️ Consideraciones de Campo (Offline)
-* Búsqueda indexada en SQLite por número de hierro para respuesta instantánea en la manga de manejo o corral.
-* Interfaz con tipografías de alto contraste y botones táctiles amplios para su uso bajo luz solar directa.
+* Búsqueda indexada en SQLite por **Número Identificador (`ID_Numero`)** y por **Hierro** para respuesta instantánea en la manga de manejo o corral.
+* El catálogo personalizado de razas se guarda localmente en SQLite/`localStorage` para estar disponible sin conexión.
 
 ### 📌 Checklist de Planificación
-- [ ] Catálogo estándar de razas bovinas comunes en doble propósito (Brahman, Gyr, Guzerá, Pardo Suizo, Carora, mestizajes F1).
-- [ ] Reglas de validación de formato para el número de hierro/arete.
-- [ ] Mockups de la "Hoja de Vida" y del árbol genealógico.
+- [x] Separación de atributos entre `ID_Numero` (identificador individual y clave de genealogía materna/paterna) y `Hierro` (descripción de iniciales/figura de propietario y procedencia).
+- [x] Catálogo extensible de razas bovinas con opción de crear y guardar nuevas razas desde los formularios de alta y parto.
+- [x] Clasificación por condiciones fisiológicas venezolanas (*Becerro/a*, *Maute/a*, *Novillo/Novilla*, *Toro Reproductor*, *Vaca parida*, *Vaca escotera*, *Vaca seca*) e indicador de preñez exclusivo para hembras.
 
 [⬆ Volver al Índice](#indice)
 
@@ -101,33 +109,33 @@ Digitalizar el censo del rebaño bovino, constituyendo el núcleo del sistema. P
 ## 3. Módulo 3: Control de Producción de Doble Propósito (Leche y Carne)
 
 ### 🎯 Propósito del Módulo
-Registrar y analizar las dos fuentes primarias de rendimiento económico en fincas de doble propósito: la producción lechera diaria y la ganancia de peso para carne. Permite identificar las vacas de alta producción y los lotes de engorde más eficientes.
+Registrar y analizar las dos fuentes primarias de rendimiento económico en fincas de doble propósito: la producción lechera diaria y la ganancia de peso para carne. Permite identificar las vacas de alta producción y los lotes de levante y ceba más eficientes según su etapa fisiológica.
 
 ### 🧩 Entidades del Modelo de Dominio
-* **`RegistroOrdeno`**: `ID_ordeno`, `Fecha_Hora`, `Cantidad_Litros`, `Jornada` (*Mañana*, *Tarde*), `Animal (1)`.
-* **`RegistroPesaje`**: `ID_pesaje`, `Fecha`, `Peso_Kg`, `Animal (1)`.
+* **`RegistroOrdeno`**: `ID_ordeno`, `Fecha_Hora`, `Cantidad_Litros`, `Jornada` (*Mañana*, *Tarde*), `Animal_Numero (1)`.
+* **`RegistroPesaje`**: `ID_pesaje`, `Fecha`, `Peso_Kg`, `Condicion_Fisiologica_Actual`, `Animal_Numero (1)`.
 
 ### 📝 Desglose de Funcionalidades Paso a Paso
 1. **Submódulo de Ordeño Diario:**
-   * **Entrada Individual Rápida:** Registro de litros por vaca y jornada (mañana/tarde).
+   * **Entrada Individual Rápida:** Búsqueda por **Número Identificador (`ID_Numero`)** de la vaca (filtrando hembras en condición `Vaca parida` / lactancia) y registro de litros por jornada (mañana/tarde).
    * **Modo Carga Masiva / Lista de Vaquera:** Formulario en tabla para ingresar rápidamente los litros de todo el lote de ordeño sin cambiar de pantalla.
    * Acumulados diarios de producción global de la finca (litros totales del día).
-2. **Submódulo de Pesaje y Control de Carne:**
-   * Registro de pesajes periódicos en báscula física o cinta bovinométrica.
+2. **Submódulo de Pesaje y Control de Carne por Etapa Fisiológica:**
+   * Registro de pesajes periódicos en báscula física o cinta bovinométrica identificando al animal por su `ID_Numero`.
    * **Cálculo Automático de Ganancia Diaria de Peso (GDP):**  
      $$\text{GDP} = \frac{\text{Peso Actual} - \text{Peso Anterior}}{\text{Días transcurridos}}$$
-   * Clasificación de animales de engorde y alertas de animales estancados o con pérdida de peso.
+   * Evaluación del peso respecto a los umbrales de transición de etapa fisiológica en Venezuela (*Destete de Becerro a Maute*: ~150–200 kg; *Levante de Maute a Novillo/Novilla*: ~350 kg; *Acabado/Reproducción*: ≥400–425 kg).
 3. **Analítica de Productividad:**
    * Curvas de lactancia (días en lactancia vs. litros/día).
    * Promedios de producción por animal, por lote y comparativa entre temporadas (verano/invierno).
 
 ### ⚠️ Consideraciones de Campo (Offline)
 * Teclado numérico predeterminado en formularios para acelerar la digitación durante la faena.
-* Validación de rangos lógicos (ejemplo: alertar si se digitan >50 litros en una vaca o pesos incoherentes para evitar errores de dedo).
+* Validación de rangos lógicos (ejemplo: alertar si se digitan >40 litros en una jornada o pesos incoherentes para evitar errores de dedo).
 
 ### 📌 Checklist de Planificación
 - [ ] Definición de fórmulas de cálculo de promedios de lactancia normalizada (305 días).
-- [ ] Flujo de entrada de datos en menos de 3 toques de pantalla por animal.
+- [ ] Sugerencia automática de cambio de condición fisiológica cuando un animal alcanza el peso/edad de transición (ej. de *Becerro* a *Maute* o de *Maute* a *Novillo*).
 - [ ] Diseño de gráficos ligeros renderizables en local sin bibliotecas pesadas.
 
 [⬆ Volver al Índice](#indice)
@@ -141,12 +149,12 @@ Registrar y analizar las dos fuentes primarias de rendimiento económico en finc
 Garantizar la salud del rebaño y salvaguardar la inocuidad alimentaria. El control estricto de los **Tiempos de Retiro** (período de carencia de medicamentos en leche y carne) evita la contaminación de la leche entregada al centro de acopio y la venta de reses con trazas de fármacos.
 
 ### 🧩 Entidades del Modelo de Dominio
-* **`EventoSanitario`**: `ID_Sanidad`, `Tipo_Evento` (*Vacunación*, *Desparasitación*, *Tratamiento Antibiótico*, *Vitaminización*), `Fecha_Aplicacion`, `Producto_Usado`, `Dias_Retiro_Leche`, `Dias_Retiro_Carne`, `Animales (1..*)`.
+* **`EventoSanitario`**: `ID_Sanidad`, `Tipo_Evento` (*Vacunación*, *Desparasitación*, *Tratamiento Antibiótico*, *Vitaminización*), `Fecha_Aplicacion`, `Producto_Usado`, `Dias_Retiro_Leche`, `Dias_Retiro_Carne`, `Animales_Numero (1..*)`.
 
 ### 📝 Desglose de Funcionalidades Paso a Paso
 1. **Registro de Eventos y Campañas Sanitarias:**
-   * Registro individual (para animales enfermos en enfermería/corral).
-   * Registro colectivo/en lote (ej. vacunación oficial contra Fiebre Aftosa, Rabia, Brucelosis o baños garrapaticidas para todo el rebaño).
+   * Registro individual por `ID_Numero` (para animales enfermos en enfermería/corral).
+   * Registro colectivo/en lote (ej. vacunación oficial de ley según INSAI contra Fiebre Aftosa, Rabia, Brucelosis en hembras o pruebas serológicas de Brucelosis y Tuberculosis).
 2. **Semáforo y Alertas de Tiempos de Retiro (Punto Crítico):**
    * Cálculo automático de fecha de liberación:  
      $$\text{Fecha de Fin de Retiro} = \text{Fecha de Aplicación} + \text{Días de Retiro}$$
@@ -173,31 +181,37 @@ Garantizar la salud del rebaño y salvaguardar la inocuidad alimentaria. El cont
 ## 5. Módulo 5: Gestión Reproductiva y Trazabilidad Materno-Filial
 
 ### 🎯 Propósito del Módulo
-Monitorear y optimizar los ciclos reproductivos de las hembras bovinas. Un óptimo manejo reproductivo reduce los días abiertos, acorta el Intervalo Entre Partos (IEP) y sincroniza los partos para mantener picos sostenidos de producción lechera y reemplazos de ganado.
+Monitorear y optimizar los ciclos reproductivos de las hembras bovinas (*Novillas de vientre* y *Vacas*). Un óptimo manejo reproductivo actualiza dinámicamente la condición fisiológica y el estado de preñez de la hembra, reduce los días abiertos, acorta el Intervalo Entre Partos (IEP) y automatiza el registro genealógico de las crías usando el **Número Identificador** de los progenitores.
 
 ### 🧩 Entidades del Modelo de Dominio
-* **`EventoReproductivo`**: `ID_Reproduccion`, `Tipo_Evento` (*Celo*, *Servicio/Monta*, *Inseminación*, *Palpación/Diagnóstico*, *Secado*, *Parto*, *Aborto*), `Fecha_Evento`, `Resultado`, `Observaciones`, `Hembra (1)`, `Macho (0..1)`.
+* **`EventoReproductivo`**: `ID_Reproduccion`, `Tipo_Evento` (*Celo*, *Servicio/Monta*, *Inseminación*, *Palpación/Diagnóstico*, *Secado*, *Parto*, *Aborto*), `Fecha_Evento`, `Resultado`, `Observaciones`, `Hembra_Numero (1)`, `Macho_Numero_O_Semen (0..1)`.
 
 ### 📝 Desglose de Funcionalidades Paso a Paso
 1. **Registro de Ciclo y Servicios:**
-   * Registro de celos detectados y servicios (monta natural con toro o inseminación artificial con pajuela/raza del toro).
-2. **Diagnóstico de Gestación (Palpación / Ecografía):**
-   * Registro de resultado (Preñada / Vacía / Dudosa).
-   * Proyección automática de fecha estimada de parto (período de gestación promedio de 280-285 días).
+   * Selección exclusiva de hembras en etapa reproductiva (*Novilla*, *Vaca parida*, *Vaca escotera*, *Vaca seca*) identificadas por su `ID_Numero`.
+   * Registro de celos detectados y servicios (monta natural indicando el `ID_Numero` del *Toro Reproductor* o inseminación artificial con código de pajuela).
+2. **Diagnóstico de Gestación (Palpación / Ecografía) y Estado de Preñez:**
+   * Registro de resultado (*Preñada Confirmada* / *Vacía* / *Dudosa*).
+   * Si el resultado es *Preñada Confirmada*, el sistema actualiza automáticamente el atributo `Esta_Prenada = Sí` en la ficha de la hembra (y si no está produciendo leche, puede clasificarla como *Vaca escotera*). Si el resultado es *Vacía* o *Aborto*, actualiza `Esta_Prenada = No`.
+   * Proyección automática de fecha estimada de parto (período de gestación promedio de 283 días).
 3. **Control y Alertas del Ciclo de la Vaca:**
-   * **Alerta de Secado:** Notificación ~60 días antes del parto estimado para suspender el ordeño y permitir la recuperación de la ubre y el desarrollo fetal.
+   * **Alerta de Secado:** Notificación ~60 días antes del parto estimado para suspender el ordeño; al registrar el evento de *Secado*, la condición fisiológica de la hembra cambia automáticamente a **`Vaca seca`** (manteniendo `Esta_Prenada = Sí`).
    * **Alerta de Próximo Parto:** Notificación ~15 días antes para traslado a potrero de maternidad.
-4. **Atención y Registro de Partos:**
-   * Registro de fecha de parto, tipo (normal/distócico), sexo de la cría y viabilidad (vivo/nacimuerto).
-   * **Enlace automático:** Alta directa de la cría en el Módulo 2 con asignación automática de madre y padre, e inicio del nuevo ciclo de lactancia de la vaca en el Módulo 3.
+4. **Atención y Registro de Partos (Alta Automática de Cría con Número e Hierro):**
+   * Registro de fecha de parto, sexo de la cría y peso al nacer.
+   * **Enlace automático con el Módulo 2 (Censo):**
+     * Da de alta a la cría solicitando su **`ID_Numero` (N° Identificador único)**, **`Hierro` (Descripción del hierro de propiedad/procedencia)**, `Nombre_Alias`, `Sexo`, `Raza` (permitiendo elegir una existente o registrar una nueva raza en el acto) y `Peso_Kg`.
+     * Asigna automáticamente la condición fisiológica inicial **`Becerro`** (si es macho) o **`Becerra`** (si es hembra), con `Esta_Prenada = No aplica`.
+     * Registra la genealogía vinculando **`Madre` = `ID_Numero` de la vaca parida** y **`Padre` = `ID_Numero` del toro reproductor / semen**.
+     * Actualiza a la madre a condición fisiológica **`Vaca parida`** (en lactancia) y estado `Esta_Prenada = No` (iniciando su período de espera voluntaria).
 
 ### ⚠️ Consideraciones de Campo (Offline)
-* El motor local debe recalcular automáticamente el estado reproductivo de la hembra (*Vacía*, *Servida*, *Preñada*, *Seca*, *En Lactancia*) tras cada evento registrado.
+* El motor local debe recalcular automáticamente la condición fisiológica (*Vaca parida*, *Vaca escotera*, *Vaca seca*) y el indicador booleano de preñez (`Esta_Prenada`) tras cada evento registrado.
 
 ### 📌 Checklist de Planificación
-- [ ] Matriz de transición de estados reproductivos de la hembra.
-- [ ] Algoritmo de cálculo de fechas de secado y fecha estimada de parto.
-- [ ] Flujo integrado: "Registrar Parto -> Dar de Alta al Becerro/a".
+- [x] Matriz de transición de condiciones fisiológicas y estado de preñez de la hembra.
+- [x] Algoritmo de cálculo de fechas de secado y fecha estimada de parto.
+- [x] Flujo integrado: "Registrar Parto -> Dar de Alta al Becerro/a con N° Identificador, Hierro descriptivo y Madre por N° Identificador".
 
 [⬆ Volver al Índice](#indice)
 
@@ -214,7 +228,7 @@ Brindar claridad financiera sobre los ingresos y egresos cotidianos de la explot
 
 ### 📝 Desglose de Funcionalidades Paso a Paso
 1. **Libro de Caja y Flujo de Operación:**
-   * **Ingresos:** Venta de leche (litros x precio), venta de animales (kilos o pie x precio), venta de subproductos (queso, cuajada, estiércol).
+   * **Ingresos:** Venta de leche (litros x precio), venta de animales por categoría fisiológica (becerros destetados, mautes, novillos gordos en pie/canal, vacas o toros de descarte), venta de subproductos (queso, cuajada, estiércol).
    * **Egresos:** Compra de concentrado/alimento, medicamentos veterinarios, sal mineralizada, pago de jornales/nómina, mantenimiento de cercas y potreros, combustible.
 2. **Cálculo de Costos Directos de Producción:**
    * Cálculo del costo estimado por litro de leche producido:  
@@ -238,36 +252,33 @@ Brindar claridad financiera sobre los ingresos y egresos cotidianos de la explot
 ---
 
 <a id="modulo-7-dashboard-reportes"></a>
-## 7. Módulo 7: Tablero de Control (Dashboard), Métricas y Reportes
+## 7. Módulo 7: Vista Rápida Ejecutiva, Terminal de Carga en Campo e Historial Inmutable de Acciones
 
 ### 🎯 Propósito del Módulo
-Consolidar la información de todos los módulos en una vista gerencial simple, visual e intuitiva para apoyar la toma de decisiones rápidas por parte del propietario o encargado.
+Materializar en Flutter la **Propuesta A** de experiencia dual y garantizar trazabilidad forense completa:
+1. **`📱 Terminal de Carga` (`Trabajador / Operador`):** Interfaz ergonómica de campo con 4 tarjetas táctiles gigantes (*Ordeño, Pesaje, Sanidad, Reproducción/Parto*), buscador instantáneo en corral por `numero_identificador` con semáforo sanitario y monitor de la cola offline FIFO (`cola_envios_campo`).
+2. **`📊 Vista Rápida (Admin)` (`Administrador`):** Lectura ejecutiva inmediata en el móvil de los KPIs consolidados en la Base de Datos Central (*Tanque, Rebaño Activo, Retiros Sanitarios, Utilidad en Caja, Alertas y Últimas Acciones*).
+3. **`📜 Historial de Acciones` (`historial_acciones` — Exclusivo `Administrador`):** Bitácora cronológica e **inmutable (*append-only*)** de absolutamente toda operación o cambio realizado por el `Administrador` o por cualquier `Trabajador` (tanto `Online` como `Offline sincronizado`).
 
 ### 🧩 Integración de Entidades
-Cruza datos de `Animal`, `RegistroOrdeno`, `RegistroPesaje`, `EventoSanitario`, `EventoReproductivo` y `TransaccionFinanciera`.
+Cruza datos en el Servidor Central de `configuracion_finca`, `animales`, `catalogo_razas`, `registros_ordeno`, `registros_pesaje`, `eventos_sanitarios`, `eventos_reproductivos`, `ventas_leche`, `ventas_canal`, `transacciones_financieras` e `historial_acciones`.
 
 ### 📝 Desglose de Funcionalidades Paso a Paso
-1. **Resumen de Estado del Rebaño:**
-   * Tarjetas informativas: Total animales activos, vacas en ordeño, vacas secas, terneros/as, mautas/novillos, toros reproductores.
-2. **Semáforo Operativo Diario:**
-   * Animales en período de retiro sanitario activo (leche/carne no apta).
-   * Vacas próximas a secado (próximos 7-15 días).
-   * Vacas próximas al parto (próximos 7 días).
-   * Lotes con pesaje vencido o pendiente.
-3. **Indicadores Clave de Desempeño (KPIs Ganaderos):**
-   * Promedio de leche diario (litros/vaca/día y total tanque).
-   * Ganancia Media Diaria (GMD) en lotes de ceba.
-   * Días Abiertos promedio del rebaño e Intervalo Entre Partos (IEP).
-   * Margen operativo del mes (Ingresos vs. Gastos).
-4. **Generación de Reportes Locales:**
-   * Generación de reportes resumidos en formato PDF estructurado para compartir por WhatsApp o imprimir cuando se disponga de conexión.
+1. **Vista Rápida Ejecutiva del Administrador (`GET /api/v1/resumen-ejecutivo`):**
+   * Tarjetas resumen: Litros disponibles en tanque y ordeño del día, total de animales activos (preñadas y ventas en canal), vacas en retiro sanitario activo y utilidad neta en caja.
+   * Semáforo operativo diario de alertas rojas (retiro sanitario vigente) y ámbar (secados programados ~60 días antes del parto), más resumen de las últimas 4 acciones registradas en la finca.
+2. **Terminal Ligera de Carga de Datos en Campo (`Trabajador`):**
+   * Consulta instantánea sin internet sobre `cache_padron_activo` y envío en lote cronológico FIFO al reconectar (`POST /api/v1/campo/sincronizar-lote`).
+3. **Historial General Inmutable de Acciones (`GET /api/v1/historial-acciones`):**
+   * Registro automático sin posibilidad de edición ni borrado con usuario, rol, módulo, acción, entidad afectada, detalle del cambio, origen de red (`Online` vs. `Offline sincronizado`), **hora real de captura en campo** y **hora de recepción en servidor**.
+   * Filtros combinados por Rol/Autor, Módulo, Origen de Red y búsqueda de texto libre.
 
-### ⚠️ Consideraciones de Campo (Offline)
-* Los indicadores del dashboard se calculan a partir de la base de datos local SQLite mediante consultas agregadas optimizadas con índices.
+### ⚠️ Consideraciones de Conectividad
+* El Administrador consulta los indicadores en tiempo real desde la Base de Datos Central (y conserva en `cache_referencia_resumen.resumen_ejecutivo_json` el último snapshot de solo lectura cuando está en tránsito sin cobertura).
 
 ### 📌 Checklist de Planificación
-- [ ] Definición del layout de widgets para pantallas móviles.
-- [ ] Diseño de las plantillas PDF para los reportes de cierre semanal y mensual.
+- [x] Diseño validado en prototipo de `📱 Terminal de Carga`, `📊 Vista Rápida (Admin)` e `📜 Historial de Acciones`.
+- [x] Modelo relacional de `historial_acciones` con doble marca de tiempo e idempotencia por `id_cola_uuid` en [`modelo_base_de_datos.md`](./modelo_base_de_datos.md).
 
 [⬆ Volver al Índice](#indice)
 
@@ -280,15 +291,15 @@ Para planificar el desarrollo ágil de **FincaControl**, se recomienda seguir es
 
 ```mermaid
 flowchart TD
-    M1["Módulo 1: Arquitectura Base y Offline-First\n(BD Local, Usuarios, Roles, Sync)"] --> M2["Módulo 2: Inventario Bovino y Genealogía\n(Registro de Animales, Hoja de Vida)"]
+    M1["Módulo 1: Arquitectura Primero Online + Cola Campo\n(BD Central 12 Tablas, SQLite Móvil 3 Tablas, Propuesta A)"] --> M2["Módulo 2: Inventario Bovino y Genealogía\n(N° Identificador, Hierro, Razas, Etapa, Altas Admin Online)"]
     
-    M2 --> M3["Módulo 3: Control de Producción\n(Ordeño y Pesaje de Carne)"]
+    M2 --> M3["Módulo 3: Control de Producción\n(Ordeño, Tanque y Pesajes con GDP)"]
     M2 --> M4["Módulo 4: Gestión Sanitaria\n(Tratamientos y Tiempos de Retiro)"]
-    M2 --> M5["Módulo 5: Gestión Reproductiva\n(Servicios, Gestación, Partos)"]
+    M2 --> M5["Módulo 5: Gestión Reproductiva\n(Preñez, Secado y Partos con Alta de Cría en Campo)"]
     
-    M1 --> M6["Módulo 6: Control Financiero Operativo\n(Ingresos, Gastos, Costos Directos)"]
+    M1 --> M6["Módulo 6: Control Financiero Online\n(Ingresos, Gastos y Costo Directo/Litro)"]
     
-    M3 --> M7["Módulo 7: Dashboard y Reportes Gerenciales\n(KPIs, Semáforos, Alertas Consolidadas)"]
+    M3 --> M7["Módulo 7: Vista Rápida, Terminal de Campo\ne Historial Inmutable de Acciones"]
     M4 --> M7
     M5 --> M7
     M6 --> M7
@@ -306,13 +317,13 @@ flowchart TD
 
 | Fase | Módulo | Entregable Clave | Dependencia Previa |
 | :--- | :--- | :--- | :--- |
-| **Fase 1 (Sprint 1)** | Módulo 1 (Arquitectura Base) | Almacenamiento local SQLite, esquema de roles y autenticación. | Ninguna |
-| **Fase 2 (Sprint 2)** | Módulo 2 (Inventario Bovino) | CRUD de animales, hoja de vida y árbol genealógico. | Módulo 1 |
-| **Fase 3 (Sprint 3)** | Módulo 3 (Producción) | Entrada rápida de ordeño individual/lote y registro de pesajes con GDP. | Módulo 2 |
-| **Fase 4 (Sprint 4)** | Módulo 4 (Sanidad) | Registro de tratamientos y semáforo restrictivo de tiempos de retiro. | Módulo 2 |
-| **Fase 5 (Sprint 5)** | Módulo 5 (Reproducción) | Ciclo reproductivo, alertas de secado/parto y alta automática de crías. | Módulo 2 y Módulo 4 |
-| **Fase 6 (Sprint 6)** | Módulo 6 (Financiero) | Libro de ingresos/egresos y cálculo de costo por litro/kilo. | Módulo 1 (opcional cruce con M3 y M2) |
-| **Fase 7 (Sprint 7)** | Módulo 7 (Dashboard & Sync) | Tablero consolidado de KPIs, reportes PDF y sincronización con servidor. | Módulos 1 al 6 |
+| **Fase 1 (Sprint 1)** | Módulo 1 (Arquitectura Base) | Esquema relacional central (12 tablas incl. `historial_acciones`), autenticación por rol (Propuesta A) y SQLite móvil ligero (3 tablas). | Ninguna |
+| **Fase 2 (Sprint 2)** | Módulo 2 (Inventario Bovino) | Altas manuales Online (`Admin`), N° Identificador vs. Hierro, catálogo maestro de razas, etapas fisiológicas, preñez, genealogía y venta en canal. | Módulo 1 |
+| **Fase 3 (Sprint 3)** | Módulo 3 (Producción) | Ordeño diario (Online/Cola Campo), despacho Online de tanque y pesajes con cálculo de GDP. | Módulo 2 |
+| **Fase 4 (Sprint 4)** | Módulo 4 (Sanidad) | Tratamientos sanitarios (Online/Cola Campo) y bloqueo inmediato por tiempos de retiro en leche y carne. | Módulo 2 |
+| **Fase 5 (Sprint 5)** | Módulo 5 (Reproducción) | Preñez, secado y registro de Parto en campo con alta automática de becerro/a vinculada al N° Identificador materno. | Módulo 2 y Módulo 4 |
+| **Fase 6 (Sprint 6)** | Módulo 6 (Financiero Online) | Libro de ingresos/egresos centralizado y cálculo de costo directo por litro (`$/L`). | Módulo 1 y Módulo 3 |
+| **Fase 7 (Sprint 7)** | Módulo 7 (Experiencias & Auditoría) | `📱 Terminal de Carga`, `📊 Vista Rápida (Admin)`, sincronización FIFO de campo e `📜 Historial de Acciones` inmutable. | Módulos 1 al 6 |
 
 ---
 
