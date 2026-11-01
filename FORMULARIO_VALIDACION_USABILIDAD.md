@@ -5,6 +5,7 @@
 > **Equipo Autor:** Johan Maldonado – José Chacón  
 > **Artefactos Evaluados:** Prototipo Funcional (`agentes/prototipo/index.html` v3.0) + Guía de Usuario Orientada a Procesos (`GUIA_DE_USUARIO.pdf` Rev 3.0)  
 > **Formato Dual:** Anexo Documental Formal (Imprimible Tamaño Carta) y Plantilla Mapeada 1:1 para **Google Forms**
+> **Enlace Formulario: ** https://docs.google.com/forms/d/e/1FAIpQLSdq3PYSbIWBEBWP2etZEp9ZvbvVCPQYJYomkneL5AMKTf4Ong/viewform?usp=dialog
 
 ---
 
