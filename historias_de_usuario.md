@@ -8,14 +8,15 @@
 
 ## 📑 Índice de Historias de Usuario por Proceso y Módulo
 
-Todas las historias de usuario del sistema se consolidan en una única sección de catálogo técnico (ver abajo) mediante fichas numeradas de la **`HU-01`** a la **`HU-20`**:
+Todas las historias de usuario del sistema se consolidan en una única sección de catálogo técnico (ver abajo) mediante fichas numeradas de la **`HU-01`** a la **`HU-21`**:
 
-* **Proceso 0 y 1: Arquitectura Primero Online + Cola Offline de Campo, Roles (Propuesta A) y Configuración**
+* **Proceso 0 y 1: Arquitectura Primero Online + Cola Offline de Campo, Autenticación, Roles (Propuesta A) y Configuración**
   * [**HU-01:** Visualización del Esquema General de Procesos del Sistema](#hu-01)
   * [**HU-02:** Configuración Online de Identidad de la Finca y Hierro Oficial Predeterminado](#hu-02)
   * [**HU-03:** Gestión Online del Catálogo Maestro Extensible de Razas Bovinas y Caché de Campo](#hu-03)
   * [**HU-04:** Parametrización Comercial, Zootécnica y Experiencia Dual por Rol — Propuesta A](#hu-04)
   * [**HU-05:** Motor Primero Online + Extensión Offline Táctica de Campo (Caché Ligera y Cola FIFO en SQLite Móvil)](#hu-05)
+  * [**HU-21:** Inicio de Sesión por Rol y Gestión de Usuarios / Creación de Trabajadores (`RBAC` — Exclusivo Admin Online)](#hu-21)
 * **Proceso 2: Carga Inicial del Inventario de Animales (Censo, Etapas, Genealogía y Regla de Altas)**
   * [**HU-06:** Alta Manual de Inventario Inicial y Compras (Exclusivo Admin Online) Separando N° Identificador y Hierro](#hu-06)
   * [**HU-07:** Clasificación por Condiciones Fisiológicas Venezolanas y Estado de Preñez Condicional](#hu-07)
@@ -35,10 +36,11 @@ Todas las historias de usuario del sistema se consolidan en una única sección 
   * [**HU-18:** Terminal Ligera de Carga de Datos en Campo para el Trabajador (`📱 Terminal de Carga`)](#hu-18)
   * [**HU-19:** Vista Rápida Ejecutiva del Administrador (`📊 Vista Rápida (Admin)`), KPIs y Semáforo de Alertas](#hu-19)
   * [**HU-20:** Historial General Inmutable de Acciones y Bitácora de Auditoría (`📜 Historial de Acciones`)](#hu-20)
+  * [**HU-21:** Inicio de Sesión por Rol y Gestión de Usuarios / Creación de Trabajadores (`🔐 Login` y `👥 Usuarios`)](#hu-21)
 
 ---
 
-## 🗂️ Catálogo Único de Historias de Usuario (Fichas Técnicas HU-01 a HU-20)
+## 🗂️ Catálogo Único de Historias de Usuario (Fichas Técnicas HU-01 a HU-21)
 
 <a id="hu-01"></a>
 ### 🏷️ Ficha HU-01: Visualización del Esquema General de Procesos del Sistema
@@ -140,9 +142,10 @@ Todas las historias de usuario del sistema se consolidan en una única sección 
 
 #### 2. Conversation (Conversación y Especificación Técnica)
 * **Parámetros Configurables (`configuracion_finca`):** `capacidad_tanque_litros`, `precio_ref_leche`, `precio_ref_carne_kg`, `meta_gdp_kg_dia`, `dias_gestacion_ref` (283) y `dias_alerta_secado` (60).
-* **Reglas de Interfaz de la Propuesta A en Flutter:**
-  * Si `usuario.rol == 'ADMIN'`: Habilita `Esquema de Procesos`, `Vista Rápida (Admin)`, `Configuración`, `Inventario` (con `+ Nuevo Animal Manual`, `+ Registrar Nueva Raza`, `Vender en Canal` e `Historial Canal`), `Producción Carne`, `Producción Leche` (con `Vender / Despachar Leche`), `Sanidad`, `Reproducción`, `Financiero` e `Historial de Acciones`.
-  * Si `usuario.rol == 'OPERADOR'`: Activa por defecto `📱 Terminal de Carga` y oculta estrictamente `Configuración`, `Financiero`, `Historial de Acciones`, `+ Nuevo Animal Manual`, `+ Registrar Nueva Raza`, `Vender / Despachar Leche` y `Vender en Canal`.
+* **Reglas de Interfaz de la Propuesta A en Flutter (Interfaz Operativa Limpia — No Calco de la Guía):**
+  * **Principio de Limpieza Visual en Uso Real:** A diferencia del prototipo de validación académica (que incluía banners descriptivos y un botón simulador de rol para orientar a los evaluadores), **la aplicación en uso real no tendrá tanto texto explicativo ni será un calco literal de la Guía de Usuario**. Un trabajador o administrador en operación diaria no requiere párrafos teóricos en pantalla; las vistas son netamente operativas, con controles limpios y ayudas puntuales mediante *tooltips* (`ℹ️`).
+  * **Si `usuario.rol == 'ADMINISTRADOR'`:** Tras iniciar sesión (`HU-21`), habilita `Vista Rápida (Admin)`, `Esquema de Procesos`, `Configuración` (incluyendo la pestaña/sección `👥 Gestión de Usuarios y Trabajadores`), `Inventario` (con `+ Nuevo Animal Manual`, `+ Registrar Nueva Raza`, `Vender en Canal` e `Historial Canal`), `Producción Carne`, `Producción Leche` (con `Vender / Despachar Leche`), `Sanidad`, `Reproducción`, `Financiero` e `Historial de Acciones`.
+  * **Si `usuario.rol == 'OPERADOR'` (`Trabajador`):** Tras iniciar sesión (`HU-21`), activa por defecto `📱 Terminal de Carga` y oculta estrictamente `Configuración`, `Gestión de Usuarios`, `Financiero`, `Historial de Acciones`, `+ Nuevo Animal Manual`, `+ Registrar Nueva Raza`, `Vender / Despachar Leche` y `Vender en Canal`.
 
 #### 3. Confirmation (Confirmación y Criterios de Aceptación BDD)
 * **Escenario 1: Adaptación automática de interfaz al iniciar como Trabajador (Operador)**
@@ -592,3 +595,55 @@ Todas las historias de usuario del sistema se consolidan en una única sección 
   * **Dado que** existen múltiples acciones en `"📜 Historial de Acciones"`,
   * **Cuando** el Administrador filtra por `Rol = "Solo Trabajador / Operador"` y `Origen = "Offline sincronizado"`,
   * **Entonces** la tabla muestra exclusivamente los eventos capturados sin señal por personal de campo; y cuando la sesión cambia a `Rol: Trabajador`, el módulo `"📜 Historial de Acciones"` permanece completamente oculto e inaccesible.
+
+---
+
+<a id="hu-21"></a>
+### 🏷️ Ficha HU-21: Inicio de Sesión por Rol y Gestión de Usuarios / Creación de Trabajadores (`RBAC` — Exclusivo Admin Online)
+
+#### 1. Card (Tarjeta)
+* **ID:** `HU-21`
+* **Título:** Pestaña de Inicio de Sesión (`🔐 Login`), persistencia de sesión en campo y panel del Administrador para crear, gestionar y suspender cuentas de trabajadores (`👥 Gestión de Usuarios y Roles`).
+* **Prioridad:** Crítica (Seguridad, Roles y Gobernanza) | **Estimación:** 8 Puntos | **Proceso:** 1. Configuración / Seguridad y Roles (Módulo 1)
+* **Enunciado Clásico:**
+  * **Como** Administrador de la finca,
+  * **quiero** que el acceso a la aplicación se realice mediante una **pestaña/pantalla de Inicio de Sesión** que identifique el rol de cada usuario (`Administrador` o `Trabajador`), y disponer de un **panel exclusivo en línea para crear cuentas de trabajadores**, asignarles su cargo en la finca, restablecer sus credenciales y activar o suspender su acceso cuando dejen de laborar,
+  * **para** que cada miembro del personal ingrese directamente a la interfaz que le corresponde (**Propuesta A**) y todas las operaciones queden vinculadas con certeza al trabajador o administrador que las ejecutó en el `Historial de Acciones`.
+
+#### 2. Conversation (Conversación y Especificación Técnica)
+* **Transición del Prototipo Académico a la Aplicación Real:**
+  * En el prototipo web (`index.html`) se incluyó un botón superior de cambio rápido de rol (`👤 Rol: Administrador` ↔ `👷 Rol: Trabajador`) únicamente para que los pares evaluadores pudieran inspeccionar ambas vistas sin cerrar sesión. En la aplicación real ese conmutador libre no existe: el ingreso está gobernado por la **Pestaña/Pantalla de Inicio de Sesión (`🔐 Iniciar Sesión`)**.
+* **Flujo de Inicio de Sesión y Enrutamiento por Rol (`POST /api/v1/auth/login`):**
+  1. El usuario ingresa su **`identificador_acceso`** (ej. `admin.johan`, `pedro.ordeno`) y su **Contraseña o PIN de acceso**.
+  2. El Servidor Central verifica que el usuario exista en la tabla `usuarios`, que su credencial sea válida (`credencial_hash`) y que su cuenta se encuentre activa (`activo = TRUE`).
+  3. Según el atributo `rol` devuelto:
+     * Si `rol == 'ADMINISTRADOR'`: Carga la interfaz administrativa (`📊 Vista Rápida (Admin)`, módulos de gestión, ventas, finanzas, gestión de usuarios e `📜 Historial de Acciones`).
+     * Si `rol == 'OPERADOR'` (`Trabajador`): Carga directamente la **`📱 Terminal de Carga`** con las 4 tarjetas operativas y el buscador de corral, sin exponer módulos administrativos ni textos explicativos innecesarios.
+* **Persistencia de Sesión en Campo y Cierre de Sesión Seguro (`Offline`):**
+  * Una vez que el trabajador inicia sesión en línea al comenzar su turno (descargando su token y la caché inicial `cache_padron_activo`), su sesión permanece activa localmente en el teléfono aunque pierda señal en los potreros o mangas, sellando cada registro de `cola_envios_campo` con su `id_usuario` y `nombre_completo`.
+  * Si el trabajador pulsa `"Cerrar Sesión"` (por ejemplo, en un teléfono compartido de vaquera) y aún existen registros pendientes en `cola_envios_campo`, el sistema muestra una advertencia preventiva indicando cuántos registros faltan por sincronizar y conserva la autoría original de cada registro encolado.
+* **Submódulo de Gestión de Usuarios y Trabajadores (`👥 Gestión de Usuarios y Roles` — Exclusivo `Administrador Online`):**
+  * Ubicado dentro de `⚙️ 1. Configuración` (o pestaña administrativa de Personal), permite al `Administrador` conectado en línea:
+    1. **Crear Trabajadores (`POST /api/v1/usuarios`):** Registrar `nombre_completo`, `cedula_telefono`, `cargo_finca` (*Ordeñador*, *Vaquero de Corral / Manga*, *Encargado Sanitario / Reproducción*, *Mayordomo*), `identificador_acceso` único, contraseña/PIN inicial y `rol` (`OPERADOR` o co-`ADMINISTRADOR`).
+    2. **Consultar Directorio de Personal (`GET /api/v1/usuarios`):** Visualizar todos los usuarios de la finca, su cargo, rol, estado (`🟢 Activo` / `🔴 Suspendido`) y fecha/hora de su último acceso o sincronización (`ultimo_acceso_en`).
+    3. **Editar Datos o Restablecer Credenciales (`PUT /api/v1/usuarios/{id}`):** Actualizar el cargo o asignar un nuevo PIN/contraseña temporal si un trabajador olvida su clave.
+    4. **Suspender / Reactivar Acceso sin Borrado Físico (`PATCH /api/v1/usuarios/{id}/estado`):** Cuando un trabajador se retira de la finca, el Administrador cambia su estado a `activo = FALSE` (nunca se ejecuta `DELETE` sobre `usuarios`), revocando de inmediato su acceso al sistema mientras se conserva intacto el $100\%$ de su trazabilidad histórica en `historial_acciones`, ordeños y pesajes.
+  * Toda alta, edición, cambio de rol o suspensión de un usuario queda registrada automáticamente en **`📜 Historial de Acciones`**.
+
+#### 3. Confirmation (Confirmación y Criterios de Aceptación BDD)
+* **Escenario 1: Inicio de sesión y redirección automática según el rol del usuario**
+  * **Dado que** el usuario se encuentra en la pestaña `"🔐 Iniciar Sesión"`,
+  * **Cuando** ingresa credenciales válidas de una cuenta activa con `rol = "OPERADOR"` (`Trabajador`),
+  * **Entonces** el sistema autentica la sesión, descarga la caché operativa del hato y abre directamente la vista `"📱 Terminal de Carga"` ocultando todas las funciones administrativas; y si ingresa con `rol = "ADMINISTRADOR"`, abre la experiencia gerencial con `"📊 Vista Rápida (Admin)"`, `"⚙️ 1. Configuración"`, `"👥 Gestión de Usuarios"` e `"📜 Historial de Acciones"`.
+* **Escenario 2: Creación exitosa de la cuenta de un nuevo trabajador por el Administrador en línea**
+  * **Dado que** el Administrador tiene sesión activa y conexión `"En Línea"` dentro de `"👥 Gestión de Usuarios y Roles"`,
+  * **Cuando** pulsa `"+ Nuevo Trabajador / Usuario"`, completa `Nombre = "Pedro Pérez"`, `Cédula/Tel = "V-19823410"`, `Cargo = "Ordeñador"`, `Usuario = "pedro.ordeno"`, `Rol = "Trabajador / Operador"` y su PIN/contraseña inicial, y presiona `"Guardar Usuario"`,
+  * **Entonces** el Servidor Central crea el registro en la tabla `usuarios` con `activo = TRUE`, registra el alta en `"📜 Historial de Acciones"` y habilita a `"pedro.ordeno"` para iniciar sesión desde su teléfono de campo.
+* **Escenario 3: Suspensión lógica de un trabajador retirado preservando su historial auditado**
+  * **Dado que** el trabajador `"pedro.ordeno"` dejó de laborar en la finca pero posee registros históricos de ordeños y pesajes,
+  * **Cuando** el Administrador cambia su estado a `"🔴 Inactivo / Suspendido"` (`activo = FALSE`),
+  * **Entonces** el sistema revoca su sesión e impide que `"pedro.ordeno"` vuelva a iniciar sesión o enviar datos, pero conserva intactos todos sus registros previos y su nombre en `"📜 Historial de Acciones"`.
+* **Escenario 4: Bloqueo de intento de inicio de sesión de un usuario suspendido**
+  * **Dado que** la cuenta de `"pedro.ordeno"` tiene `activo = FALSE` en la Base de Datos Central,
+  * **Cuando** intenta ingresar sus credenciales en `"🔐 Iniciar Sesión"`,
+  * **Entonces** el sistema rechaza el acceso y muestra el mensaje `"Cuenta suspendida o inactiva. Contacte al Administrador de la finca"`.

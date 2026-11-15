@@ -11,32 +11,34 @@
   
   <style>
     /* ==========================================================================
-       VARIABLES Y DESIGN TOKENS (MINIMALISTA, ALTO CONTRASTE, POCOS COLORES)
+       VARIABLES Y DESIGN TOKENS — FINCACONTROL v4.0 (AGRO-MODERN MOBILE UI)
        ========================================================================== */
     :root {
       --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       
-      /* Fondos neutros de baja fatiga visual */
-      --bg-app: #F8FAFC;
+      /* Fondos neutros cálidos de baja fatiga visual bajo sol de campo */
+      --bg-app: #F4F7F5;
       --bg-surface: #FFFFFF;
-      --bg-subtle: #F1F5F9;
-      --bg-card-hover: #F8FAFC;
+      --bg-subtle: #EDF2EE;
+      --bg-card-hover: #F8FAF9;
       
-      /* Escala tipográfica neutra de alto contraste */
+      /* Escala tipográfica de alto contraste */
       --text-main: #0F172A;      /* Contraste 14.5:1 sobre blanco */
       --text-muted: #334155;     /* Contraste 7.0:1 sobre blanco */
       --text-dim: #64748B;
       
-      /* Bordes sobrios y estructurados */
+      /* Bordes limpios y estructurados */
       --border-subtle: #E2E8F0;
       --border-medium: #CBD5E1;
       --border-strong: #94A3B8;
       
-      /* Acento primario sobrio ganadero (Verde bosque profundo) */
-      --color-primary: #166534;
-      --color-primary-hover: #14532D;
-      --color-primary-subtle: #F0FDF4;
-      --color-primary-border: #BBF7D0;
+      /* Identidad Agro-Moderna (Verde Bosque Esmeralda Profundo + Acento Ámbar) */
+      --color-primary: #146C43;
+      --color-primary-dark: #0D472A;
+      --color-primary-hover: #0F5132;
+      --color-primary-subtle: #ECFDF5;
+      --color-primary-border: #A7F3D0;
+      --color-accent: #D97706;
       
       /* Semáforo semántico estricto */
       --status-danger-bg: #FEF2F2;
@@ -47,29 +49,30 @@
       --status-warning-text: #92400E;
       --status-warning-border: #FBBF24;
       
-      --status-success-bg: #F0FDF4;
-      --status-success-text: #166534;
-      --status-success-border: #86EFAC;
+      --status-success-bg: #ECFDF5;
+      --status-success-text: #146C43;
+      --status-success-border: #6EE7B7;
       
       --status-info-bg: #EFF6FF;
       --status-info-text: #1E40AF;
       --status-info-border: #93C5FD;
       
-      /* Destacado de campos de entrada (INPUT HIGHLIGHT) */
+      /* Destacado ergonómico de campos de entrada (INPUT HIGHLIGHT) */
       --input-border: #94A3B8;
       --input-bg: #FFFFFF;
-      --input-focus-border: #166534;
-      --input-focus-ring: rgba(22, 101, 52, 0.16);
-      --input-active-fill: #FAFAF9;
+      --input-focus-border: #146C43;
+      --input-focus-ring: rgba(20, 108, 67, 0.18);
+      --input-active-fill: #F9FBF9;
       
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
       
-      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-      --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
-      --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
-      --shadow-highlight: 0 0 0 3px var(--input-focus-ring);
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
+      --shadow-card: 0 6px 18px -4px rgba(13, 71, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.05);
+      --shadow-modal: 0 24px 38px -8px rgba(15, 23, 42, 0.22), 0 10px 16px -6px rgba(15, 23, 42, 0.10);
+      --shadow-highlight: 0 0 0 3.5px var(--input-focus-ring);
     }
 
     * {
@@ -81,215 +84,388 @@
 
     body {
       font-family: var(--font-family);
-      background-color: var(--bg-app);
+      background-color: #CBD5CE;
+      background-image: radial-gradient(circle at 15% 15%, rgba(20, 108, 67, 0.12) 0%, transparent 45%),
+                        radial-gradient(circle at 85% 80%, rgba(15, 23, 42, 0.08) 0%, transparent 45%);
       color: var(--text-main);
       line-height: 1.5;
-      font-size: 14px;
+      font-size: 15.5px;
       -webkit-font-smoothing: antialiased;
+      padding-bottom: 24px;
     }
 
     /* ==========================================================================
-       ESTRUCTURA Y CONTENEDOR PRINCIPAL
+       BARRA SUPERIOR DE PRUEBA DEL PROTOTIPO (VISTA TELÉFONO VS. TABLET/MAXIMIZADA)
+       ========================================================================== */
+    .proto-device-bar {
+      position: sticky;
+      top: 0;
+      z-index: 180;
+      background: #0F172A;
+      color: #F8FAFC;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      font-size: 13px;
+    }
+    .proto-device-switch {
+      display: inline-flex;
+      background: #1E293B;
+      padding: 3px;
+      border-radius: 99px;
+      border: 1px solid #334155;
+      gap: 4px;
+    }
+    .proto-view-btn {
+      background: transparent;
+      border: none;
+      color: #CBD5E1;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 99px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.16s ease;
+    }
+    .proto-view-btn.active {
+      background: #16A34A;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.4);
+    }
+
+    /* ==========================================================================
+       ESTRUCTURA PRINCIPAL ANDROID (MODO TELÉFONO POR DEFECTO Y MODO TABLET)
        ========================================================================== */
     .app-shell {
-      max-width: 1220px;
-      margin: 0 auto;
-      min-height: 100vh;
+      width: 100%;
+      max-width: 460px;
+      margin: 14px auto 24px auto;
+      min-height: calc(100vh - 80px);
       display: flex;
       flex-direction: column;
       background-color: var(--bg-app);
-      border-left: 1px solid var(--border-subtle);
-      border-right: 1px solid var(--border-subtle);
+      border-radius: 34px;
+      border: 7px solid #1E293B;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.30);
+      position: relative;
+      overflow-x: hidden;
+      transition: max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.25s ease;
+    }
+    .app-shell.tablet-mode {
+      max-width: 1160px;
+      border-radius: 24px;
+      border-width: 5px;
     }
 
-    /* Barra Superior */
-    .top-bar {
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 12px 20px;
+    /* Mientras está en pantalla de Login, ocultar barras de navegación interna */
+    .app-shell.login-mode .hero-header-shell,
+    .app-shell.login-mode .bottom-nav-bar {
+      display: none !important;
+    }
+    .app-shell.login-mode .main-content {
+      padding: 18px 16px 28px 16px;
+      justify-content: center;
+      min-height: calc(100vh - 110px);
+    }
+
+    /* Barra de estado simulada de Android en la parte superior del teléfono */
+    .android-status-strip {
+      background: #072818;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 6px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      letter-spacing: 0.3px;
+    }
+
+    /* Cabecera Hero Curva Android */
+    .hero-header-shell {
+      background: linear-gradient(135deg, #0B3B24 0%, #145E38 55%, #197246 100%);
+      color: #FFFFFF;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 8px 22px -6px rgba(11, 59, 36, 0.32);
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 60;
+      overflow: hidden;
+    }
+
+    .top-bar {
+      background: transparent;
+      padding: 12px 16px 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
 
-    .brand-badge {
-      background-color: var(--text-main);
+    /* Botón de Menú Lateral (Hamburguesa Android) */
+    .hamburger-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
       color: #FFFFFF;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 5px 8px;
-      border-radius: var(--radius-sm);
-      letter-spacing: 0.5px;
+      font-size: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .hamburger-btn:hover {
+      background: rgba(255, 255, 255, 0.28);
+      transform: scale(1.03);
     }
 
     .brand-title {
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.15;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-version-tag {
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.2;
+      background: rgba(255, 255, 255, 0.20);
+      color: #DCFCE7;
+      padding: 2px 8px;
+      border-radius: 99px;
     }
 
     .brand-subtitle {
-      font-size: 12px;
-      color: var(--text-dim);
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.88);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+    .app-shell.tablet-mode .brand-subtitle {
+      max-width: 520px;
     }
 
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .status-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-muted);
+      padding: 6px 11px;
+      background-color: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 99px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #FFFFFF;
     }
 
     .status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background-color: #16A34A;
+      background-color: #4ADE80;
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
     }
 
     .role-badge {
-      font-size: 12px;
-      font-weight: 600;
-      background-color: #E2E8F0;
-      color: var(--text-main);
-      padding: 4px 10px;
-      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      background-color: #FFFFFF;
+      color: #0B3B24;
+      padding: 6px 12px;
+      border-radius: 99px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
-    /* PESTAÑAS DE NAVEGACIÓN MODULAR */
-    .nav-tabs {
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
+    /* ==========================================================================
+       PANEL LATERAL IZQUIERDO DE NAVEGACIÓN (ANDROID NAVIGATION DRAWER)
+       ========================================================================== */
+    .side-nav-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(2px);
+      z-index: 165;
+      display: none;
+      justify-content: flex-start;
+    }
+    .side-nav-backdrop.open {
       display: flex;
-      overflow-x: auto;
-      padding: 0 16px;
-      gap: 6px;
-      scrollbar-width: none;
     }
-    .nav-tabs::-webkit-scrollbar { display: none; }
-
+    .side-nav-panel {
+      width: 86%;
+      max-width: 340px;
+      background: #FFFFFF;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 12px 0 32px rgba(0, 0, 0, 0.28);
+      animation: slideInLeft 0.22s ease-out;
+      overflow-y: auto;
+    }
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+    .side-nav-header {
+      background: linear-gradient(135deg, #0B3B24 0%, #146C43 100%);
+      color: #FFFFFF;
+      padding: 22px 18px 18px 18px;
+    }
+    .side-nav-list {
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .side-nav-section-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+      padding: 8px 10px 4px 10px;
+    }
     .nav-tab-btn {
-      background: none;
-      border: none;
-      padding: 14px 14px;
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid transparent;
+      padding: 12px 14px;
+      border-radius: 14px;
       font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-muted);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: left;
       transition: all 0.15s ease;
     }
-
     .nav-tab-btn:hover {
-      color: var(--text-main);
       background-color: var(--bg-subtle);
     }
-
     .nav-tab-btn.active {
-      color: var(--color-primary);
-      font-weight: 600;
-      border-bottom-color: var(--color-primary);
-      background-color: transparent;
+      color: #0B3B24;
+      font-weight: 800;
+      background-color: #DCFCE7;
+      border-color: #86EFAC;
     }
 
     /* Contenido Principal */
     .main-content {
-      padding: 20px 20px 80px 20px;
+      padding: 18px 16px 105px 16px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
+    }
+    .app-shell.tablet-mode .main-content {
+      padding: 22px 24px 110px 24px;
     }
 
     /* Vistas de cada módulo */
     .module-view {
       display: none;
       flex-direction: column;
-      gap: 20px;
-      animation: fadeIn 0.2s ease-in-out;
+      gap: 18px;
+      animation: fadeIn 0.2s ease-out;
     }
     .module-view.active {
       display: flex;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* ==========================================================================
-       COMPONENTES VISUALES: SECCIONES, CARDS Y MÉTRICAS
+       COMPONENTES VISUALES: SECCIONES, CARDS Y MÉTRICAS (TIPOGRAFÍA AMPLIADA)
        ========================================================================== */
     .section-header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: -2px;
+      align-items: center;
+      margin-bottom: 2px;
       flex-wrap: wrap;
       gap: 10px;
     }
 
     .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--text-dim);
+      font-size: 16.5px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: var(--text-main);
     }
 
     .section-action {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--color-primary);
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: none;
       cursor: pointer;
     }
     .section-action:hover { text-decoration: underline; }
 
-    /* Grid de Métricas */
+    /* Grid de Métricas: 2 columnas en Teléfono, 4 columnas en modo Tablet */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
     @media (min-width: 768px) {
-      .metrics-grid {
+      .app-shell.tablet-mode .metrics-grid {
         grid-template-columns: repeat(4, 1fr);
       }
     }
 
     .metric-card {
       background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
+      border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 15px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
@@ -297,8 +473,8 @@
     }
 
     .metric-label {
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 700;
       color: var(--text-muted);
       display: flex;
       align-items: center;
@@ -306,16 +482,16 @@
     }
 
     .metric-value {
-      font-size: 26px;
-      font-weight: 700;
+      font-size: 27px;
+      font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.5px;
     }
 
     .metric-meta {
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text-dim);
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .metric-card.danger {
@@ -343,20 +519,20 @@
     }
 
     /* ==========================================================================
-       FORMULARIOS Y CAMPOS RESALTADOS (INPUT HIGHLIGHTING)
+       FORMULARIOS Y CAMPOS RESALTADOS (TIPOGRAFÍA Y CONTROLES TÁCTILES GRANDES)
        ========================================================================== */
     .form-panel {
       background-color: var(--bg-surface);
       border: 2px solid var(--color-primary-border);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 18px;
       box-shadow: var(--shadow-card);
       position: relative;
     }
 
     .form-panel-plain {
       background-color: var(--bg-surface);
-      border: 1px solid var(--border-medium);
+      border: 1.5px solid var(--border-medium);
       border-radius: var(--radius-lg);
       padding: 16px;
       box-shadow: var(--shadow-sm);
@@ -369,41 +545,44 @@
       background-color: var(--color-primary-subtle);
       color: var(--color-primary);
       border: 1px solid var(--color-primary-border);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 4px 10px;
+      letter-spacing: 0.4px;
+      padding: 4px 11px;
       border-radius: 20px;
       margin-bottom: 10px;
     }
 
     .panel-title {
-      font-size: 17px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 800;
       color: var(--text-main);
       margin-bottom: 4px;
     }
 
     .panel-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
       margin-bottom: 16px;
     }
 
-    /* Grids de Formulario */
+    /* Grids de Formulario: 1 columna en Teléfono, 2/4 columnas solo en Tablet/Maximizada */
     .form-grid-4 {
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
     }
+    .app-shell:not(.tablet-mode) .form-grid-4 > [style*="span"] {
+      grid-column: 1 / -1 !important;
+    }
     @media (min-width: 640px) {
-      .form-grid-4 {
+      .app-shell.tablet-mode .form-grid-4 {
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    @media (min-width: 860px) {
-      .form-grid-4 {
+    @media (min-width: 900px) {
+      .app-shell.tablet-mode .form-grid-4 {
         grid-template-columns: repeat(4, 1fr);
         align-items: flex-end;
       }
@@ -415,7 +594,7 @@
       gap: 14px;
     }
     @media (min-width: 640px) {
-      .form-grid-3 {
+      .app-shell.tablet-mode .form-grid-3 {
         grid-template-columns: repeat(3, 1fr);
         align-items: flex-end;
       }
@@ -428,28 +607,30 @@
     }
 
     .input-label {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
       color: var(--text-main);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
     .input-hint {
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--color-primary);
     }
 
     .link-inline-action {
-      font-size: 11.5px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--color-primary);
       background: var(--color-primary-subtle);
       border: 1px solid var(--color-primary-border);
-      padding: 1px 7px;
-      border-radius: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
     }
@@ -457,14 +638,14 @@
       background: #DCFCE7;
     }
 
-    /* ESTILOS RESALTADOS DE INPUTS */
+    /* ESTILOS RESALTADOS DE INPUTS (MÁS GRANDES PARA MÓVIL) */
     .highlight-input {
       width: 100%;
-      height: 48px;
+      height: 50px;
       padding: 10px 14px;
       font-family: inherit;
-      font-size: 14.5px;
-      font-weight: 500;
+      font-size: 15.5px;
+      font-weight: 600;
       color: var(--text-main);
       background-color: var(--input-bg);
       border: 2px solid var(--input-border);
@@ -487,7 +668,7 @@
     }
 
     textarea.highlight-input {
-      height: 80px;
+      height: 84px;
       resize: vertical;
       padding-top: 10px;
     }
@@ -497,14 +678,14 @@
       font-weight: 400;
     }
 
-    /* Botones */
+    /* Botones Táctiles Android */
     .btn-submit {
-      height: 48px;
+      height: 50px;
       background-color: var(--color-primary);
       color: #FFFFFF;
       font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 15.5px;
+      font-weight: 700;
       border: none;
       border-radius: var(--radius-sm);
       padding: 0 18px;
@@ -514,7 +695,7 @@
       justify-content: center;
       gap: 8px;
       transition: background-color 0.15s ease;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(20, 108, 67, 0.22);
       white-space: nowrap;
     }
 
@@ -531,8 +712,8 @@
       background-color: #FFFFFF;
       color: var(--text-main);
       font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 14.5px;
+      font-weight: 700;
       border: 1.5px solid var(--border-medium);
       border-radius: var(--radius-sm);
       padding: 0 16px;
@@ -549,12 +730,12 @@
     }
 
     .btn-danger-outline {
-      height: 34px;
+      height: 38px;
       background-color: #FFFFFF;
       color: #991B1B;
       font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       border: 1.5px solid #F87171;
       border-radius: var(--radius-sm);
       padding: 0 12px;
@@ -570,25 +751,27 @@
     }
 
     .btn-action-tank {
-      height: 38px;
+      height: 46px;
       background-color: #1E40AF;
       color: #FFFFFF;
       font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 14.5px;
+      font-weight: 700;
       border: none;
       border-radius: var(--radius-sm);
-      padding: 0 14px;
+      padding: 0 16px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 8px;
       transition: background-color 0.15s ease;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
     }
     .btn-action-tank:hover { background-color: #1E3A8A; }
 
     /* ==========================================================================
-       TABLAS LIMPIAS Y MONOCROMÁTICAS
+       TABLAS LIMPIAS Y MONOCROMÁTICAS (FUENTE MÁS LEGIBLE)
        ========================================================================== */
     .table-container {
       background-color: var(--bg-surface);
@@ -602,14 +785,14 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 13.5px;
+      font-size: 14.5px;
     }
 
     .clean-table th {
       background-color: var(--bg-subtle);
       color: var(--text-muted);
-      font-weight: 600;
-      font-size: 12px;
+      font-weight: 700;
+      font-size: 12.5px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       padding: 12px 14px;
@@ -618,7 +801,7 @@
     }
 
     .clean-table td {
-      padding: 12px 14px;
+      padding: 13px 14px;
       border-bottom: 1px solid var(--border-subtle);
       color: var(--text-main);
       vertical-align: middle;
@@ -634,7 +817,7 @@
     }
 
     .animal-id {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-main);
       display: inline-flex;
       align-items: center;
@@ -646,19 +829,19 @@
       background-color: #F1F5F9;
       border: 1px solid #CBD5E1;
       color: #334155;
-      font-size: 11.5px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 3px 9px;
+      border-radius: 6px;
     }
 
     /* Badges de Estado */
     .badge-status {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: var(--radius-sm);
-      font-size: 11.5px;
-      font-weight: 600;
+      font-size: 12.5px;
+      font-weight: 700;
       letter-spacing: 0.2px;
     }
 
@@ -678,7 +861,7 @@
     .alert-card {
       background-color: var(--bg-surface);
       border-radius: var(--radius-md);
-      padding: 14px 16px;
+      padding: 15px 16px;
       display: flex;
       align-items: flex-start;
       gap: 14px;
@@ -699,23 +882,23 @@
     }
 
     .alert-badge {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 11.5px;
+      font-weight: 800;
       text-transform: uppercase;
       padding: 2px 8px;
       border-radius: 4px;
       display: inline-block;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
     .alert-card.danger .alert-badge { background-color: #FEE2E2; color: #991B1B; }
     .alert-card.warning .alert-badge { background-color: #FEF3C7; color: #92400E; }
 
     .alert-content { flex: 1; }
-    .alert-header { display: flex; justify-content: space-between; align-items: baseline; }
-    .alert-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
-    .alert-time { font-size: 11.5px; color: var(--text-dim); font-weight: 500; }
-    .alert-desc { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    .alert-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+    .alert-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+    .alert-time { font-size: 12.5px; color: var(--text-dim); font-weight: 600; }
+    .alert-desc { font-size: 13.5px; color: var(--text-muted); margin-top: 4px; }
 
     /* MODAL DE HOJA DE VIDA Y MODALES GENERALES */
     .modal-overlay {
@@ -726,14 +909,14 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
-      z-index: 100;
+      z-index: 190;
     }
     .modal-overlay.open { display: flex; }
 
     .modal-card {
       background-color: #FFFFFF;
       border-radius: var(--radius-lg);
-      max-width: 680px;
+      max-width: 640px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
@@ -778,9 +961,9 @@
     .subnav-btn {
       background-color: var(--bg-subtle);
       border: 1px solid var(--border-medium);
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 600;
+      padding: 9px 15px;
+      font-size: 14px;
+      font-weight: 700;
       border-radius: var(--radius-sm);
       cursor: pointer;
       color: var(--text-muted);
@@ -798,7 +981,7 @@
       gap: 10px;
     }
     @media (min-width: 768px) {
-      .etapas-grid {
+      .app-shell.tablet-mode .etapas-grid {
         grid-template-columns: repeat(3, 1fr);
       }
     }
@@ -807,124 +990,46 @@
       border: 1px solid var(--border-medium);
       border-radius: var(--radius-sm);
       padding: 12px;
-      font-size: 12.5px;
+      font-size: 13.5px;
     }
     .etapa-box strong {
       color: var(--color-primary);
       display: block;
       margin-bottom: 4px;
-      font-size: 13px;
+      font-size: 14px;
     }
 
-    /* Esquema de Procesos Soportados por el Sistema */
+    /* Grids de paneles auxiliares */
     .process-schema-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
     }
     @media (min-width: 900px) {
-      .process-schema-grid {
+      .app-shell.tablet-mode .process-schema-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-    }
-
-    .process-card {
-      background-color: var(--bg-surface);
-      border: 1.5px solid var(--border-medium);
-      border-top: 4px solid var(--color-primary);
-      border-radius: var(--radius-md);
-      padding: 18px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .process-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-card);
-    }
-
-    .process-step-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--color-primary);
-      color: #FFFFFF;
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .process-flow-steps {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      margin-top: 6px;
-    }
-    .process-flow-steps li {
-      font-size: 13px;
-      color: var(--text-muted);
-      background-color: var(--bg-subtle);
-      border-left: 3px solid var(--color-primary);
-      padding: 7px 10px;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    }
-
-    .flow-diagram-banner {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      box-shadow: var(--shadow-sm);
-    }
-    .flow-node {
-      flex: 1;
-      min-width: 175px;
-      background-color: #FAFAF9;
-      border: 1.5px solid var(--color-primary-border);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: background-color 0.15s ease;
-    }
-    .flow-node:hover {
-      background-color: var(--color-primary-subtle);
-    }
-    .flow-arrow {
-      font-weight: 700;
-      color: var(--color-primary);
-      font-size: 18px;
     }
 
     /* Notificación Toast */
     .toast-msg {
       position: fixed;
-      bottom: 24px;
+      bottom: 84px;
       left: 50%;
-      transform: translateX(-50%) translateY(120px);
+      transform: translateX(-50%) translateY(140px);
       background-color: var(--text-main);
       color: #FFFFFF;
-      padding: 12px 22px;
+      padding: 13px 22px;
       border-radius: var(--radius-md);
-      font-size: 13.5px;
-      font-weight: 500;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      font-size: 14.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 200;
+      z-index: 220;
       display: flex;
       align-items: center;
       gap: 10px;
+      max-width: 92vw;
     }
     .toast-msg.show {
       transform: translateX(-50%) translateY(0);
@@ -938,13 +1043,13 @@
     }
     .status-pill.clickable:hover {
       border-color: var(--border-strong);
-      background-color: #E2E8F0;
+      background-color: rgba(255, 255, 255, 0.28);
     }
     .status-pill.offline-mode {
       background-color: var(--status-warning-bg);
       border-color: var(--status-warning-border);
       color: var(--status-warning-text);
-      font-weight: 600;
+      font-weight: 700;
     }
     .status-pill.offline-mode .status-dot {
       background-color: #D97706;
@@ -953,9 +1058,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 11px;
+      padding: 6px 12px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       background-color: var(--status-info-bg);
       color: var(--status-info-text);
@@ -973,14 +1078,14 @@
       border: 1px solid #FBBF24;
     }
     .role-badge.admin-active {
-      background-color: var(--color-primary-subtle);
-      color: var(--color-primary);
-      border: 1px solid var(--color-primary-border);
+      background-color: #FFFFFF;
+      color: #0B3B24;
+      border: 1px solid #DCFCE7;
     }
     .connectivity-banner {
-      padding: 12px 16px;
+      padding: 13px 16px;
       border-radius: var(--radius-md);
-      font-size: 13px;
+      font-size: 14px;
       display: none;
       align-items: center;
       justify-content: space-between;
@@ -1003,7 +1108,7 @@
       gap: 14px;
     }
     @media (min-width: 680px) {
-      .field-capture-grid {
+      .app-shell.tablet-mode .field-capture-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
@@ -1029,82 +1134,539 @@
       box-shadow: var(--shadow-card);
     }
     .field-action-icon {
-      font-size: 28px;
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
+      font-size: 30px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
       background-color: var(--color-primary-subtle);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
+
+    /* ==========================================================================
+       BOTONES GRANDES DE ACCESO RÁPIDO MÓVIL (INSPIRADOS EN EJEMPLO 3)
+       ========================================================================== */
+    .agro-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (min-width: 760px) {
+      .app-shell.tablet-mode .agro-quick-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+    }
+    .agro-quick-tile {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 16px 14px;
+      min-height: 118px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      text-align: left;
+      gap: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.18s ease;
+      position: relative;
+    }
+    .agro-quick-tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-card);
+    }
+    .agro-quick-tile:active {
+      transform: scale(0.98);
+    }
+    .agro-quick-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: var(--color-primary-subtle);
+      border: 1.5px solid var(--color-primary-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    .agro-quick-tile.accent-amber .agro-quick-icon {
+      background: #FFFBEB;
+      border-color: #FDE68A;
+    }
+    .agro-quick-tile.accent-blue .agro-quick-icon {
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+    .agro-quick-tile.accent-rose .agro-quick-icon {
+      background: #FEF2F2;
+      border-color: #FECACA;
+    }
+    .agro-quick-label {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+    .agro-quick-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      line-height: 1.3;
+      margin-top: 2px;
+    }
+
+    /* 2. Interruptor de Píldoras Segmentadas [ ➕ Registrar | 📋 Historial ] */
+    .module-toolbar-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--bg-surface);
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+    }
+    .segmented-control {
+      display: inline-flex;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 99px;
+      border: 1px solid var(--border-medium);
+      gap: 4px;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .app-shell.tablet-mode .segmented-control {
+      width: auto;
+    }
+    .seg-pill {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 9px 12px;
+      border-radius: 99px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .seg-pill.active {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(20, 108, 67, 0.28);
+    }
+    .subview-hidden {
+      display: none !important;
+    }
+
+    /* 3. Micro-Tooltips Contextuales (ℹ️) */
+    .info-tip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: #E2E8F0;
+      color: #0F172A;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: help;
+      position: relative;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+    .info-tip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      background: #0F172A;
+      color: #FFFFFF;
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      padding: 9px 12px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      z-index: 90;
+      pointer-events: none;
+      text-align: left;
+      white-space: normal;
+    }
+
+    /* 4. Stepper Visual de 2 Pasos para Parto y Cría */
+    .calving-stepper {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (min-width: 640px) {
+      .app-shell.tablet-mode .calving-stepper {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .step-node {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-primary-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .step-node.active-step {
+      border-color: var(--color-primary);
+      background: #F0FDF4;
+    }
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* 5. Chips Rápidos de Filtro en Corral y Cargos Personalizados */
+    .corral-filter-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .corral-chip {
+      border: 1.5px solid var(--border-medium);
+      background: #FFFFFF;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 13px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .corral-chip:hover, .corral-chip.active {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+
+    /* 6. Pantalla de Inicio de Sesión (Login Android) */
+    .login-card-wrap {
+      max-width: 440px;
+      margin: 4px auto;
+      width: 100%;
+      background: var(--bg-surface);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: var(--shadow-modal);
+      border: 1.5px solid var(--border-subtle);
+    }
+    .login-hero-top {
+      background: linear-gradient(135deg, #0B3B24 0%, #146C43 100%);
+      color: #FFFFFF;
+      padding: 28px 22px 24px 22px;
+      text-align: center;
+      border-radius: 0 0 28px 28px;
+    }
+    .login-body {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .demo-user-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 2px solid var(--border-subtle);
+      background: var(--bg-app);
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+    .demo-user-chip:hover {
+      border-color: var(--color-primary);
+      background: var(--color-primary-subtle);
+    }
+
+    /* 7. Drawer Lateral Derecho de Perfil y Sesión Activa */
+    .profile-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.48);
+      backdrop-filter: blur(2px);
+      z-index: 170;
+      display: none;
+      justify-content: flex-end;
+    }
+    .profile-drawer-backdrop.open {
+      display: flex;
+    }
+    .profile-drawer-panel {
+      width: 100%;
+      max-width: 360px;
+      background: #FFFFFF;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+      animation: slideInRight 0.22s ease-out;
+      overflow-y: auto;
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    /* 8. Barra Inferior Fija Android (BottomNav) con Botón Central + */
+    .bottom-nav-bar {
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      margin-top: auto;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border-top: 1.5px solid var(--border-medium);
+      padding: 8px 10px 12px 10px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 70;
+      box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.08);
+    }
+    .bottom-nav-item {
+      background: none;
+      border: none;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-dim);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 12px;
+      transition: all 0.15s ease;
+    }
+    .bottom-nav-item .bnav-icon {
+      font-size: 21px;
+      line-height: 1;
+    }
+    .bottom-nav-item.active {
+      color: var(--color-primary);
+      font-weight: 800;
+    }
+    .fab-central-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #146C43 0%, #0B3B24 100%);
+      color: #FFFFFF;
+      border: 3px solid #FFFFFF;
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-top: -26px;
+      box-shadow: 0 8px 18px rgba(20, 108, 67, 0.42);
+      transition: transform 0.15s ease;
+    }
+    .fab-central-btn:hover {
+      transform: scale(1.06);
+    }
   </style>
 </head>
 <body>
 
-  <div class="app-shell">
-    
-    <!-- BARRA SUPERIOR: ESTADO ONLINE / COLA OFFLINE Y PERFIL ADAPTATIVO (PROPUESTA A) -->
-    <header class="top-bar">
-      <div class="brand-group">
-        <span class="brand-badge">FC</span>
-        <div>
-          <h1 class="brand-title">FincaControl</h1>
-          <p class="brand-subtitle" id="header-finca-subtitle">Hda. La Esperanza (Hierro: Hda. La Esperanza - Iniciales HE) • Doble Propósito</p>
-        </div>
-      </div>
-      
-      <div class="top-actions" style="flex-wrap: wrap; justify-content: flex-end;">
-        <div class="status-pill clickable" id="connectivity-pill" onclick="toggleConectividad()" title="Haz clic para simular conexión Online o modo Sin Señal en campo">
-          <span class="status-dot"></span>
-          <span id="header-sync-status">En Línea (Servidor Central)</span>
-        </div>
-        <button type="button" class="queue-badge-btn" id="btn-sync-queue" onclick="sincronizarColaOffline()" style="display: none;" title="Enviar registros capturados en campo al Servidor Central">
-          📤 Cola Offline: <span id="queue-count-badge">0</span>
-        </button>
-        <div class="role-badge admin-active" id="role-indicator" onclick="toggleRole()" title="Haz clic para cambiar entre Vista Rápida (Admin) y Terminal de Carga (Trabajador)">
-          👤 Rol: Administrador (Vista Rápida)
-        </div>
-      </div>
-    </header>
+  <!-- BARRA FLOTANTE PARA PROBAR EL PROTOTIPO: VISTA TELÉFONO VS. VISTA MAXIMIZADA / TABLET -->
+  <div class="proto-device-bar" id="proto-device-bar">
+    <span style="font-weight: 700; color: #94A3B8;">📐 Modo de Prueba del Prototipo:</span>
+    <div class="proto-device-switch">
+      <button type="button" class="proto-view-btn active" id="btn-view-phone" onclick="cambiarModoVistaPrototipo('phone')">
+        📱 Vista Teléfono (Android)
+      </button>
+      <button type="button" class="proto-view-btn" id="btn-view-tablet" onclick="cambiarModoVistaPrototipo('tablet')">
+        📟 Vista Maximizada / Tablet
+      </button>
+    </div>
+    <button type="button" class="proto-view-btn" style="background:#334155; color:#F8FAFC;" onclick="cerrarSesionUsuario()" title="Ir a la pantalla inicial de Iniciar Sesión">
+      🔐 Probar Inicio de Sesión
+    </button>
+  </div>
 
-    <!-- PESTAÑAS DE NAVEGACIÓN ADAPTATIVAS POR ROL (PROPUESTA A) -->
-    <nav class="nav-tabs" aria-label="Navegación por Procesos y Módulos">
-      <button class="nav-tab-btn active" id="tab-btn-procesos" data-role="admin" onclick="switchTab('procesos', event)">
-        🗺️ Esquema de Procesos
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-dashboard" data-role="admin" onclick="switchTab('dashboard', event)">
-        📊 Vista Rápida (Admin)
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-campo" data-role="operador" style="display: none;" onclick="switchTab('campo', event)">
-        📱 Terminal de Carga
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-configuracion" data-role="admin" onclick="switchTab('configuracion', event)">
-        ⚙️ 1. Configuración
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-censo" data-role="ambos" onclick="switchTab('censo', event)">
-        🐄 2. Inventario (Censo)
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-pesaje" data-role="ambos" onclick="switchTab('pesaje', event)">
-        ⚖️ 3. Producción Carne
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-ordeno" data-role="ambos" onclick="switchTab('ordeno', event)">
-        🥛 4. Producción Leche
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-sanidad" data-role="ambos" onclick="switchTab('sanidad', event)">
-        🩺 Sanidad & Retiro
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-reproduccion" data-role="ambos" onclick="switchTab('reproduccion', event)">
-        🧬 Reproducción
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-finanzas" data-role="admin" onclick="switchTab('finanzas', event)">
-        💰 Financiero
-      </button>
-      <button class="nav-tab-btn" id="tab-btn-historial" data-role="admin" onclick="switchTab('historial', event)">
-        📜 Historial de Acciones
-      </button>
-    </nav>
+  <div class="app-shell phone-mode login-mode" id="app-shell">
+
+    <!-- BARRA DE ESTADO ANDROID -->
+    <div class="android-status-strip">
+      <span>9:41 AM • FincaControl Android</span>
+      <span id="android-status-right">📶 4G • 🔋 94%</span>
+    </div>
+    
+    <!-- CABECERA SUPERIOR ANDROID (CON BOTÓN DE PANEL LATERAL ☰) -->
+    <div class="hero-header-shell">
+      <header class="top-bar">
+        <div class="brand-group">
+          <button type="button" class="hamburger-btn" onclick="abrirMenuLateral()" title="Abrir Menú Lateral de Módulos" aria-label="Abrir Menú Lateral">
+            ☰
+          </button>
+          <div style="min-width: 0;">
+            <h1 class="brand-title">
+              FincaControl
+              <span class="brand-version-tag">Android</span>
+            </h1>
+            <p class="brand-subtitle" id="header-finca-subtitle">Hda. La Esperanza (Hierro: HE)</p>
+          </div>
+        </div>
+        
+        <div class="top-actions">
+          <div class="status-pill clickable" id="connectivity-pill" onclick="toggleConectividad()" title="Toca para simular conexión Online o Sin Señal en campo">
+            <span class="status-dot"></span>
+            <span id="header-sync-status">En Línea</span>
+          </div>
+          <button type="button" class="queue-badge-btn" id="btn-sync-queue" onclick="sincronizarColaOffline()" style="display: none;" title="Subir registros en cola">
+            📤 <span id="queue-count-badge">0</span>
+          </button>
+          <div class="role-badge admin-active" id="role-indicator" onclick="abrirDrawerPerfil()" title="Ver sesión activa o cambiar de usuario">
+            👨‍💼 Johan M.
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <!-- ======================================================================
+         PANEL LATERAL IZQUIERDO DE NAVEGACIÓN (ANDROID NAVIGATION DRAWER)
+         ====================================================================== -->
+    <div id="side-nav-drawer" class="side-nav-backdrop" onclick="if(event.target.id==='side-nav-drawer') cerrarMenuLateral()">
+      <aside class="side-nav-panel" aria-label="Menú Principal de Módulos">
+        <div>
+          <div class="side-nav-header">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 48px; height: 48px; border-radius: 15px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 26px;" id="sidenav-user-avatar">
+                  👨‍💼
+                </div>
+                <div>
+                  <div style="font-size: 16.5px; font-weight: 800;" id="sidenav-user-name">Johan Maldonado</div>
+                  <div style="font-size: 12.5px; color: #DCFCE7;" id="sidenav-user-role">Administrador General</div>
+                </div>
+              </div>
+              <button type="button" onclick="cerrarMenuLateral()" style="background: rgba(255,255,255,0.18); border: none; color: #FFFFFF; width: 34px; height: 34px; border-radius: 50%; font-size: 18px; cursor: pointer;">&times;</button>
+            </div>
+            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.16); font-size: 12.5px; color: rgba(255,255,255,0.9);">
+              🏡 <strong>Hda. La Esperanza</strong> • Hierro: HE
+            </div>
+          </div>
+
+          <nav class="side-nav-list">
+            <div class="side-nav-section-label">Navegación Principal</div>
+
+            <button class="nav-tab-btn active" id="tab-btn-dashboard" data-role="admin" onclick="switchTab('dashboard', event)">
+              <span>📊 Inicio (Resumen Admin)</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-campo" data-role="operador" style="display: none;" onclick="switchTab('campo', event)">
+              <span>📱 Terminal de Campo</span>
+              <span>➔</span>
+            </button>
+
+            <div class="side-nav-section-label">Operaciones de Finca</div>
+
+            <button class="nav-tab-btn" id="tab-btn-ordeno" data-role="ambos" onclick="switchTab('ordeno', event)">
+              <span>🥛 Ordeño y Tanque</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-pesaje" data-role="ambos" onclick="switchTab('pesaje', event)">
+              <span>⚖️ Carne y Pesaje</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-sanidad" data-role="ambos" onclick="switchTab('sanidad', event)">
+              <span>🩺 Sanidad y Retiro</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-reproduccion" data-role="ambos" onclick="switchTab('reproduccion', event)">
+              <span>🧬 Reproducción y Partos</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-censo" data-role="ambos" onclick="switchTab('censo', event)">
+              <span>🐄 Ganado (Censo)</span>
+              <span>➔</span>
+            </button>
+
+            <div class="side-nav-section-label admin-only-control">Administración y Control</div>
+
+            <button class="nav-tab-btn" id="tab-btn-finanzas" data-role="admin" onclick="switchTab('finanzas', event)">
+              <span>💰 Caja y Costos</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-usuarios" data-role="admin" onclick="switchTab('usuarios', event)">
+              <span>👥 Usuarios y Roles</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-historial" data-role="admin" onclick="switchTab('historial', event)">
+              <span>📜 Bitácora de Auditoría</span>
+              <span>➔</span>
+            </button>
+
+            <button class="nav-tab-btn" id="tab-btn-configuracion" data-role="admin" onclick="switchTab('configuracion', event)">
+              <span>⚙️ Configuración de Finca</span>
+              <span>➔</span>
+            </button>
+          </nav>
+        </div>
+
+        <div style="padding: 14px 16px; border-top: 1px solid var(--border-subtle); background: var(--bg-app); display: flex; flex-direction: column; gap: 8px;">
+          <button type="button" class="btn-secondary" style="width: 100%; height: 42px; font-size: 13.5px;" onclick="cerrarMenuLateral(); toggleRole();">
+            🔄 Alternar Rápido Admin / Trabajador
+          </button>
+          <button type="button" class="btn-danger-outline" style="width: 100%; height: 42px; justify-content: center;" onclick="cerrarMenuLateral(); cerrarSesionUsuario();">
+            🚪 Cerrar Sesión / Cambiar Usuario
+          </button>
+        </div>
+      </aside>
+    </div>
 
     <!-- CUERPO PRINCIPAL -->
     <main class="main-content">
@@ -1114,164 +1676,219 @@
         <div id="banner-offline-text">
           🟠 <strong>Modo Sin Señal Activo:</strong> Operando con caché local.
         </div>
-        <button type="button" class="btn-secondary" style="height: 32px; font-size: 12px; padding: 0 12px; background: #FFFFFF;" onclick="toggleConectividad()">
+        <button type="button" class="btn-secondary" style="height: 36px; font-size: 13px; padding: 0 12px; background: #FFFFFF;" onclick="toggleConectividad()">
           🟢 Reconectar al Servidor Central
         </button>
       </div>
 
       <!-- ======================================================================
-           0. ESQUEMA DE PROCESOS SOPORTADOS POR EL SISTEMA (VISTA INICIAL ADMIN)
+           PANTALLA INICIAL: INICIAR SESIÓN Y SELECCIÓN DE ROL (HU-21)
            ====================================================================== -->
-      <section id="view-procesos" class="module-view active">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">0. Esquema General de Procesos Soportados por FincaControl</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
-              Arquitectura <strong>Primero Online + Extensión Offline de Campo</strong> con experiencia dual: <strong>Terminal de Carga</strong> para el trabajador y <strong>Vista Rápida + Auditoría</strong> para el Administrador.
+      <section id="view-login" class="module-view active">
+        <div class="login-card-wrap">
+          <div class="login-hero-top">
+            <div style="width: 64px; height: 64px; border-radius: 20px; background: rgba(255,255,255,0.20); display: inline-flex; align-items: center; justify-content: center; font-size: 34px; margin-bottom: 10px; box-shadow: 0 6px 16px rgba(0,0,0,0.18);">
+              🐄
+            </div>
+            <h2 style="font-size: 22px; font-weight: 800; letter-spacing: -0.3px;">Bienvenido a FincaControl</h2>
+            <p style="font-size: 14px; color: rgba(255,255,255,0.90); margin-top: 4px;">
+              Hda. La Esperanza • Inicia sesión para cargar tu entorno según tu rol en la finca
             </p>
           </div>
-          <span class="badge-status success">Propuesta A • Guía & Auditoría Activa</span>
-        </div>
 
-        <!-- Diagrama Secuencial Interactivo del Flujo Lógico -->
-        <div class="flow-diagram-banner">
-          <div class="flow-node" onclick="switchTab('configuracion')">
-            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 1 • Parametrización</div>
-            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">⚙️ 1. Configuración del Sistema</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Hierro oficial de la finca, catálogo de razas, precios, tanque y roles RBAC.</div>
-          </div>
-          <span class="flow-arrow">➔</span>
-          <div class="flow-node" onclick="switchTab('censo')">
-            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 2 • Censo Fundacional</div>
-            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">🐄 2. Carga Inicial de Inventario</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">N° Identificador único vs. Hierro, raza, etapa fisiológica, preñez y madre por N° ID.</div>
-          </div>
-          <span class="flow-arrow">➔</span>
-          <div class="flow-node" onclick="switchTab('pesaje')">
-            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 3 • Línea Cárnica</div>
-            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">⚖️ 3. Proceso Producción Carne</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Pesaje en báscula, cálculo GDP, control de retiro en carne y beneficio en canal.</div>
-          </div>
-          <span class="flow-arrow">➔</span>
-          <div class="flow-node" onclick="switchTab('ordeno')">
-            <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">Paso 4 • Línea Láctea</div>
-            <div style="font-size: 14px; font-weight: 700; margin-top: 2px;">🥛 4. Proceso Producción Leche</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Parto y lactancia, ordeño diario, bloqueo por retiro, tanque y venta comercial.</div>
-          </div>
-        </div>
+          <div class="login-body">
+            <div id="login-error-alert" style="display: none; padding: 12px 14px; border-radius: 12px; background: var(--status-danger-bg); border: 1.5px solid var(--status-danger-border); color: var(--status-danger-text); font-size: 13.5px; font-weight: 700;">
+              🚫 Credenciales inválidas o cuenta suspendida.
+            </div>
 
-        <!-- Detalle de los 4 Procesos Principales -->
-        <div class="process-schema-grid">
-          
-          <!-- Proceso 1 -->
-          <div class="process-card">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="process-step-num">Proceso 1</span>
-                <span class="badge-status info">Puesta en Marcha</span>
+            <!-- Botones Grandes de Acceso Rápido por Rol para Evaluadores -->
+            <div style="background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 18px; padding: 14px;">
+              <div style="font-size: 12.5px; font-weight: 800; text-transform: uppercase; color: #0B3B24; margin-bottom: 10px; letter-spacing: 0.4px;">
+                ⚡ Entrar con 1 Toque (Prueba de Roles):
               </div>
-              <h3 style="font-size: 16px; font-weight: 700;">1. Configuración del Sistema</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
-                Define los parámetros maestros de la unidad de producción antes de cargar el rebaño.
-              </p>
-              <ul class="process-flow-steps">
-                <li><strong>1.1 Identidad y Hierro Oficial:</strong> Registra el nombre del hato y la descripción del <em>Hierro</em> propio (iniciales o figura), el cual se pre-carga por defecto en altas y partos.</li>
-                <li><strong>1.2 Catálogo Extensible de Razas:</strong> Carga razas predeterminadas y permite registrar nuevas razas/cruces personalizados de forma persistente.</li>
-                <li><strong>1.3 Parámetros Comerciales y Roles:</strong> Configura capacidad del tanque, precios de referencia ($/L leche, $/Kg carne), meta de GDP y control de acceso (Administrador / Operador).</li>
-              </ul>
-            </div>
-            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('configuracion')">
-              Ir al Proceso 1: Configuración del Sistema ➔
-            </button>
-          </div>
-
-          <!-- Proceso 2 -->
-          <div class="process-card">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="process-step-num">Proceso 2</span>
-                <span class="badge-status success">Trazabilidad Venezolana</span>
+              <div style="display: flex; flex-direction: column; gap: 8px;" id="login-demo-chips-container">
+                <!-- Se inyecta dinámicamente con los usuarios registrados -->
               </div>
-              <h3 style="font-size: 16px; font-weight: 700;">2. Carga Inicial del Inventario de Animales</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
-                Registro individual del rebaño separando identificación numérica, marca de propiedad y estado biológico.
-              </p>
-              <ul class="process-flow-steps">
-                <li><strong>2.1 N° Identificador vs. Hierro:</strong> El <strong>N° Identificador</strong> individualiza al animal (único en censo activo), mientras el <strong>Hierro</strong> describe propietario/procedencia (compartido por varios animales).</li>
-                <li><strong>2.2 Condición Fisiológica y Preñez:</strong> Clasifica en <em>Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida (primípara/multípara), Vaca escotera o Vaca seca</em>. Valida <code>¿Está Preñada?</code> solo en hembras aptas (bloqueado en machos y crías).</li>
-                <li><strong>2.3 Genealogía por N° Identificador:</strong> Vincula Madre y Padre mediante el <strong>N° Identificador</strong> del ejemplar (nunca por el hierro).</li>
-              </ul>
             </div>
-            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('censo')">
-              Ir al Proceso 2: Inventario de Animales (Censo) ➔
-            </button>
-          </div>
 
-          <!-- Proceso 3 -->
-          <div class="process-card">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="process-step-num">Proceso 3</span>
-                <span class="badge-status warning">Levante, Ceba y Canal</span>
+            <div style="display: flex; align-items: center; gap: 10px; color: var(--text-dim); font-size: 12.5px; font-weight: 700; text-transform: uppercase;">
+              <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+              <span>O ingresa con tu Usuario y PIN</span>
+              <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
+              <div class="input-group">
+                <label class="input-label" for="login-in-user">
+                  <span>👤 Usuario de Acceso *</span>
+                </label>
+                <input type="text" id="login-in-user" class="highlight-input" placeholder="Ej: jmaldonado, cperez, pperez" required autocomplete="off">
               </div>
-              <h3 style="font-size: 16px; font-weight: 700;">3. Registro de Datos del Proceso de Producción de Carne</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
-                Controla el desarrollo ponderal desde el destete hasta la liquidación en frigorífico o matadero.
-              </p>
-              <ul class="process-flow-steps">
-                <li><strong>3.1 Pesajes Periódicos y GDP:</strong> Registra el peso vivo en báscula por <code>N° Identificador</code> y calcula automáticamente la Ganancia Diaria de Peso (<strong>GDP</strong> en kg/día).</li>
-                <li><strong>3.2 Inocuidad Cárnica (Tiempo de Retiro):</strong> Verifica que el animal no tenga tratamientos veterinarios con retiro de carne vigente antes de autorizar su salida.</li>
-                <li><strong>3.3 Beneficio en Canal y Liberación de N° ID:</strong> Calcula el ingreso total en caja, desincorpora al ejemplar y <strong>libera su N° Identificador</strong> para futuras crías.</li>
-              </ul>
-            </div>
-            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('pesaje')">
-              Ir al Proceso 3: Producción de Carne y Pesajes ➔
-            </button>
-          </div>
 
-          <!-- Proceso 4 -->
-          <div class="process-card">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="process-step-num">Proceso 4</span>
-                <span class="badge-status info">Ordeño, Tanque y Costos</span>
+              <div class="input-group">
+                <label class="input-label" for="login-in-pin">
+                  <span>🔒 Contraseña o PIN de Campo *</span>
+                  <button type="button" class="link-inline-action" onclick="toggleMostrarPinLogin()">Mostrar/Ocultar</button>
+                </label>
+                <input type="password" id="login-in-pin" class="highlight-input" placeholder="Ingresa tu PIN (Ej: 1234 o 2026)" required>
               </div>
-              <h3 style="font-size: 16px; font-weight: 700;">4. Registro de Datos del Proceso de Producción de Leche</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
-                Integra reproducción, lactancia, control de inocuidad en vaquera, inventario en tanque y despacho comercial.
-              </p>
-              <ul class="process-flow-steps">
-                <li><strong>4.1 Ciclo Reproductivo y Parto:</strong> El registro de parto incorpora automáticamente al becerro/a (con su propio <code>N° Identificador</code> y madre vinculada por <code>N° ID</code>) y pasa a la madre a <strong>Vaca parida</strong>.</li>
-                <li><strong>4.2 Ordeño Diario e Inocuidad:</strong> Registra litros en jornada Mañana/Tarde. Si la vaca tiene retiro sanitario en leche, desvía los litros a <strong>Descarte</strong> sin contaminar el tanque.</li>
-                <li><strong>4.3 Tanque, Venta y Costo por Litro:</strong> Acumula leche apta en tanque, registra despachos comerciales generando ingresos en caja y calcula el costo directo por litro.</li>
-              </ul>
-            </div>
-            <button class="btn-submit" style="width: 100%; height: 40px;" onclick="switchTab('ordeno')">
-              Ir al Proceso 4: Producción de Leche y Tanque ➔
-            </button>
-          </div>
 
-        </div>
-
-        <!-- Matriz Rápida de Procesos Transversales de Soporte -->
-        <div class="form-panel-plain" style="background-color: #FAFAF9;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <div>
-              <span class="panel-badge" style="margin-bottom: 4px;">🔄 Procesos Transversales Integrados</span>
-              <h3 style="font-size: 15px; font-weight: 700;">Módulos de Soporte Sanitario, Reproductivo y Financiero</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted);">Estos módulos interactúan en tiempo real con los procesos de Carne (Proceso 3) y Leche (Proceso 4).</p>
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('sanidad')">🩺 Sanidad y Tiempos de Retiro</button>
-              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('reproduccion')">🧬 Reproducción y Partos</button>
-              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('finanzas')">💰 Flujo de Caja y Costos</button>
-              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('dashboard')">📊 Vista Rápida (Admin)</button>
-              <button class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="switchTab('historial')">📜 Historial de Acciones</button>
-            </div>
+              <button type="submit" class="btn-submit" style="width: 100%; height: 52px; border-radius: 14px; font-size: 16px;">
+                Iniciar Sesión ➔
+              </button>
+            </form>
           </div>
         </div>
       </section>
 
+      <!-- ======================================================================
+           MÓDULO DE GESTIÓN DE USUARIOS, TRABAJADORES Y ROLES (HU-21 • ADMIN ONLINE)
+           ====================================================================== -->
+      <section id="view-usuarios" class="module-view">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">👥 Gestión de Usuarios, Trabajadores y Roles de Finca</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+              Crea cuentas para tus trabajadores de campo, asigna su cargo operativo y administra permisos o suspensiones sin perder el historial de auditoría.
+            </p>
+          </div>
+          <span class="badge-status info">🔒 Exclusivo Administrador (Online)</span>
+        </div>
+
+        <!-- KPIs de Usuarios -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">👥 Total Cuentas</span>
+            <span class="metric-value" id="usr-kpi-total">3</span>
+            <span class="metric-meta">Padrón de personal</span>
+          </div>
+          <div class="metric-card success">
+            <span class="metric-label">🟢 Personal Activo</span>
+            <span class="metric-value" id="usr-kpi-activos">3</span>
+            <span class="metric-meta">Con acceso habilitado</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">👷 Trabajadores Campo</span>
+            <span class="metric-value" id="usr-kpi-operadores">2</span>
+            <span class="metric-meta">Rol Operador (Terminal)</span>
+          </div>
+          <div class="metric-card danger">
+            <span class="metric-label">⏸️ Suspendidos</span>
+            <span class="metric-value" id="usr-kpi-suspendidos">0</span>
+            <span class="metric-meta">Acceso bloqueado</span>
+          </div>
+        </div>
+
+        <!-- Formulario para Crear Nuevo Trabajador / Usuario -->
+        <div class="form-panel">
+          <span class="panel-badge">➕ Alta de Personal en Finca</span>
+          <h3 class="panel-title">Registrar Nuevo Trabajador o Administrador</h3>
+
+          <form onsubmit="handleCrearUsuario(event)" style="margin-top: 10px;">
+            <div class="form-grid-4">
+              <div class="input-group">
+                <label class="input-label" for="usr-in-nombre">Nombre Completo *</label>
+                <input type="text" id="usr-in-nombre" class="highlight-input" placeholder="Ej: Luis Gómez" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="usr-in-cedula">Cédula / Teléfono *</label>
+                <input type="text" id="usr-in-cedula" class="highlight-input" placeholder="Ej: V-24.110.500" required>
+              </div>
+
+              <div class="input-group" style="grid-column: span 2;">
+                <label class="input-label" for="usr-in-cargo">
+                  <span>Cargo en la Finca *</span>
+                  <span class="input-hint">Puedes elegir uno o escribir el que quieras</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="usr-in-cargo" 
+                  list="datalist-cargos-finca" 
+                  class="highlight-input" 
+                  placeholder="Escribe cualquier cargo (ej. Quesero, Tractorista, Veterinario)..." 
+                  value="Ordeñador (Vaquera)" 
+                  required
+                >
+                <datalist id="datalist-cargos-finca">
+                  <option value="Ordeñador (Vaquera)"></option>
+                  <option value="Corralero / Pesador (Manga)"></option>
+                  <option value="Encargado Sanitario / Inseminador"></option>
+                  <option value="Caporal de Campo"></option>
+                  <option value="Médico Veterinario"></option>
+                  <option value="Tractorista / Mantenimiento"></option>
+                  <option value="Quesero / Planta Láctea"></option>
+                  <option value="Vigilante / Casero"></option>
+                  <option value="Administrador / Propietario"></option>
+                </datalist>
+                <div class="corral-filter-chips" style="margin-top: 6px;">
+                  <button type="button" class="corral-chip" onclick="seleccionarCargoPreset('Ordeñador (Vaquera)')">🥛 Ordeñador</button>
+                  <button type="button" class="corral-chip" onclick="seleccionarCargoPreset('Corralero / Pesador (Manga)')">⚖️ Corralero</button>
+                  <button type="button" class="corral-chip" onclick="seleccionarCargoPreset('Encargado Sanitario / Inseminador')">🩺 Sanitario / Inseminador</button>
+                  <button type="button" class="corral-chip" onclick="seleccionarCargoPreset('Caporal de Campo')">🤠 Caporal</button>
+                  <button type="button" class="corral-chip" onclick="seleccionarCargoPreset('Médico Veterinario')">💉 Veterinario</button>
+                  <button type="button" class="corral-chip" onclick="seleccionarCargoPreset('', true)">✏️ Escribir otro cargo...</button>
+                </div>
+              </div>
+
+              <div class="input-group" style="grid-column: span 2;">
+                <label class="input-label" for="usr-in-rol">
+                  <span>Rol de Permisos en la App (RBAC) *</span>
+                  <span class="info-tip" data-tip="Trabajador (Operador): Abre la Terminal de Campo con soporte Offline. Administrador: Acceso total a Ventas, Finanzas, Usuarios y Configuración.">ℹ️</span>
+                </label>
+                <select id="usr-in-rol" class="highlight-input">
+                  <option value="Operador">👷 Trabajador de Campo (Operador)</option>
+                  <option value="Administrador">👨‍💼 Administrador General</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="usr-in-login">
+                  <span>Usuario de Acceso (Login) *</span>
+                  <span class="input-hint">Sin espacios</span>
+                </label>
+                <input type="text" id="usr-in-login" class="highlight-input" placeholder="Ej: lgomez" required>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label" for="usr-in-pin">
+                  <span>PIN / Contraseña Inicial *</span>
+                  <span class="input-hint">4+ dígitos</span>
+                </label>
+                <input type="text" id="usr-in-pin" class="highlight-input" placeholder="Ej: 2026" value="2026" required>
+              </div>
+
+              <div class="input-group" style="grid-column: span 2;">
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                  ➕ Crear Cuenta y Habilitar Acceso
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabla de Usuarios y Control de Acceso -->
+        <div>
+          <h3 class="section-title" style="margin-bottom: 10px;">Directorio de Personal y Estado de Acceso</h3>
+          <div class="table-container">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Nombre y Cédula</th>
+                  <th>Cargo en Finca</th>
+                  <th>Usuario / PIN</th>
+                  <th>Rol Asignado</th>
+                  <th>Estado</th>
+                  <th>Acciones de Seguridad</th>
+                </tr>
+              </thead>
+              <tbody id="usuarios-tbody">
+                <!-- Se renderiza dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       <!-- ======================================================================
            1. MÓDULO (PROCESO 1): CONFIGURACIÓN DEL SISTEMA (EXCLUSIVO ADMIN ONLINE)
@@ -1279,12 +1896,12 @@
       <section id="view-configuracion" class="module-view">
         <div class="section-header">
           <div>
-            <h2 class="section-title">Proceso 1: Configuración Inicial y Puesta en Producción del Sistema</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
-              Parametrización centralizada (<strong>Online</strong>) de la unidad de producción, marca de <strong>Hierro oficial</strong> por defecto, catálogo extensible de razas y perfiles de rol (Propuesta A).
+            <h2 class="section-title">⚙️ Configuración General de la Finca</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-top: 2px;">
+              Define el nombre del hato, el <strong>Hierro oficial</strong> por defecto, el catálogo de razas y los precios de referencia.
             </p>
           </div>
-          <span class="badge-status info">Paso 1 de 4 • Exclusivo Administrador (Online)</span>
+          <span class="badge-status info">🔒 Exclusivo Administrador (Online)</span>
         </div>
 
         <!-- Formulario Principal de Configuración de la Unidad de Producción -->
@@ -1292,7 +1909,7 @@
           <span class="panel-badge">⚙️ 1.1 Identidad del Hato, Hierro Oficial y Parámetros Productivos</span>
           <h3 class="panel-title">Parámetros Generales de la Finca</h3>
           <p class="panel-desc">
-            Configura los datos maestros de la finca en el Servidor Central. El <strong>Hierro Oficial</strong> configurado aquí se asignará por defecto al registrar nuevos animales o partos, y los precios referenciales se usarán en las liquidaciones de leche y carne.
+            El <strong>Hierro Oficial</strong> configurado aquí se asignará por defecto al registrar nuevos animales o partos, y los precios referenciales se usarán en las ventas de leche y carne.
           </p>
 
           <form onsubmit="handleGuardarConfiguracion(event)">
@@ -1362,15 +1979,12 @@
             </div>
 
             <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-              <span style="font-size: 12.5px; color: var(--text-muted);">
-                💾 Los cambios se persisten Online en la Base de Datos Central, quedan auditados en el <strong>Historial de Acciones</strong> y actualizan la caché de referencia de los dispositivos de campo.
+              <span style="font-size: 13.5px; color: var(--text-muted);">
+                💾 Los cambios se guardan Online en la Base de Datos Central y quedan auditados en la <strong>Bitácora</strong>.
               </span>
-              <div style="display: flex; gap: 10px;">
-                <button type="submit" class="btn-submit">
+              <div style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%;">
+                <button type="submit" class="btn-submit" style="flex: 1;">
                   Guardar Configuración del Sistema
-                </button>
-                <button type="button" class="btn-secondary" onclick="switchTab('censo')">
-                  Siguiente Paso: 2. Carga de Inventario ➔
                 </button>
               </div>
             </div>
@@ -1382,45 +1996,45 @@
           
           <!-- Catálogo de Razas -->
           <div class="form-panel-plain">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
               <span class="panel-badge" style="margin-bottom: 0;">🧬 1.2 Catálogo Maestro de Razas Bovinas</span>
-              <button class="btn-secondary" style="height: 32px; font-size: 12px; padding: 0 10px;" onclick="abrirModalNuevaRaza()">
+              <button class="btn-secondary" style="height: 38px; font-size: 13px; padding: 0 12px;" onclick="abrirModalNuevaRaza()">
                 + Agregar Nueva Raza
               </button>
             </div>
-            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Razas Disponibles en el Sistema</h3>
-            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px;">
-              Cualquier raza personalizada agregada por el Administrador queda guardada en la Base de Datos Central y disponible en la caché del teléfono de campo.
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Razas Disponibles en el Sistema</h3>
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 12px;">
+              Cualquier raza personalizada agregada por el Administrador queda disponible en todos los formularios de la app.
             </p>
             <div id="cfg-chips-razas" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: var(--bg-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
               <!-- Renderizado dinámicamente -->
             </div>
           </div>
 
-          <!-- Arquitectura Online Central + Extensión Offline de Campo y Roles (Propuesta A) -->
+          <!-- Simulador de Perfiles y Conectividad -->
           <div class="form-panel-plain">
-            <span class="panel-badge" style="margin-bottom: 8px;">📡 1.3 Arquitectura Online + Cola Offline de Campo y Roles</span>
-            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Simulador de Perfiles (Propuesta A) y Conectividad</h3>
-            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px;">
-              El Servidor Central gobierna saldos, inventario, ventas y auditoría (<strong>Online</strong>). En campo sin señal, el perfil <strong>Trabajador</strong> opera como Terminal de Carga y encola registros localmente.
+            <span class="panel-badge" style="margin-bottom: 8px;">📡 1.3 Simulador de Red y Perfiles</span>
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Prueba de Conectividad y Cola Offline</h3>
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 12px;">
+              En campo sin señal, el perfil <strong>Trabajador</strong> opera como Terminal de Carga y guarda los registros en la Cola Offline del teléfono.
             </p>
-            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span><strong>Conectividad Actual:</strong></span>
-                <button type="button" class="btn-secondary" style="height: 30px; font-size: 12px; padding: 0 10px;" onclick="toggleConectividad()">
+                <button type="button" class="btn-secondary" style="height: 36px; font-size: 13px; padding: 0 12px;" onclick="toggleConectividad()">
                   Alternar Red (<span id="cfg-red-actual">En Línea</span>)
                 </button>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span><strong>Experiencia por Rol (Propuesta A):</strong></span>
-                <button type="button" class="btn-secondary" style="height: 30px; font-size: 12px; padding: 0 10px;" onclick="toggleRole()">
-                  Cambiar a Trabajador / Admin (<span id="cfg-rol-actual">Administrador</span>)
+                <span><strong>Rol Activo:</strong></span>
+                <button type="button" class="btn-secondary" style="height: 36px; font-size: 13px; padding: 0 12px;" onclick="toggleRole()">
+                  Cambiar Rol (<span id="cfg-rol-actual">Administrador</span>)
                 </button>
               </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span><strong>Cola de Envíos de Campo:</strong></span>
-                <button type="button" class="btn-secondary" style="height: 30px; font-size: 12px; padding: 0 10px;" onclick="sincronizarColaOffline()">
-                  🔄 Procesar Cola Offline (<span id="cfg-cola-count">0</span>)
+                <button type="button" class="btn-secondary" style="height: 36px; font-size: 13px; padding: 0 12px;" onclick="sincronizarColaOffline()">
+                  🔄 Subir Cola (<span id="cfg-cola-count">0</span>)
                 </button>
               </div>
             </div>
@@ -1431,64 +2045,135 @@
 
 
       <!-- ======================================================================
-           MÓDULO: VISTA RÁPIDA EJECUTIVA DEL ADMINISTRADOR (DASHBOARD)
+           MÓDULO: INICIO (ADMIN) — ORDENADO, CLARO Y ENFOCADO EN MÓVIL ANDROID
            ====================================================================== -->
       <section id="view-dashboard" class="module-view">
         
-        <!-- Indicadores Resumen de Consulta Rápida -->
+        <!-- 1. Tarjeta Destacada de Despacho Comercial de Leche -->
+        <div style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 2px solid #93C5FD; border-radius: 20px; padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: var(--shadow-sm);">
+          <div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #1E40AF; letter-spacing: 0.4px;">🥛 Despacho Comercial de Vaquera</span>
+            <h3 style="font-size: 17px; font-weight: 800; color: #0F172A; margin-top: 2px;">Venta Directa desde el Tanque</h3>
+            <p style="font-size: 13.5px; color: #334155; margin-top: 2px;">Descuenta litros aptos del tanque y registra el ingreso en Caja automáticamente.</p>
+          </div>
+          <button type="button" class="btn-action-tank" style="width: 100%; justify-content: center;" onclick="abrirModalVentaLeche()">
+            🥛 Vender Leche del Tanque ➔
+          </button>
+        </div>
+
+        <!-- 2. Resumen Ejecutivo del Hato (Cuadrícula 2x2 Clara) -->
         <div>
-          <div class="section-header" style="margin-bottom: 12px;">
+          <div class="section-header" style="margin-bottom: 10px;">
             <div>
-              <h2 class="section-title">Vista Rápida Ejecutiva del Administrador</h2>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Lectura consolidada en tiempo real desde la Base de Datos Central: tanque, rebaño, alertas sanitarias, caja y bitácora reciente.</p>
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn-action-tank" onclick="abrirModalVentaLeche()">
-                🥛 Vender Leche de Tanque
-              </button>
-              <button class="btn-secondary" style="height: 36px; font-size: 12.5px; padding: 0 12px;" onclick="switchTab('historial')">
-                📜 Ver Historial de Acciones
-              </button>
+              <h2 class="section-title">📊 Estado Actual de la Finca</h2>
+              <p style="font-size: 13.5px; color: var(--text-muted);">Toca cualquier tarjeta para abrir su módulo de detalle</p>
             </div>
           </div>
 
           <div class="metrics-grid">
-            <!-- Métrica Tanque Leche Disponible -->
-            <div class="metric-card tank">
-              <span class="metric-label">🥛 Disponible en Tanque</span>
+            <div class="metric-card tank" onclick="switchTab('ordeno')" style="cursor: pointer;">
+              <span class="metric-label">🥛 Leche en Tanque</span>
               <span class="metric-value" id="kpi-dash-tanque">342.5 L</span>
               <span class="metric-meta" id="kpi-dash-ordeñado-hoy">Ordeñado hoy: 42.1 L</span>
             </div>
 
-            <div class="metric-card">
+            <div class="metric-card" onclick="switchTab('censo')" style="cursor: pointer;">
               <span class="metric-label">🐄 Rebaño Activo</span>
               <span class="metric-value" id="kpi-dash-censo">7 reses</span>
               <span class="metric-meta" id="kpi-dash-desincorporados">2 preñadas • 0 en canal</span>
             </div>
 
-            <div class="metric-card danger">
-              <span class="metric-label" style="color: var(--status-danger-text);">🚨 Retiro Sanitario</span>
+            <div class="metric-card danger" onclick="switchTab('sanidad')" style="cursor: pointer;">
+              <span class="metric-label" style="color: var(--status-danger-text);">🚨 En Retiro Sanitario</span>
               <span class="metric-value" id="kpi-dash-retiros">1 Vaca</span>
               <span class="metric-meta" style="color: var(--status-danger-text);">Leche/Carne Bloqueada</span>
             </div>
 
-            <div class="metric-card success">
+            <div class="metric-card success" onclick="switchTab('finanzas')" style="cursor: pointer;">
               <span class="metric-label" style="color: var(--status-success-text);">💰 Utilidad en Caja</span>
               <span class="metric-value" id="kpi-dash-utilidad">$ 455.00</span>
-              <span class="metric-meta" id="kpi-dash-ingresos-meta">Ingresos actualizados</span>
+              <span class="metric-meta" id="kpi-dash-ingresos-meta">Balance actualizado</span>
             </div>
           </div>
         </div>
 
-        <!-- Semáforo de Alertas Operativas -->
+        <!-- 3. Botones Grandes de Acceso Rápido a Módulos (2 Columnas en Teléfono / 4 en Tablet) -->
         <div>
-          <div class="section-header" style="margin-bottom: 12px;">
-            <h2 class="section-title">Alertas Prioritarias de Manejo</h2>
-            <span class="section-action" onclick="switchTab('sanidad')">Ver módulo sanitario ➔</span>
+          <div class="section-header" style="margin-bottom: 10px;">
+            <div>
+              <h2 class="section-title">⚡ Módulos de Gestión de la Finca</h2>
+              <p style="font-size: 13.5px; color: var(--text-muted);">Selecciona la operación que deseas realizar</p>
+            </div>
+          </div>
+          <div class="agro-quick-grid">
+            <button type="button" class="agro-quick-tile accent-blue" onclick="switchTab('ordeno')">
+              <div class="agro-quick-icon">🥛</div>
+              <div>
+                <div class="agro-quick-label">Ordeño y Tanque</div>
+                <div class="agro-quick-sub">Registrar litros diarios y ver enfriamiento</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile accent-amber" onclick="switchTab('pesaje')">
+              <div class="agro-quick-icon">⚖️</div>
+              <div>
+                <div class="agro-quick-label">Carne y Pesaje</div>
+                <div class="agro-quick-sub">Pesar ganado en manga y medir ganancia (GDP)</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile accent-rose" onclick="switchTab('sanidad')">
+              <div class="agro-quick-icon">🩺</div>
+              <div>
+                <div class="agro-quick-label">Sanidad y Retiro</div>
+                <div class="agro-quick-sub">Vacunas, tratamientos y bloqueo sanitario</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile" onclick="switchTab('reproduccion')">
+              <div class="agro-quick-icon">🧬</div>
+              <div>
+                <div class="agro-quick-label">Reproducción</div>
+                <div class="agro-quick-sub">Montas, preñez, secado y partos con cría</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile" onclick="switchTab('censo')">
+              <div class="agro-quick-icon">🐄</div>
+              <div>
+                <div class="agro-quick-label">Ganado (Censo)</div>
+                <div class="agro-quick-sub">Padrón de animales, hoja de vida y venta</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile accent-amber" onclick="switchTab('finanzas')">
+              <div class="agro-quick-icon">💰</div>
+              <div>
+                <div class="agro-quick-label">Caja y Costos</div>
+                <div class="agro-quick-sub">Ingresos, gastos operativos y costo $/L</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile accent-blue" onclick="switchTab('usuarios')">
+              <div class="agro-quick-icon">👥</div>
+              <div>
+                <div class="agro-quick-label">Usuarios y Roles</div>
+                <div class="agro-quick-sub">Crear trabajadores, cargos y accesos</div>
+              </div>
+            </button>
+            <button type="button" class="agro-quick-tile" onclick="switchTab('configuracion')">
+              <div class="agro-quick-icon">⚙️</div>
+              <div>
+                <div class="agro-quick-label">Configuración</div>
+                <div class="agro-quick-sub">Hierro de la finca, catálogo de razas y precios</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Semáforo Compacto de Alertas Operativas + Acceso a Bitácora -->
+        <div>
+          <div class="section-header" style="margin-bottom: 10px;">
+            <h2 class="section-title">🔔 Alertas Prioritarias de Manejo</h2>
+            <span class="section-action" onclick="switchTab('sanidad')">Ir a Sanidad ➔</span>
           </div>
 
           <div class="alerts-container">
-            <div class="alert-card danger">
+            <div class="alert-card danger" onclick="switchTab('sanidad')" style="cursor: pointer;">
               <div class="alert-content">
                 <div class="alert-header">
                   <div>
@@ -1497,11 +2182,11 @@
                   </div>
                   <span class="alert-time">Fin: 14-Oct</span>
                 </div>
-                <p class="alert-desc">Bloqueo de venta comercial de leche y beneficio en canal activo. Res no apta para consumo hasta cumplir días de retiro.</p>
+                <p class="alert-desc">Leche y carne bloqueadas para venta comercial hasta cumplir días de retiro.</p>
               </div>
             </div>
 
-            <div class="alert-card warning">
+            <div class="alert-card warning" onclick="switchTab('reproduccion')" style="cursor: pointer;">
               <div class="alert-content">
                 <div class="alert-header">
                   <div>
@@ -1514,96 +2199,13 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Últimas Acciones Registradas en el Sistema (Resumen de Auditoría) -->
-        <div>
-          <div class="section-header" style="margin-bottom: 12px;">
-            <h2 class="section-title">Últimas Acciones en la Finca (Administrador y Trabajadores)</h2>
-            <span class="section-action" onclick="switchTab('historial')">Abrir Historial Completo de Auditoría ➔</span>
-          </div>
-          <div class="table-container">
-            <table class="clean-table">
-              <thead>
-                <tr>
-                  <th>Hora Acción</th>
-                  <th>Autor / Rol</th>
-                  <th>Módulo & Acción</th>
-                  <th>Detalle del Cambio</th>
-                  <th>Origen</th>
-                </tr>
-              </thead>
-              <tbody id="dash-audit-tbody">
-                <!-- Se inyecta dinámicamente con las últimas acciones del historial -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Tabla Rápida de Últimos Ordeños del Día -->
-        <div>
-          <div class="section-header" style="margin-bottom: 12px;">
-            <h2 class="section-title">Últimos Ordeños Recibidos Hoy</h2>
-            <span class="section-action" onclick="switchTab('ordeno')">Ir a Producción de Leche ➔</span>
-          </div>
-          <div class="table-container">
-            <table class="clean-table">
-              <thead>
-                <tr>
-                  <th>N° Identificador / Alias</th>
-                  <th>Jornada</th>
-                  <th>Volumen</th>
-                  <th>Condición</th>
-                  <th>Hora</th>
-                </tr>
-              </thead>
-              <tbody id="dash-records-tbody">
-                <!-- Se inyecta dinámicamente con JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Captura Auxiliar Opcional si el Administrador está en Vaquera -->
-        <div class="form-panel-plain">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <div>
-              <span class="panel-badge" style="margin-bottom: 2px;">⚡ Acceso Rápido Opcional en Campo</span>
-              <h3 style="font-size: 14.5px; font-weight: 700;">¿Necesitas cargar un ordeño directo desde aquí?</h3>
-            </div>
-            <button type="button" class="btn-secondary" style="height: 34px; font-size: 12.5px;" onclick="toggleElement('dash-quick-milk-box')">
-              Mostrar / Ocultar Captura Rápida de Ordeño
+          <!-- Botón Limpio para Consultar la Bitácora Completa de Auditoría -->
+          <div style="margin-top: 14px;">
+            <button type="button" class="btn-secondary" style="width: 100%; height: 50px; justify-content: space-between; padding: 0 18px; border-radius: 16px;" onclick="switchTab('historial')">
+              <span>📜 Ver Bitácora de Auditoría (Acciones de Admin y Trabajadores)</span>
+              <span>➔</span>
             </button>
-          </div>
-          <div id="dash-quick-milk-box" style="display: none; margin-top: 14px;">
-            <form id="dash-quick-form" onsubmit="handleDashQuickMilk(event)">
-              <div class="form-grid-4">
-                <div class="input-group">
-                  <label class="input-label" for="dash-in-numero">
-                    <span>N° Identificador Animal *</span>
-                    <span class="input-hint">Ej: 104, 042</span>
-                  </label>
-                  <input type="text" id="dash-in-numero" class="highlight-input" placeholder="N° Identificador de la vaca..." required autocomplete="off" oninput="checkRetiroInForm(this.value, 'dash-warning')">
-                </div>
-                <div class="input-group">
-                  <label class="input-label" for="dash-in-jornada"><span>Jornada *</span></label>
-                  <select id="dash-in-jornada" class="highlight-input">
-                    <option value="Mañana">Mañana (05:30 AM)</option>
-                    <option value="Tarde">Tarde (03:00 PM)</option>
-                  </select>
-                </div>
-                <div class="input-group">
-                  <label class="input-label" for="dash-in-litros"><span>Litros (L) *</span></label>
-                  <input type="number" step="0.1" min="0.5" max="40" id="dash-in-litros" class="highlight-input" placeholder="0.0 L" inputmode="decimal" required>
-                </div>
-                <div class="input-group">
-                  <button type="submit" class="btn-submit">Guardar Medición</button>
-                </div>
-              </div>
-              <div id="dash-warning" style="display: none; margin-top: 12px; padding: 10px 14px; background-color: var(--status-danger-bg); border: 1.5px solid var(--status-danger-border); border-radius: 8px; font-size: 13px; color: var(--status-danger-text);">
-                ⚠️ <strong>¡ALERTA SANITARIA!</strong> Este animal tiene tratamiento médico vigente. Esta leche <strong>NO entrará al tanque disponible</strong> (se marcará como descarte).
-              </div>
-            </form>
           </div>
         </div>
 
@@ -1863,14 +2465,21 @@
            ====================================================================== -->
       <section id="view-ordeno" class="module-view">
         
-        <div class="section-header">
+        <div class="module-toolbar-bar">
           <div>
-            <h2 class="section-title">Control de Ordeño e Inventario de Tanque</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Carga de litros para vacas paridas (en lactancia), balance del tanque de leche y despacho comercial.</p>
+            <h2 class="section-title">🥛 Producción de Leche y Tanque</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Carga rápida de litros por vaca parida y balance comercial del tanque.</p>
           </div>
-          <button class="btn-action-tank admin-only-control" onclick="abrirModalVentaLeche()">
-            🥛 Vender / Despachar Leche (Online)
-          </button>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div class="segmented-control" id="seg-ordeno">
+              <button type="button" class="seg-pill active" onclick="toggleModuleSubview('ordeno', 'all', this)">📐 Todo</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('ordeno', 'form', this)">➕ Registrar</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('ordeno', 'hist', this)">📋 Historial</button>
+            </div>
+            <button class="btn-action-tank admin-only-control" onclick="abrirModalVentaLeche()">
+              🥛 Vender Leche
+            </button>
+          </div>
         </div>
 
         <!-- Tarjetas de Balance de Leche -->
@@ -1901,12 +2510,14 @@
         </div>
 
         <!-- Formulario Carga de Ordeño -->
-        <div class="form-panel">
-          <span class="panel-badge">🥛 Carga de Ordeño</span>
-          <h3 class="panel-title">Entrada de Litros por Vaca (Por N° Identificador)</h3>
-          <p class="panel-desc">Los campos resaltados validan automáticamente el estado sanitario del animal.</p>
+        <div class="form-panel" id="subview-ordeno-form">
+          <span class="panel-badge">🥛 Captura de Ordeño</span>
+          <h3 class="panel-title">
+            Entrada de Litros por Vaca
+            <span class="info-tip" data-tip="Si la vaca tiene retiro sanitario activo, el sistema desvía automáticamente los litros a Descarte para proteger el tanque.">ℹ️</span>
+          </h3>
 
-          <form onsubmit="handleModuloMilk(event)">
+          <form onsubmit="handleModuloMilk(event)" style="margin-top: 10px;">
             <div class="form-grid-4">
               
               <div class="input-group">
@@ -1943,47 +2554,49 @@
           </form>
         </div>
 
-        <!-- Tabla Historial de Ordeño -->
-        <div>
-          <h3 class="section-title" style="margin-bottom: 10px;">Registros de Ordeño de la Jornada</h3>
-          <div class="table-container">
-            <table class="clean-table">
-              <thead>
-                <tr>
-                  <th>N° Identificador</th>
-                  <th>Nombre Vaca</th>
-                  <th>Jornada</th>
-                  <th>Litros</th>
-                  <th>Inocuidad</th>
-                  <th>Fecha y Hora</th>
-                </tr>
-              </thead>
-              <tbody id="ordeno-tbody">
-                <!-- Se inyecta dinámicamente -->
-              </tbody>
-            </table>
+        <!-- Tabla Historial de Ordeño y Despachos -->
+        <div id="subview-ordeno-hist" style="display: flex; flex-direction: column; gap: 18px;">
+          <div>
+            <h3 class="section-title" style="margin-bottom: 10px;">Registros de Ordeño de la Jornada</h3>
+            <div class="table-container">
+              <table class="clean-table">
+                <thead>
+                  <tr>
+                    <th>N° Identificador</th>
+                    <th>Nombre Vaca</th>
+                    <th>Jornada</th>
+                    <th>Litros</th>
+                    <th>Inocuidad</th>
+                    <th>Fecha y Hora</th>
+                  </tr>
+                </thead>
+                <tbody id="ordeno-tbody">
+                  <!-- Se inyecta dinámicamente -->
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <!-- Tabla de Despachos / Ventas de Leche Realizadas (Solo Admin) -->
-        <div class="admin-only-control">
-          <h3 class="section-title" style="margin-bottom: 10px;">Historial de Despachos y Ventas de Leche</h3>
-          <div class="table-container">
-            <table class="clean-table">
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Litros Despachados</th>
-                  <th>Precio / Litro</th>
-                  <th>Total Cobrado ($)</th>
-                  <th>Comprador / Destino</th>
-                  <th>Impacto en Caja</th>
-                </tr>
-              </thead>
-              <tbody id="ordeno-ventas-tbody">
-                <!-- Se inyecta dinámicamente -->
-              </tbody>
-            </table>
+          <!-- Tabla de Despachos / Ventas de Leche Realizadas (Solo Admin) -->
+          <div class="admin-only-control">
+            <h3 class="section-title" style="margin-bottom: 10px;">Historial de Despachos y Ventas de Leche</h3>
+            <div class="table-container">
+              <table class="clean-table">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Litros Despachados</th>
+                    <th>Precio / Litro</th>
+                    <th>Total Cobrado ($)</th>
+                    <th>Comprador / Destino</th>
+                    <th>Impacto en Caja</th>
+                  </tr>
+                </thead>
+                <tbody id="ordeno-ventas-tbody">
+                  <!-- Se inyecta dinámicamente -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -1995,20 +2608,28 @@
            ====================================================================== -->
       <section id="view-pesaje" class="module-view">
         
-        <div class="section-header">
+        <div class="module-toolbar-bar">
           <div>
-            <h2 class="section-title">Proceso 3: Producción de Carne (Pesajes, Cálculo de GDP y Beneficio en Canal)</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Control ponderal por <strong>N° Identificador</strong>, cálculo automático de Ganancia Diaria de Peso (GDP), verificación de retiro en carne y liquidación en canal.</p>
+            <h2 class="section-title">⚖️ Producción de Carne, Báscula y Canal</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
+              Control de peso vivo, ganancia diaria (GDP) y salida a matadero. Meta: <strong id="pesaje-meta-gdp-pill">+0.70 kg/día</strong>
+            </p>
           </div>
-          <span class="status-pill">Meta Ceba: <strong id="pesaje-meta-gdp-pill">+0.70 kg/día</strong></span>
+          <div class="segmented-control" id="seg-pesaje">
+            <button type="button" class="seg-pill active" onclick="toggleModuleSubview('pesaje', 'all', this)">📐 Todo</button>
+            <button type="button" class="seg-pill" onclick="toggleModuleSubview('pesaje', 'form', this)">➕ Registrar</button>
+            <button type="button" class="seg-pill" onclick="toggleModuleSubview('pesaje', 'hist', this)">📋 Historial</button>
+          </div>
         </div>
 
-        <div class="form-panel">
-          <span class="panel-badge">⚖️ Paso 3.1 y 3.2: Registro de Báscula y Cálculo Automático de GDP</span>
-          <h3 class="panel-title">Nuevo Pesaje Periódico</h3>
-          <p class="panel-desc">Al ingresar el peso actual por <strong>N° Identificador</strong>, el sistema calcula de inmediato el incremento diario (<strong>GDP</strong>) respecto al último pesaje registrado.</p>
+        <div class="form-panel" id="subview-pesaje-form">
+          <span class="panel-badge">⚖️ Registro en Manga</span>
+          <h3 class="panel-title">
+            Nuevo Pesaje en Báscula
+            <span class="info-tip" data-tip="GDP (Ganancia Diaria de Peso) = (Peso Actual - Peso Previo) / Días transcurridos. Evalúa el ritmo de engorde del animal.">ℹ️</span>
+          </h3>
 
-          <form onsubmit="handleRegistrarPesaje(event)">
+          <form onsubmit="handleRegistrarPesaje(event)" style="margin-top: 10px;">
             <div class="form-grid-4">
               
               <div class="input-group">
@@ -2042,10 +2663,10 @@
         </div>
 
         <!-- Tabla Historial Pesajes y Acción de Salida a Canal -->
-        <div>
+        <div id="subview-pesaje-hist">
           <div class="section-header" style="margin-bottom: 10px;">
             <h3 class="section-title">Historial de Pesajes, Evaluación de GDP y Salida a Canal</h3>
-            <span class="section-action admin-only-control" onclick="switchTab('censo'); switchSubnavCenso('canal');">Ver historial de animales vendidos en canal ➔</span>
+            <span class="section-action admin-only-control" onclick="switchTab('censo'); switchSubnavCenso('canal');">Ver animales vendidos en canal ➔</span>
           </div>
           <div class="table-container">
             <table class="clean-table">
@@ -2058,7 +2679,7 @@
                   <th>Peso Previo</th>
                   <th>GDP Calculada</th>
                   <th>Desempeño</th>
-                  <th>Paso 3.3: Salida / Canal</th>
+                  <th>Salida / Canal</th>
                 </tr>
               </thead>
               <tbody id="pesaje-tbody">
@@ -2076,20 +2697,29 @@
            ====================================================================== -->
       <section id="view-sanidad" class="module-view">
         
-        <div class="section-header">
+        <div class="module-toolbar-bar">
           <div>
-            <h2 class="section-title">Sanidad Animal y Tiempos de Retiro</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Protección de inocuidad: control de días de retiro para leche y carne por N° Identificador.</p>
+            <h2 class="section-title">🩺 Sanidad Animal y Tiempos de Retiro</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Control de tratamientos y bloqueo preventivo de leche y carne.</p>
           </div>
-          <span class="badge-status danger" id="sanidad-badge-cuarentena">🚨 Animales en Cuarentena</span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div class="segmented-control" id="seg-sanidad">
+              <button type="button" class="seg-pill active" onclick="toggleModuleSubview('sanidad', 'all', this)">📐 Todo</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('sanidad', 'form', this)">➕ Registrar</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('sanidad', 'hist', this)">📋 Historial</button>
+            </div>
+            <span class="badge-status danger" id="sanidad-badge-cuarentena">🚨 Animales en Cuarentena</span>
+          </div>
         </div>
 
-        <div class="form-panel">
+        <div class="form-panel" id="subview-sanidad-form">
           <span class="panel-badge">🩺 Evento Sanitario</span>
-          <h3 class="panel-title">Registrar Tratamiento o Vacunación</h3>
-          <p class="panel-desc">Al ingresar los días de retiro, el semáforo bloqueará automáticamente la venta de leche y el beneficio en canal.</p>
+          <h3 class="panel-title">
+            Registrar Tratamiento o Vacunación
+            <span class="info-tip" data-tip="Tiempo de Retiro: Días posteriores a la aplicación de un fármaco durante los cuales la leche o carne no es apta para consumo humano.">ℹ️</span>
+          </h3>
 
-          <form onsubmit="handleRegistrarSanidad(event)">
+          <form onsubmit="handleRegistrarSanidad(event)" style="margin-top: 10px;">
             <div class="form-grid-4">
               
               <div class="input-group">
@@ -2140,7 +2770,7 @@
         </div>
 
         <!-- Tabla de Eventos Sanitarios -->
-        <div>
+        <div id="subview-sanidad-hist">
           <h3 class="section-title" style="margin-bottom: 10px;">Historial de Tratamientos y Estado de Cuarentena</h3>
           <div class="table-container">
             <table class="clean-table">
@@ -2166,24 +2796,32 @@
 
 
       <!-- ======================================================================
-           6. MÓDULO: GESTIÓN REPRODUCTIVA (EVENTO REPRODUCTIVO CON ALTA COMPLETA DE CRÍA)
+           6. MÓDULO: GESTIÓN REPRODUCTIVA (STEPPER DE 2 PASOS EN PARTO - ACC-05)
            ====================================================================== -->
       <section id="view-reproduccion" class="module-view">
         
-        <div class="section-header">
+        <div class="module-toolbar-bar">
           <div>
-            <h2 class="section-title">Manejo Reproductivo, Preñez y Ciclo de Cría</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Servicios, diagnóstico de preñez, secado y alta automática de becerros/as vinculando a la madre por su <strong>N° Identificador</strong>.</p>
+            <h2 class="section-title">🧬 Manejo Reproductivo, Preñez y Partos</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Servicios, palpaciones, secado y registro de partos con alta automática de cría.</p>
           </div>
-          <span class="status-pill">Gestación Promedio: <strong>283 días</strong></span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div class="segmented-control" id="seg-reproduccion">
+              <button type="button" class="seg-pill active" onclick="toggleModuleSubview('reproduccion', 'all', this)">📐 Todo</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('reproduccion', 'form', this)">➕ Registrar</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('reproduccion', 'hist', this)">📋 Historial</button>
+            </div>
+          </div>
         </div>
 
-        <div class="form-panel">
+        <div class="form-panel" id="subview-reproduccion-form">
           <span class="panel-badge">🧬 Evento Reproductivo</span>
-          <h3 class="panel-title">Registrar Evento de Ciclo</h3>
-          <p class="panel-desc">Si seleccionas <strong>Parto</strong>, podrás registrar el <strong>N° Identificador</strong> de la cría, la descripción de su <strong>Hierro</strong>, su raza (o agregar una nueva) y quedará vinculada automáticamente al <strong>N° Identificador de la Madre</strong>.</p>
+          <h3 class="panel-title">
+            Registrar Evento de Ciclo
+            <span class="info-tip" data-tip="Al seleccionar 'Parto', se habilita el asistente de 2 pasos: actualiza a la madre a Vaca Parida y crea automáticamente la ficha del becerro/a en el inventario.">ℹ️</span>
+          </h3>
 
-          <form onsubmit="handleRegistrarReproduccion(event)">
+          <form onsubmit="handleRegistrarReproduccion(event)" style="margin-top: 10px;">
             
             <!-- Datos del Evento Madre -->
             <div class="form-grid-4">
@@ -2232,12 +2870,24 @@
 
             </div>
 
-            <!-- SUB-PANEL DESTACADO: DATOS COMPLETOS DE LA CRÍA AL REGISTRAR PARTO -->
-            <div id="panel-parto-completo" style="display: none; margin-top: 16px; padding: 16px; background-color: var(--color-primary-subtle); border: 2px dashed var(--color-primary-border); border-radius: var(--radius-md);">
-              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span class="panel-badge" style="margin-bottom: 0;">🐄 Ficha Completa del Nuevo Becerro/a (Censo)</span>
-                  <span style="font-size: 12px; color: var(--color-primary); font-weight: 600;">Etapa inicial automática: <strong>Becerro / Becerra</strong> • Madre asignada por <strong>N° Identificador</strong></span>
+            <!-- SUB-PANEL DESTACADO: STEPPER DE 2 PASOS AL REGISTRAR PARTO (INSPIRADO EN EJEMPLO 2 — SOLUCIÓN ACC-05) -->
+            <div id="panel-parto-completo" style="display: none; margin-top: 16px; padding: 16px; background-color: var(--color-primary-subtle); border: 2px solid var(--color-primary-border); border-radius: var(--radius-md);">
+              
+              <!-- Stepper Visual de 2 Pasos -->
+              <div class="calving-stepper">
+                <div class="step-node active-step">
+                  <div class="step-circle">1</div>
+                  <div>
+                    <div style="font-size: 12.5px; font-weight: 800; color: var(--color-primary-dark);">Paso 1: Transición de la Madre</div>
+                    <div style="font-size: 11.5px; color: var(--text-muted);">Pasa a <strong>Vaca Parida</strong> (En Ordeño, Preñada = No)</div>
+                  </div>
+                </div>
+                <div class="step-node active-step">
+                  <div class="step-circle">2</div>
+                  <div>
+                    <div style="font-size: 12.5px; font-weight: 800; color: var(--color-primary-dark);">Paso 2: Alta Automática de Cría</div>
+                    <div style="font-size: 11.5px; color: var(--text-muted);">Crea el becerro/a en Censo vinculado al N° ID Madre</div>
+                  </div>
                 </div>
               </div>
 
@@ -2246,9 +2896,9 @@
                 <div class="input-group">
                   <label class="input-label" for="repro-in-cria-numero">
                     <span>N° Identificador Cría *</span>
-                    <span class="input-hint">ID único del animal</span>
+                    <button type="button" class="link-inline-action" id="btn-sugerir-id-cria" onclick="autocompletarIdCriaSugerido()">✨ Sugerir N° libre</button>
                   </label>
-                  <input type="text" id="repro-in-cria-numero" class="highlight-input" placeholder="Ej: 115, 202">
+                  <input type="text" id="repro-in-cria-numero" class="highlight-input" placeholder="Ej: 115, 201">
                 </div>
 
                 <div class="input-group">
@@ -2324,7 +2974,7 @@
         </div>
 
         <!-- Tabla de Eventos Reproductivos -->
-        <div>
+        <div id="subview-reproduccion-hist">
           <h3 class="section-title" style="margin-bottom: 10px;">Bitácora de Reproducción del Rebaño</h3>
           <div class="table-container">
             <table class="clean-table">
@@ -2353,12 +3003,19 @@
            ====================================================================== -->
       <section id="view-finanzas" class="module-view">
         
-        <div class="section-header">
+        <div class="module-toolbar-bar">
           <div>
-            <h2 class="section-title">Control Financiero Operativo y Costos Directos</h2>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Cálculo de flujo de caja, ingresos por leche/carne y costo por litro.</p>
+            <h2 class="section-title">💰 Control Financiero y Costos Directos</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Flujo de caja operativo, ingresos por leche/carne y costo por litro.</p>
           </div>
-          <span class="badge-status info">Acceso: Administrador</span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div class="segmented-control" id="seg-finanzas">
+              <button type="button" class="seg-pill active" onclick="toggleModuleSubview('finanzas', 'all', this)">📐 Todo</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('finanzas', 'form', this)">➕ Registrar</button>
+              <button type="button" class="seg-pill" onclick="toggleModuleSubview('finanzas', 'hist', this)">📋 Historial</button>
+            </div>
+            <span class="badge-status info">Acceso: Administrador</span>
+          </div>
         </div>
 
         <!-- KPIs Financieros -->
@@ -2389,12 +3046,11 @@
         </div>
 
         <!-- Formulario de Transacción Financiera Manual con Campos Resaltados -->
-        <div class="form-panel">
+        <div class="form-panel" id="subview-finanzas-form">
           <span class="panel-badge">💰 Nueva Transacción Manual</span>
           <h3 class="panel-title">Asiento de Ingreso o Gasto Operativo</h3>
-          <p class="panel-desc">Registra ventas diversas o gastos en finca para recalcular la rentabilidad en tiempo real.</p>
 
-          <form onsubmit="handleRegistrarTransaccion(event)">
+          <form onsubmit="handleRegistrarTransaccion(event)" style="margin-top: 10px;">
             <div class="form-grid-4">
               
               <div class="input-group">
@@ -2440,7 +3096,7 @@
         </div>
 
         <!-- Tabla de Transacciones Financieras -->
-        <div>
+        <div id="subview-finanzas-hist">
           <h3 class="section-title" style="margin-bottom: 10px;">Libro de Caja y Transacciones Recientes</h3>
           <div class="table-container">
             <table class="clean-table">
@@ -2471,9 +3127,9 @@
         
         <div class="section-header">
           <div>
-            <h2 class="section-title">📱 Terminal de Carga de Datos en Campo (Perfil Trabajador)</h2>
+            <h2 class="section-title">📱 Terminal de Carga en Campo (Perfil Trabajador)</h2>
             <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
-              Interfaz simplificada para captura rápida en vaquera, manga y potrero. Funciona <strong>En Línea</strong> contra el Servidor Central y <strong>Sin Señal</strong> mediante caché de padrón activo y cola de envío.
+              Captura rápida en vaquera y manga. Opera <strong>En Línea</strong> o <strong>Sin Señal</strong> con caché local y cola automática.
             </p>
           </div>
           <span class="badge-status warning" id="campo-status-badge">👷 Sesión: Carlos P. (Trabajador)</span>
@@ -2486,7 +3142,7 @@
               <div class="field-action-icon">🥛</div>
               <div>
                 <div style="font-size: 16px; font-weight: 700; color: var(--text-main);">+ Registrar Ordeño Diario</div>
-                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Carga de litros Mañana / Tarde con validación inmediata de retiro en leche.</div>
+                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Carga de litros Mañana / Tarde con validación de retiro.</div>
               </div>
             </div>
             <span style="font-size: 18px; font-weight: 700; color: var(--color-primary);">➔</span>
@@ -2497,7 +3153,7 @@
               <div class="field-action-icon">⚖️</div>
               <div>
                 <div style="font-size: 16px; font-weight: 700; color: var(--text-main);">+ Registrar Pesaje en Manga</div>
-                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Captura de peso vivo en báscula por N° Identificador y referencia de GDP.</div>
+                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Captura de peso vivo en báscula y cálculo de GDP.</div>
               </div>
             </div>
             <span style="font-size: 18px; font-weight: 700; color: var(--color-primary);">➔</span>
@@ -2508,7 +3164,7 @@
               <div class="field-action-icon">🩺</div>
               <div>
                 <div style="font-size: 16px; font-weight: 700; color: var(--text-main);">+ Evento Sanitario / Retiro</div>
-                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Vacunaciones y tratamientos médicos con bloqueo inmediato de retiro.</div>
+                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Vacunaciones y tratamientos con alerta de cuarentena.</div>
               </div>
             </div>
             <span style="font-size: 18px; font-weight: 700; color: var(--color-primary);">➔</span>
@@ -2518,33 +3174,40 @@
             <div style="display: flex; align-items: center; gap: 14px;">
               <div class="field-action-icon">🧬</div>
               <div>
-                <div style="font-size: 16px; font-weight: 700; color: var(--text-main);">+ Reproducción y Parto (Alta Cría)</div>
-                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Servicios, palpaciones, secado y nacimiento de becerros/as en campo.</div>
+                <div style="font-size: 16px; font-weight: 700; color: var(--text-main);">+ Reproducción y Parto (Cría)</div>
+                <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Servicios, palpaciones, secado y nacimiento de crías.</div>
               </div>
             </div>
             <span style="font-size: 18px; font-weight: 700; color: var(--color-primary);">➔</span>
           </button>
         </div>
 
-        <!-- Buscador Rápido de Ficha y Semáforo Sanitario en Corral -->
+        <!-- Buscador Inteligente de Ficha y Semáforo Sanitario en Corral (Inspirado en Ejemplo 3 — Solución ACC-03) -->
         <div class="form-panel">
-          <span class="panel-badge">🔍 Consulta Instantánea en Corral (Caché de Padrón Activo)</span>
-          <h3 class="panel-title">Verificar Ficha y Semáforo Sanitario por N° Identificador</h3>
-          <p class="panel-desc">Escribe el <strong>N° Identificador</strong> (ej. <code>104</code>, <code>042</code>, <code>201</code>) para verificar al instante si el animal tiene retiro sanitario activo, su etapa fisiológica y preñez, incluso sin internet.</p>
+          <span class="panel-badge">🔍 Buscador Inteligente en Corral (Offline-Ready)</span>
+          <h3 class="panel-title">Consultar Ficha y Semáforo por N° Identificador, Nombre o Raza</h3>
 
-          <div class="form-grid-4">
-            <div class="input-group" style="grid-column: span 2;">
+          <div class="form-grid-4" style="margin-top: 8px;">
+            <div class="input-group" style="grid-column: span 3;">
               <label class="input-label" for="campo-buscador-id">
-                <span>N° Identificador del Animal</span>
-                <span class="input-hint">Ej: 104 (En retiro), 042, 078, 201</span>
+                <span>🔍 Buscar por N° ID (104, 042) o Nombre (Canela, Mariposa)</span>
               </label>
-              <input type="text" id="campo-buscador-id" class="highlight-input" placeholder="Ingresa N° Identificador..." autocomplete="off" oninput="buscarAnimalRapidoCampo(this.value)">
+              <input type="text" id="campo-buscador-id" class="highlight-input" placeholder="Escribe N° Identificador, nombre o raza..." autocomplete="off" oninput="buscarAnimalRapidoCampo(this.value)">
             </div>
-            <div class="input-group" style="grid-column: span 2;">
+            <div class="input-group">
               <button type="button" class="btn-secondary" style="width: 100%;" onclick="switchTab('censo')">
-                🐄 Ver Lista Completa del Padrón Activo
+                🐄 Padrón Completo
               </button>
             </div>
+          </div>
+
+          <!-- Píldoras de Filtro Rápido a 1 Toque en Corral -->
+          <div class="corral-filter-chips">
+            <button type="button" class="corral-chip" onclick="filtrarRapidoCorral('104')">🚨 En Retiro (#104 Canela)</button>
+            <button type="button" class="corral-chip" onclick="filtrarRapidoCorral('042')">🥛 #042 Mariposa</button>
+            <button type="button" class="corral-chip" onclick="filtrarRapidoCorral('078')">🤰 #078 Rubia (Seca)</button>
+            <button type="button" class="corral-chip" onclick="filtrarRapidoCorral('201')">⚖️ #201 Campeón (Maute)</button>
+            <button type="button" class="corral-chip" onclick="filtrarRapidoCorral('TODAS')">📋 Mostrar Todos (7)</button>
           </div>
 
           <div id="campo-resultado-busqueda" style="margin-top: 14px; display: none;">
@@ -2553,12 +3216,11 @@
         </div>
 
         <!-- Buzón Local: Cola de Envíos Offline del Dispositivo -->
-        <div class="form-panel-plain">
+        <div class="form-panel-plain" id="campo-buzon-offline-box">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
             <div>
-              <span class="panel-badge" style="margin-bottom: 2px;">📤 Buzón de Salida del Teléfono (Cola Offline de Campo)</span>
-              <h3 style="font-size: 15px; font-weight: 700;">Registros Capturados sin Señal Pendientes de Envío</h3>
-              <p style="font-size: 12.5px; color: var(--text-muted);">Prueba cambiar arriba a <strong>Sin Señal</strong>, registra un ordeño o pesaje y observa cómo se encola aquí hasta reconectar.</p>
+              <span class="panel-badge" style="margin-bottom: 2px;">📤 Buzón de Salida del Teléfono (Cola Offline)</span>
+              <h3 style="font-size: 15px; font-weight: 700;">Registros Capturados sin Señal Pendientes de Sincronizar</h3>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button type="button" class="btn-secondary" style="height: 36px; font-size: 12.5px;" onclick="toggleConectividad()">
@@ -2980,6 +3642,128 @@
     </div>
 
 
+    <!-- ======================================================================
+         MODAL 5: MENÚ DE CAPTURA RÁPIDA DESDE EL BOTÓN CENTRAL + (BOTTOM NAV)
+         ====================================================================== -->
+    <div id="modal-quick-fab" class="modal-overlay" onclick="cerrarModalExterno(event, 'modal-quick-fab')">
+      <div class="modal-card" style="max-width: 460px;">
+        <div class="modal-header">
+          <div>
+            <span class="panel-badge" style="margin-bottom: 0;">⚡ Acción Rápida de Campo</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-top: 4px;">¿Qué deseas registrar ahora?</h3>
+          </div>
+          <button onclick="cerrarModal('modal-quick-fab')" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-dim);">&times;</button>
+        </div>
+        <div class="modal-body" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button type="button" class="agro-quick-tile accent-blue" onclick="cerrarModal('modal-quick-fab'); switchTab('ordeno');">
+            <div class="agro-quick-icon">🥛</div>
+            <div class="agro-quick-label">Ordeño Diario</div>
+            <div class="agro-quick-sub">Litros Mañana/Tarde</div>
+          </button>
+          <button type="button" class="agro-quick-tile accent-amber" onclick="cerrarModal('modal-quick-fab'); switchTab('pesaje');">
+            <div class="agro-quick-icon">⚖️</div>
+            <div class="agro-quick-label">Pesaje Carne</div>
+            <div class="agro-quick-sub">Báscula y GDP</div>
+          </button>
+          <button type="button" class="agro-quick-tile accent-rose" onclick="cerrarModal('modal-quick-fab'); switchTab('sanidad');">
+            <div class="agro-quick-icon">🩺</div>
+            <div class="agro-quick-label">Sanidad / Retiro</div>
+            <div class="agro-quick-sub">Vacuna o Antibiótico</div>
+          </button>
+          <button type="button" class="agro-quick-tile" onclick="cerrarModal('modal-quick-fab'); switchTab('reproduccion');">
+            <div class="agro-quick-icon">🧬</div>
+            <div class="agro-quick-label">Parto / Repro</div>
+            <div class="agro-quick-sub">Ciclo y Alta Cría</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         DRAWER LATERAL DE PERFIL Y SESIÓN ACTIVA (INSPIRADO EN EJEMPLO 1)
+         ====================================================================== -->
+    <div id="profile-drawer" class="profile-drawer-backdrop" onclick="if(event.target.id==='profile-drawer') cerrarDrawerPerfil()">
+      <div class="profile-drawer-panel">
+        <div>
+          <div style="background: linear-gradient(135deg, #0B3B24 0%, #146C43 100%); color: #FFFFFF; padding: 24px 20px; border-radius: 0 0 24px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div style="width: 52px; height: 52px; border-radius: 16px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 26px;" id="drawer-user-avatar">
+                👨‍💼
+              </div>
+              <button onclick="cerrarDrawerPerfil()" style="background: rgba(255,255,255,0.18); border: none; color: #FFFFFF; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer;">&times;</button>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-top: 12px;" id="drawer-user-name">Johan Maldonado</h3>
+            <div style="font-size: 12.5px; color: #DCFCE7; margin-top: 2px;" id="drawer-user-cargo">Administrador General • @jmaldonado</div>
+            <div style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; background: rgba(255,255,255,0.18); font-size: 11.5px; font-weight: 700;" id="drawer-user-role-pill">
+              🔑 Rol: Administrador (Acceso Total)
+            </div>
+          </div>
+
+          <div style="padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-dim);">Acciones de Sesión y Finca</div>
+            
+            <button type="button" class="demo-user-chip" onclick="cerrarDrawerPerfil(); switchTab('login');">
+              <span>🔐 Cambiar de Usuario (Login)</span>
+              <span>➔</span>
+            </button>
+
+            <button type="button" class="demo-user-chip admin-only-control" id="drawer-btn-usuarios" onclick="cerrarDrawerPerfil(); switchTab('usuarios');">
+              <span>👥 Administrar Trabajadores y Roles</span>
+              <span>➔</span>
+            </button>
+
+            <button type="button" class="demo-user-chip" onclick="cerrarDrawerPerfil(); toggleRole();">
+              <span>🔄 Alternar Rápido Admin / Trabajador</span>
+              <span>➔</span>
+            </button>
+
+            <button type="button" class="demo-user-chip" onclick="toggleConectividad();">
+              <span>📡 Simular Red Online / Sin Señal</span>
+              <span id="drawer-net-label" style="font-weight: 700; color: var(--color-primary);">En Línea</span>
+            </button>
+
+            <div style="border-top: 1px solid var(--border-subtle); margin-top: 6px; padding-top: 10px;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;">Cambio Directo de Cuenta (Demo):</div>
+              <div id="drawer-quick-users" style="display: flex; flex-direction: column; gap: 6px;">
+                <!-- Se inyecta dinámicamente -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 16px 20px; border-top: 1px solid var(--border-subtle); background: var(--bg-app);">
+          <button type="button" class="btn-danger-outline" style="width: 100%; height: 42px; justify-content: center; font-weight: 700;" onclick="cerrarSesionUsuario()">
+            🚪 Cerrar Sesión Actual
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         BARRA DE NAVEGACIÓN INFERIOR FIJA (BOTTOM NAV) CON BOTÓN CENTRAL +
+         ====================================================================== -->
+    <nav class="bottom-nav-bar" id="bottom-nav-bar" aria-label="Navegación Inferior Rápida">
+      <button type="button" class="bottom-nav-item active" id="bnav-home" onclick="irInicioSegunRol()">
+        <span class="bnav-icon" id="bnav-home-icon">📊</span>
+        <span id="bnav-home-label">Inicio</span>
+      </button>
+      <button type="button" class="bottom-nav-item" id="bnav-censo" onclick="switchTab('censo')">
+        <span class="bnav-icon">🐄</span>
+        <span>Ganado</span>
+      </button>
+      <button type="button" class="fab-central-btn" onclick="abrirModalQuickFab()" title="Registrar Ordeño, Pesaje, Sanidad o Parto">
+        +
+      </button>
+      <button type="button" class="bottom-nav-item" id="bnav-ordeno" onclick="switchTab('ordeno')">
+        <span class="bnav-icon">🥛</span>
+        <span>Leche</span>
+      </button>
+      <button type="button" class="bottom-nav-item" id="bnav-perfil" onclick="abrirDrawerPerfil()">
+        <span class="bnav-icon">👤</span>
+        <span id="bnav-perfil-label">Sesión</span>
+      </button>
+    </nav>
+
     <!-- NOTIFICACIÓN FLOTANTE (TOAST) -->
     <div id="toast" class="toast-msg">
       <svg width="18" height="18" fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
@@ -3234,6 +4018,47 @@
     };
 
     // --------------------------------------------------------------------------
+    // 8. ENTIDAD USUARIOS (AUTENTICACIÓN, ROLES RBAC Y PERSONAL DE FINCA - HU-21)
+    // --------------------------------------------------------------------------
+    let usuariosSistema = [
+      {
+        id: "USR-01",
+        nombreCompleto: "Johan Maldonado",
+        nombreCorto: "Johan M.",
+        cedula: "V-19.840.210",
+        cargo: "Administrador / Propietario",
+        login: "jmaldonado",
+        pin: "1234",
+        rol: "Administrador",
+        activo: true
+      },
+      {
+        id: "USR-02",
+        nombreCompleto: "Carlos Pérez",
+        nombreCorto: "Carlos P.",
+        cedula: "V-23.412.880",
+        cargo: "Ordeñador (Vaquera)",
+        login: "cperez",
+        pin: "2026",
+        rol: "Operador",
+        activo: true
+      },
+      {
+        id: "USR-03",
+        nombreCompleto: "Pedro Pérez",
+        nombreCorto: "Pedro P.",
+        cedula: "V-25.119.304",
+        cargo: "Corralero / Pesador (Manga)",
+        login: "pperez",
+        pin: "2026",
+        rol: "Operador",
+        activo: true
+      }
+    ];
+
+    let usuarioSesionActual = usuariosSistema[0];
+
+    // --------------------------------------------------------------------------
     // INICIALIZACIÓN
     // --------------------------------------------------------------------------
     document.addEventListener("DOMContentLoaded", () => {
@@ -3254,12 +4079,17 @@
       renderizarFinanzas();
       renderizarHistorial();
       renderizarColaCampo();
+      renderizarUsuarios();
+      renderizarChipsLoginDemo();
     });
 
     // --------------------------------------------------------------------------
     // MOTOR DE AUDITORÍA (HISTORIAL INMUTABLE) Y COLA OFFLINE DE CAMPO
     // --------------------------------------------------------------------------
     function obtenerActorActual() {
+      if (usuarioSesionActual && usuarioSesionActual.rol === rolActual) {
+        return { usuario: usuarioSesionActual.nombreCorto, rol: usuarioSesionActual.rol };
+      }
       return rolActual === "Administrador"
         ? { usuario: "Johan M.", rol: "Administrador" }
         : { usuario: "Carlos P.", rol: "Operador" };
@@ -3385,14 +4215,18 @@
       const cfgRed = document.getElementById("cfg-red-actual");
       const cfgCola = document.getElementById("cfg-cola-count");
       const campoColaBtnCount = document.getElementById("campo-cola-btn-count");
+      const drawerNet = document.getElementById("drawer-net-label");
+      const androidRight = document.getElementById("android-status-right");
 
       if (estaEnLinea) {
         pill.classList.remove("offline-mode");
-        statusText.textContent = "En Línea (Servidor Central)";
+        statusText.textContent = "En Línea";
+        if (androidRight) androidRight.textContent = "📶 4G • 🔋 94%";
         if (banner) banner.style.display = "none";
       } else {
         pill.classList.add("offline-mode");
-        statusText.textContent = "Sin Señal (Modo Campo)";
+        statusText.textContent = "Sin Señal";
+        if (androidRight) androidRight.textContent = "📵 Sin Señal • 🔋 94%";
         if (banner && bannerText) {
           banner.style.display = "flex";
           bannerText.innerHTML = (rolActual === "Operador")
@@ -3402,6 +4236,10 @@
       }
 
       if (cfgRed) cfgRed.textContent = estaEnLinea ? "En Línea" : "Sin Señal";
+      if (drawerNet) {
+        drawerNet.textContent = estaEnLinea ? "🟢 En Línea" : "🟠 Sin Señal";
+        drawerNet.style.color = estaEnLinea ? "var(--color-primary)" : "#D97706";
+      }
       if (cfgCola) cfgCola.textContent = colaEnviosOffline.length;
       if (campoColaBtnCount) campoColaBtnCount.textContent = colaEnviosOffline.length;
 
@@ -3441,6 +4279,17 @@
       });
     }
 
+    function filtrarRapidoCorral(filtro) {
+      const input = document.getElementById("campo-buscador-id");
+      if (filtro === "TODAS") {
+        if (input) input.value = "";
+        buscarAnimalRapidoCampo("TODAS");
+      } else {
+        if (input) input.value = filtro;
+        buscarAnimalRapidoCampo(filtro);
+      }
+    }
+
     function buscarAnimalRapidoCampo(valor) {
       const box = document.getElementById("campo-resultado-busqueda");
       if (!box) return;
@@ -3450,38 +4299,52 @@
         return;
       }
 
-      const animal = animales.find(a => a.id.toLowerCase() === clean.toLowerCase() || a.nombre.toLowerCase().includes(clean.toLowerCase()));
+      let coincidencias = [];
+      if (clean.toUpperCase() === "TODAS") {
+        coincidencias = [...animales];
+      } else {
+        const q = clean.toLowerCase();
+        coincidencias = animales.filter(a =>
+          a.id.toLowerCase().includes(q) ||
+          a.nombre.toLowerCase().includes(q) ||
+          a.raza.toLowerCase().includes(q) ||
+          a.condicion.toLowerCase().includes(q)
+        );
+      }
+
       box.style.display = "block";
 
-      if (!animal) {
+      if (coincidencias.length === 0) {
         box.innerHTML = `
           <div style="padding: 12px 14px; background: var(--bg-subtle); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); font-size: 13px; color: var(--text-muted);">
-            No se encontró ningún animal activo con N° Identificador o alias <strong>"${valor}"</strong> en la caché del padrón.
+            No se encontró ningún animal activo con N° Identificador, nombre o raza <strong>"${valor}"</strong> en la caché del padrón.
           </div>
         `;
         return;
       }
 
-      const enRetiro = animalesEnRetiro.includes(animal.id);
-      box.innerHTML = `
-        <div style="padding: 14px; border-radius: var(--radius-md); border: 2px solid ${enRetiro ? 'var(--status-danger-border)' : 'var(--status-success-border)'}; background: ${enRetiro ? 'var(--status-danger-bg)' : 'var(--status-success-bg)'}; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-          <div>
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span class="animal-id">#${animal.id}</span>
-              <strong style="font-size: 15px;">${animal.nombre}</strong>
-              <span class="badge-status ${enRetiro ? 'danger' : 'success'}">
-                ${enRetiro ? '🚨 BLOQUEO SANITARIO: EN RETIRO DE LECHE / CARNE' : '✅ APTO (SIN RETIRO SANITARIO)'}
-              </span>
+      box.innerHTML = coincidencias.map(animal => {
+        const enRetiro = animalesEnRetiro.includes(animal.id);
+        return `
+          <div style="padding: 14px; margin-bottom: 8px; border-radius: var(--radius-md); border: 2px solid ${enRetiro ? 'var(--status-danger-border)' : 'var(--status-success-border)'}; background: ${enRetiro ? 'var(--status-danger-bg)' : 'var(--status-success-bg)'}; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span class="animal-id">#${animal.id}</span>
+                <strong style="font-size: 15px;">${animal.nombre}</strong>
+                <span class="badge-status ${enRetiro ? 'danger' : 'success'}">
+                  ${enRetiro ? '🚨 BLOQUEO SANITARIO: EN RETIRO DE LECHE / CARNE' : '✅ APTO (SIN RETIRO SANITARIO)'}
+                </span>
+              </div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
+                <strong>Etapa:</strong> ${animal.condicion} • <strong>Preñada:</strong> ${animal.prenada} • <strong>Raza:</strong> ${animal.raza} • <strong>Último Peso:</strong> ${animal.peso} Kg • <strong>Hierro:</strong> ${animal.hierro}
+              </div>
             </div>
-            <div style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
-              <strong>Etapa:</strong> ${animal.condicion} • <strong>Preñada:</strong> ${animal.prenada} • <strong>Raza:</strong> ${animal.raza} • <strong>Último Peso:</strong> ${animal.peso} Kg • <strong>Hierro:</strong> ${animal.hierro}
-            </div>
+            <button type="button" class="btn-secondary" style="height: 34px; font-size: 12.5px; background: #FFFFFF;" onclick="abrirHojaVida('${animal.id}')">
+              Ver Hoja de Vida
+            </button>
           </div>
-          <button type="button" class="btn-secondary" style="height: 34px; font-size: 12.5px; background: #FFFFFF;" onclick="abrirHojaVida('${animal.id}')">
-            Ver Hoja de Vida
-          </button>
-        </div>
-      `;
+        `;
+      }).join("");
     }
 
     function renderizarHistorial() {
@@ -3596,12 +4459,66 @@
     }
 
     // --------------------------------------------------------------------------
-    // NAVEGACIÓN ENTRE PESTAÑAS Y EXPERIENCIA ADAPTATIVA POR ROL (PROPUESTA A)
+    // NAVEGACIÓN ENTRE PESTAÑAS, PANEL LATERAL, MODOS DE VISTA Y EXPERIENCIA POR ROL
     // --------------------------------------------------------------------------
+    function cambiarModoVistaPrototipo(modo) {
+      const shell = document.getElementById("app-shell");
+      const btnPhone = document.getElementById("btn-view-phone");
+      const btnTablet = document.getElementById("btn-view-tablet");
+      if (!shell) return;
+
+      if (modo === "tablet") {
+        shell.classList.remove("phone-mode");
+        shell.classList.add("tablet-mode");
+        if (btnTablet) btnTablet.classList.add("active");
+        if (btnPhone) btnPhone.classList.remove("active");
+        showToast("📟 Vista Maximizada / Tablet activada.");
+      } else {
+        shell.classList.remove("tablet-mode");
+        shell.classList.add("phone-mode");
+        if (btnPhone) btnPhone.classList.add("active");
+        if (btnTablet) btnTablet.classList.remove("active");
+        showToast("📱 Vista Teléfono Android activada.");
+      }
+    }
+
+    function abrirMenuLateral() {
+      actualizarDrawerPerfilUI();
+      const sideNav = document.getElementById("side-nav-drawer");
+      if (sideNav) sideNav.classList.add("open");
+    }
+
+    function cerrarMenuLateral() {
+      const sideNav = document.getElementById("side-nav-drawer");
+      if (sideNav) sideNav.classList.remove("open");
+    }
+
+    function seleccionarCargoPreset(cargo, limpiarEnfocar = false) {
+      const inp = document.getElementById("usr-in-cargo");
+      if (!inp) return;
+      if (limpiarEnfocar) {
+        inp.value = "";
+        inp.focus();
+      } else {
+        inp.value = cargo;
+      }
+    }
+
     function switchTab(tabId, ev) {
-      const tabsExclusivosAdmin = ["procesos", "dashboard", "configuracion", "finanzas", "historial"];
+      const tabsExclusivosAdmin = ["dashboard", "configuracion", "finanzas", "historial", "usuarios"];
       if (rolActual === "Operador" && tabsExclusivosAdmin.includes(tabId)) {
         tabId = "campo";
+      }
+
+      cerrarMenuLateral();
+
+      const shell = document.getElementById("app-shell");
+      if (shell) {
+        if (tabId === "login") {
+          shell.classList.add("login-mode");
+        } else {
+          shell.classList.remove("login-mode");
+        }
       }
 
       document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -3616,7 +4533,74 @@
       const targetView = document.getElementById(`view-${tabId}`);
       if (targetView) targetView.classList.add('active');
 
+      // Sincronizar Barra Inferior (BottomNav)
+      document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+      if (tabId === "dashboard" || tabId === "campo") {
+        const bHome = document.getElementById("bnav-home");
+        if (bHome) bHome.classList.add("active");
+      } else if (tabId === "censo") {
+        const bCenso = document.getElementById("bnav-censo");
+        if (bCenso) bCenso.classList.add("active");
+      } else if (tabId === "ordeno") {
+        const bOrdeno = document.getElementById("bnav-ordeno");
+        if (bOrdeno) bOrdeno.classList.add("active");
+      } else if (tabId === "login" || tabId === "usuarios") {
+        const bPerfil = document.getElementById("bnav-perfil");
+        if (bPerfil) bPerfil.classList.add("active");
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function irInicioSegunRol() {
+      switchTab(rolActual === "Administrador" ? "dashboard" : "campo");
+    }
+
+    function abrirModalQuickFab() {
+      document.getElementById("modal-quick-fab").classList.add("open");
+    }
+
+    function toggleModuleSubview(modulo, modo, btnElem) {
+      const parentSeg = document.getElementById(`seg-${modulo}`);
+      if (parentSeg) {
+        parentSeg.querySelectorAll('.seg-pill').forEach(p => p.classList.remove('active'));
+      }
+      if (btnElem) btnElem.classList.add('active');
+
+      const formBox = document.getElementById(`subview-${modulo}-form`);
+      const histBox = document.getElementById(`subview-${modulo}-hist`);
+      if (!formBox || !histBox) return;
+
+      if (modo === 'form') {
+        formBox.classList.remove('subview-hidden');
+        histBox.classList.add('subview-hidden');
+      } else if (modo === 'hist') {
+        formBox.classList.add('subview-hidden');
+        histBox.classList.remove('subview-hidden');
+      } else {
+        formBox.classList.remove('subview-hidden');
+        histBox.classList.remove('subview-hidden');
+      }
+    }
+
+    function autocompletarIdCriaSugerido() {
+      const input = document.getElementById("repro-in-cria-numero");
+      if (!input) return;
+      if (historialVentasCanal.length > 0) {
+        const liberado = historialVentasCanal[0].numero;
+        const enUso = animales.some(a => a.id === liberado);
+        if (!enUso) {
+          input.value = liberado;
+          showToast(`♻️ Código liberado #${liberado} asignado automáticamente a la nueva cría.`);
+          return;
+        }
+      }
+      let candidato = 115;
+      while (animales.some(a => a.id === String(candidato))) {
+        candidato++;
+      }
+      input.value = String(candidato);
+      showToast(`✨ Código disponible #${candidato} sugerido para el nuevo becerro/a.`);
     }
 
     function toggleElement(elemId) {
@@ -3627,19 +4611,37 @@
 
     function aplicarExperienciaPorRol(cambiarVistaActiva = true) {
       const esAdmin = (rolActual === "Administrador");
+      if (!usuarioSesionActual || usuarioSesionActual.rol !== rolActual) {
+        const candidato = usuariosSistema.find(u => u.rol === rolActual && u.activo);
+        if (candidato) usuarioSesionActual = candidato;
+      }
+
+      const nombreMostrar = usuarioSesionActual ? usuarioSesionActual.nombreCorto : (esAdmin ? "Johan M." : "Carlos P.");
       const roleBadge = document.getElementById("role-indicator");
       if (roleBadge) {
         roleBadge.textContent = esAdmin
-          ? "👤 Rol: Administrador (Vista Rápida)"
-          : "👷 Rol: Trabajador (Terminal de Carga)";
+          ? `👨‍💼 ${nombreMostrar}`
+          : `👷 ${nombreMostrar}`;
         roleBadge.classList.toggle("admin-active", esAdmin);
         roleBadge.classList.toggle("operador-active", !esAdmin);
       }
 
+      const campoBadge = document.getElementById("campo-status-badge");
+      if (campoBadge && usuarioSesionActual) {
+        campoBadge.textContent = `👷 Sesión: ${usuarioSesionActual.nombreCompleto} (${usuarioSesionActual.cargo})`;
+      }
+
+      const bnavHomeIcon = document.getElementById("bnav-home-icon");
+      const bnavHomeLabel = document.getElementById("bnav-home-label");
+      const bnavPerfilLabel = document.getElementById("bnav-perfil-label");
+      if (bnavHomeIcon) bnavHomeIcon.textContent = esAdmin ? "📊" : "📱";
+      if (bnavHomeLabel) bnavHomeLabel.textContent = esAdmin ? "Inicio" : "Terminal";
+      if (bnavPerfilLabel) bnavPerfilLabel.textContent = nombreMostrar;
+
       const cfgRol = document.getElementById("cfg-rol-actual");
       if (cfgRol) cfgRol.textContent = rolActual;
 
-      // Mostrar/ocultar pestañas de navegación según el perfil (Propuesta A)
+      // Mostrar/ocultar opciones del Panel Lateral según el perfil
       document.querySelectorAll('.nav-tab-btn').forEach(btn => {
         const perm = btn.getAttribute("data-role");
         if (perm === "admin") {
@@ -3651,10 +4653,12 @@
         }
       });
 
-      // Ajustar etiqueta de Censo según rol
+      // Ajustar etiqueta de Censo en el Panel Lateral según rol
       const tabCenso = document.getElementById("tab-btn-censo");
       if (tabCenso) {
-        tabCenso.textContent = esAdmin ? "🐄 2. Inventario (Censo)" : "🐄 Padrón Activo (Consulta)";
+        tabCenso.innerHTML = esAdmin
+          ? `<span>🐄 Ganado (Censo)</span><span>➔</span>`
+          : `<span>🐄 Padrón (Consulta)</span><span>➔</span>`;
       }
 
       // Mostrar/ocultar controles exclusivos del Administrador
@@ -3675,6 +4679,7 @@
       renderizarCenso();
       renderizarPesajes();
       actualizarIndicadoresConectividad();
+      actualizarDrawerPerfilUI();
 
       if (cambiarVistaActiva) {
         switchTab(esAdmin ? "dashboard" : "campo");
@@ -3683,10 +4688,271 @@
 
     function toggleRole() {
       rolActual = (rolActual === "Administrador") ? "Operador" : "Administrador";
+      const candidato = usuariosSistema.find(u => u.rol === rolActual && u.activo);
+      if (candidato) usuarioSesionActual = candidato;
       aplicarExperienciaPorRol(true);
       showToast(rolActual === "Administrador"
-        ? "👤 Modo Administrador activo: Vista Rápida Ejecutiva, Ventas, Finanzas e Historial de Acciones."
-        : "👷 Modo Trabajador activo: Terminal Ligera de Carga de Datos en Campo.");
+        ? `👨‍💼 Sesión activa: ${usuarioSesionActual.nombreCompleto} (Administrador)`
+        : `👷 Sesión activa: ${usuarioSesionActual.nombreCompleto} (Trabajador de Campo)`);
+    }
+
+    // --------------------------------------------------------------------------
+    // GESTIÓN DE USUARIOS, TRABAJADORES Y AUTENTICACIÓN (HU-21)
+    // --------------------------------------------------------------------------
+    function renderizarUsuarios() {
+      const tbody = document.getElementById("usuarios-tbody");
+      if (!tbody) return;
+
+      const kpiTotal = document.getElementById("usr-kpi-total");
+      const kpiActivos = document.getElementById("usr-kpi-activos");
+      const kpiOperadores = document.getElementById("usr-kpi-operadores");
+      const kpiSuspendidos = document.getElementById("usr-kpi-suspendidos");
+
+      if (kpiTotal) kpiTotal.textContent = usuariosSistema.length;
+      if (kpiActivos) kpiActivos.textContent = usuariosSistema.filter(u => u.activo).length;
+      if (kpiOperadores) kpiOperadores.textContent = usuariosSistema.filter(u => u.rol === "Operador").length;
+      if (kpiSuspendidos) kpiSuspendidos.textContent = usuariosSistema.filter(u => !u.activo).length;
+
+      tbody.innerHTML = "";
+      usuariosSistema.forEach(u => {
+        const esAdmin = u.rol === "Administrador";
+        const esActual = usuarioSesionActual && usuarioSesionActual.id === u.id;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <strong>${u.nombreCompleto}</strong> ${esActual ? '<span class="badge-status info">Tú</span>' : ''}
+            <div style="font-size: 12.5px; color: var(--text-dim);">${u.cedula}</div>
+          </td>
+          <td><strong>${u.cargo}</strong></td>
+          <td>
+            <code>@${u.login}</code>
+            <div style="font-size: 12.5px; color: var(--text-dim);">PIN: <strong>${u.pin}</strong></div>
+          </td>
+          <td>
+            <span class="badge-status ${esAdmin ? 'info' : 'warning'}">
+              ${esAdmin ? '👨‍💼 Administrador' : '👷 Trabajador (Operador)'}
+            </span>
+          </td>
+          <td>
+            <span class="badge-status ${u.activo ? 'success' : 'danger'}">
+              ${u.activo ? '🟢 Activo' : '🔴 Suspendido'}
+            </span>
+          </td>
+          <td>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-secondary" style="height: 34px; font-size: 12.5px; padding: 0 10px;" onclick="iniciarSesionComo('${u.id}')">
+                🔑 Probar Login
+              </button>
+              <button type="button" class="btn-secondary" style="height: 34px; font-size: 12.5px; padding: 0 10px;" onclick="resetearPinUsuario('${u.id}')">
+                🔄 PIN
+              </button>
+              ${u.id !== 'USR-01' ? `
+                <button type="button" class="btn-danger-outline" style="height: 34px; font-size: 12.5px; padding: 0 10px;" onclick="toggleSuspenderUsuario('${u.id}')">
+                  ${u.activo ? '⏸️ Suspender' : '▶️ Reactivar'}
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      renderizarChipsLoginDemo();
+      actualizarDrawerPerfilUI();
+    }
+
+    function renderizarChipsLoginDemo() {
+      const container = document.getElementById("login-demo-chips-container");
+      const drawerList = document.getElementById("drawer-quick-users");
+      const htmlChips = usuariosSistema.map(u => `
+        <button type="button" class="demo-user-chip" onclick="iniciarSesionComo('${u.id}')">
+          <div>
+            <div style="font-size: 14.5px; font-weight: 800; color: var(--text-main);">
+              ${u.rol === 'Administrador' ? '👨‍💼' : '👷'} ${u.nombreCompleto}
+              <span class="badge-status ${u.rol === 'Administrador' ? 'info' : 'warning'}" style="margin-left: 4px;">
+                ${u.rol === 'Administrador' ? 'Admin' : 'Trabajador'}
+              </span>
+              ${!u.activo ? '<span class="badge-status danger" style="margin-left:4px;">Suspendido</span>' : ''}
+            </div>
+            <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
+              Cargo: <strong>${u.cargo}</strong> • Usuario: <code>${u.login}</code> (PIN: ${u.pin})
+            </div>
+          </div>
+          <span style="font-size: 13.5px; font-weight: 800; color: var(--color-primary); white-space: nowrap;">Entrar ➔</span>
+        </button>
+      `).join("");
+
+      if (container) container.innerHTML = htmlChips;
+      if (drawerList) drawerList.innerHTML = htmlChips;
+    }
+
+    function handleCrearUsuario(e) {
+      e.preventDefault();
+      if (!validarOperacionExclusivaOnline("Alta de Trabajador / Usuario")) return;
+
+      const nombreCompleto = document.getElementById("usr-in-nombre").value.trim();
+      const cedula = document.getElementById("usr-in-cedula").value.trim();
+      const cargo = document.getElementById("usr-in-cargo").value.trim() || "Trabajador de Finca";
+      const rol = document.getElementById("usr-in-rol").value;
+      const login = document.getElementById("usr-in-login").value.trim().toLowerCase().replace(/\s+/g, "");
+      const pin = document.getElementById("usr-in-pin").value.trim();
+
+      if (usuariosSistema.some(u => u.login.toLowerCase() === login)) {
+        alert(`⚠️ El usuario de acceso "@${login}" ya existe. Elige otro identificador.`);
+        return;
+      }
+
+      const partes = nombreCompleto.split(" ");
+      const nombreCorto = partes.length > 1 ? `${partes[0]} ${partes[1][0]}.` : partes[0];
+      const nuevoId = `USR-0${usuariosSistema.length + 1}`;
+
+      usuariosSistema.push({
+        id: nuevoId,
+        nombreCompleto,
+        nombreCorto,
+        cedula,
+        cargo,
+        login,
+        pin,
+        rol,
+        activo: true
+      });
+
+      registrarAccionSistema({
+        modulo: "Configuración",
+        accion: "Alta de Usuario / Trabajador",
+        entidad: `${nombreCompleto} (@${login})`,
+        detalle: `Creado con rol ${rol} (${cargo}) • Estado: Activo.`
+      });
+
+      renderizarUsuarios();
+      document.getElementById("usr-in-nombre").value = "";
+      document.getElementById("usr-in-cedula").value = "";
+      document.getElementById("usr-in-login").value = "";
+      showToast(`👥 "${nombreCompleto}" (${cargo}) creado y listo para iniciar sesión.`);
+    }
+
+    function toggleSuspenderUsuario(idUsr) {
+      if (!validarOperacionExclusivaOnline("Suspensión / Reactivación de Cuenta")) return;
+      const u = usuariosSistema.find(x => x.id === idUsr);
+      if (!u) return;
+
+      u.activo = !u.activo;
+      registrarAccionSistema({
+        modulo: "Configuración",
+        accion: u.activo ? "Reactivación de Usuario" : "Suspensión de Usuario",
+        entidad: `${u.nombreCompleto} (@${u.login})`,
+        detalle: `Acceso ${u.activo ? 'habilitado nuevamente' : 'bloqueado (historial en bitácora preservado)'}.`
+      });
+
+      renderizarUsuarios();
+      showToast(u.activo
+        ? `🟢 Cuenta de ${u.nombreCompleto} reactivada.`
+        : `⏸️ Cuenta de ${u.nombreCompleto} suspendida. Sus registros históricos se conservan intactos.`);
+    }
+
+    function resetearPinUsuario(idUsr) {
+      if (!validarOperacionExclusivaOnline("Restablecer PIN de Acceso")) return;
+      const u = usuariosSistema.find(x => x.id === idUsr);
+      if (!u) return;
+      const nuevoPin = prompt(`Ingresa el nuevo PIN o contraseña para ${u.nombreCompleto} (@${u.login}):`, u.pin);
+      if (!nuevoPin || !nuevoPin.trim()) return;
+      u.pin = nuevoPin.trim();
+      renderizarUsuarios();
+      showToast(`🔑 PIN de ${u.nombreCompleto} actualizado correctamente.`);
+    }
+
+    function iniciarSesionComo(idUsr) {
+      const u = usuariosSistema.find(x => x.id === idUsr);
+      if (!u) return;
+
+      const alertBox = document.getElementById("login-error-alert");
+      if (!u.activo) {
+        if (alertBox) {
+          alertBox.style.display = "block";
+          alertBox.innerHTML = `🚫 <strong>Acceso Denegado:</strong> La cuenta de <strong>${u.nombreCompleto} (@${u.login})</strong> fue suspendida por el Administrador.`;
+        }
+        cerrarDrawerPerfil();
+        cerrarMenuLateral();
+        switchTab("login");
+        showToast(`🚫 Cuenta suspendida: ${u.nombreCompleto} no tiene acceso activo.`);
+        return;
+      }
+
+      if (alertBox) alertBox.style.display = "none";
+      usuarioSesionActual = u;
+      rolActual = u.rol;
+      cerrarDrawerPerfil();
+      cerrarMenuLateral();
+      aplicarExperienciaPorRol(true);
+      showToast(`🔓 Sesión iniciada: ${u.nombreCompleto} (${u.cargo}).`);
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const loginVal = document.getElementById("login-in-user").value.trim().toLowerCase();
+      const pinVal = document.getElementById("login-in-pin").value.trim();
+      const alertBox = document.getElementById("login-error-alert");
+
+      const u = usuariosSistema.find(x => x.login.toLowerCase() === loginVal && x.pin === pinVal);
+      if (!u) {
+        if (alertBox) {
+          alertBox.style.display = "block";
+          alertBox.innerHTML = `🚫 <strong>Credenciales incorrectas:</strong> Verifica tu usuario (ej. <code>jmaldonado</code>, <code>cperez</code>) y PIN.`;
+        }
+        return;
+      }
+      iniciarSesionComo(u.id);
+    }
+
+    function toggleMostrarPinLogin() {
+      const inp = document.getElementById("login-in-pin");
+      if (!inp) return;
+      inp.type = (inp.type === "password") ? "text" : "password";
+    }
+
+    function abrirDrawerPerfil() {
+      actualizarDrawerPerfilUI();
+      const dr = document.getElementById("profile-drawer");
+      if (dr) dr.classList.add("open");
+    }
+
+    function cerrarDrawerPerfil() {
+      const dr = document.getElementById("profile-drawer");
+      if (dr) dr.classList.remove("open");
+    }
+
+    function actualizarDrawerPerfilUI() {
+      if (!usuarioSesionActual) return;
+      const esAdmin = usuarioSesionActual.rol === "Administrador";
+      const avatar = document.getElementById("drawer-user-avatar");
+      const name = document.getElementById("drawer-user-name");
+      const cargo = document.getElementById("drawer-user-cargo");
+      const pill = document.getElementById("drawer-user-role-pill");
+
+      const sideAvatar = document.getElementById("sidenav-user-avatar");
+      const sideName = document.getElementById("sidenav-user-name");
+      const sideRole = document.getElementById("sidenav-user-role");
+
+      if (avatar) avatar.textContent = esAdmin ? "👨‍💼" : "👷";
+      if (name) name.textContent = usuarioSesionActual.nombreCompleto;
+      if (cargo) cargo.textContent = `${usuarioSesionActual.cargo} • @${usuarioSesionActual.login}`;
+      if (pill) pill.textContent = esAdmin ? "🔑 Rol: Administrador (Acceso Total)" : "📱 Rol: Trabajador (Terminal de Campo)";
+
+      if (sideAvatar) sideAvatar.textContent = esAdmin ? "👨‍💼" : "👷";
+      if (sideName) sideName.textContent = usuarioSesionActual.nombreCompleto;
+      if (sideRole) sideRole.textContent = `${usuarioSesionActual.cargo} (${esAdmin ? 'Admin' : 'Trabajador'})`;
+    }
+
+    function cerrarSesionUsuario() {
+      if (colaEnviosOffline.length > 0) {
+        const confirmar = confirm(`⚠️ Tienes ${colaEnviosOffline.length} registro(s) pendientes en la Cola Offline del teléfono. Se conservarán en el buzón local al cambiar de usuario. ¿Deseas ir a la pantalla de Inicio de Sesión?`);
+        if (!confirmar) return;
+      }
+      cerrarDrawerPerfil();
+      cerrarMenuLateral();
+      switchTab("login");
+      showToast("🔐 Sesión cerrada. Selecciona un perfil o ingresa tus credenciales.");
     }
 
     function switchSubnavCenso(tipo) {

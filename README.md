@@ -21,9 +21,11 @@ Ofrecemos **una sola aplicación móvil en Flutter** que adapta su experiencia s
 ## 🎯 Características Principales (Alcance)
 
 ### Dentro del Alcance 📋
-* **Propuesta A — Experiencia Dual por Rol:**
+* **Inicio de Sesión (`🔐 Login`), Gestión de Trabajadores (`👥 Usuarios y Roles`) y Propuesta A — Experiencia Dual por Rol:**
+  * **Inicio de Sesión y Administración de Personal:** Pestaña de inicio de sesión que autentica credenciales y dirige automáticamente según el rol (`ADMINISTRADOR` vs. `OPERADOR`), con sesión persistente en campo. Incluye un panel exclusivo para que el `Administrador` en línea cree cuentas de trabajadores, les asigne cargo en la finca, restablezca contraseñas/PIN y suspenda lógicamente su acceso (`activo = FALSE`) cuando dejen de laborar, preservando intacta su autoría en el historial auditado.
   * **Trabajador (`📱 Terminal de Carga`):** 4 tarjetas táctiles grandes (*Ordeño, Pesaje, Sanidad, Reproducción/Parto*), buscador instantáneo de corral por `N° Identificador` con semáforo sanitario y buzón local de cola offline.
   * **Administrador (`📊 Vista Rápida` + Control Online + `📜 Historial de Acciones`):** Lectura ejecutiva inmediata de tanque, rebaño, alertas y caja, gobierno de operaciones maestras/comerciales en línea y auditoría total.
+  * **Principio de Limpieza Visual en Uso Real:** La aplicación en producción mantiene pantallas operativas limpias y directas, sin bloques de texto explicativo extensos ni calcos literales de la Guía de Usuario.
 * **Gestión de Inventario, Condiciones Fisiológicas y Genealogía:** Registro separando **Número Identificador** único en activos vs. **Hierro** descriptivo (propietario y procedencia), catálogo maestro extensible de **razas**, clasificación por **condiciones fisiológicas venezolanas** (*Becerro/a, Maute/a, Novillo/Novilla, Toro Reproductor, Vaca parida, Vaca escotera, Vaca seca*), estado de **preñez** condicional y genealogía por `N° Identificador`. *(Altas manuales/compras exclusivas del Administrador Online; en campo solo se incorporan crías nacidas en un **Parto**).*
 * **Control de Producción (Leche y Carne):** Ordeño diario (Mañana/Tarde) con desvío automático a descarte por retiro activo, gestión y despacho Online del tanque de enfriamiento, pesajes periódicos con cálculo automático de `GDP` y venta en canal Online con liberación del `N° Identificador`.
 * **Módulo Financiero Operativo (Online):** Libro de caja con ingresos automáticos por venta de leche/canal, registro de egresos y cálculo del costo directo por litro de leche (`$/L`).

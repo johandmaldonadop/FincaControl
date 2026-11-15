@@ -14,10 +14,10 @@
    * [0.1. Mapa Integral de Procesos de FincaControl](#mapa-procesos)
    * [0.2. Secuencia Lógica de Puesta en Producción](#secuencia-logica)
    * [0.3. Experiencia Dual por Rol (Propuesta A) y Alcance Online vs. Offline](#modelo-roles-conectividad)
-2. [⚙️ Proceso 1: Configuración del Sistema (Puesta a Punto — Exclusivo Admin Online)](#proceso-1-configuracion)
+2. [⚙️ Proceso 1: Configuración del Sistema y Gestión de Usuarios/Roles (Puesta a Punto — Exclusivo Admin Online)](#proceso-1-configuracion)
    * [1.1. Identidad de la Finca y Hierro Oficial Predeterminado](#config-finca-hierro)
    * [1.2. Gestión del Catálogo Maestro de Razas Bovinas](#config-catalogo-razas)
-   * [1.3. Parámetros Productivos, Comerciales, Simulador de Red y Roles](#config-parametros-rbac)
+   * [1.3. Parámetros Productivos, Comerciales, Inicio de Sesión y Gestión de Trabajadores por Rol](#config-parametros-rbac)
 3. [🐄 Proceso 2: Carga Inicial del Inventario de Animales (Censo del Rebaño)](#proceso-2-inventario)
    * [2.1. Reglas de Identificación y Altas: N° Identificador vs. Hierro y Permisos de Creación](#regla-id-vs-hierro)
    * [2.2. Clasificación por Condiciones Fisiológicas y Estado de Preñez](#regla-condiciones-fisiologicas)
@@ -102,15 +102,18 @@ Para que el sistema opere sin inconsistencias desde el primer día, se debe segu
 | **4°** | **Proceso de Producción de Leche** | **Trabajador/Admin (Online u Offline en campo):** Preñez, secado, partos (alta de cría) y ordeño diario. **Admin (Online):** Despacho del tanque. | Leche apta en tanque, descartes sanitarios aislados, despachos cobrados y costo directo por litro calculado. |
 
 <a id="modelo-roles-conectividad"></a>
-### 0.3. Experiencia Dual por Rol  y Alcance Online vs. Offline
+### 0.3. Experiencia Dual por Rol (Propuesta A), Inicio de Sesión y Alcance Online vs. Offline
 
-**FincaControl** se distribuye como **una sola aplicación móvil que adapta automáticamente su interfaz según el rol autenticado  y opera bajo una arquitectura **Primero Online con Extensión Offline Táctica de Campo**:
+> **📌 Nota Importante (Guía de Usuario vs. Interfaz de la App en Uso Real):** El presente documento constituye el manual explicativo detallado de consulta; sin embargo, **la aplicación móvil en uso real no tendrá tanto texto explicativo en pantalla ni será un calco literal de esta Guía de Usuario**. En la operación diaria de la finca un trabajador o administrador no necesita párrafos teóricos dentro de las pantallas, por lo que la aplicación real presenta formularios limpios y directos, utilizando únicamente ayudas breves (*tooltips* `ℹ️`) junto a términos puntuales como `GDP` o `Tiempo de Retiro`.
+
+**FincaControl** se distribuye como **una sola aplicación móvil que, tras autenticar al usuario en la pestaña de `🔐 Inicio de Sesión`, adapta automáticamente su interfaz según el rol asignado (Propuesta A)** y opera bajo una arquitectura **Primero Online con Extensión Offline Táctica de Campo**:
 
 | Dimensión | 👤 Perfil Administrador (`Vista Rápida y Control`) | 👷 Perfil Trabajador / Operador (`Terminal de Carga`) |
 | :--- | :--- | :--- |
-| **Propósito del Teléfono** | Lectura ejecutiva inmediata de indicadores, gobierno administrativo/comercial y auditoría total de la finca. | Herramienta ergonómica de captura rápida de datos en vaquera, manga de pesaje y potrero. |
-| **Vistas Habilitadas** | `🗺️ Esquema de Procesos`, `📊 Vista Rápida (Admin)`, `⚙️ 1. Configuración`, `🐄 2. Inventario`, `⚖️ 3. Carne`, `🥛 4. Leche`, `🩺 Sanidad`, `🧬 Reproducción`, `💰 Financiero` e **`📜 Historial de Acciones`**. | **`📱 Terminal de Carga`** (4 botones gigantes + buscador rápido de corral + buzón offline) y formularios operativos de `Ordeño`, `Pesaje`, `Sanidad`, `Reproducción/Parto` y consulta de `Padrón Activo`. |
-| **Operaciones Exclusivas 100% Online** | Configuración de finca, creación de nuevas razas, alta manual de animales (inventario inicial y compras), venta de leche del tanque, venta en canal y libro financiero. | *Ocultas y restringidas por seguridad.* El trabajador solo incorpora animales nuevos cuando nace un becerro/a al registrar un **Parto**. |
+| **Inicio de Sesión y Gestión de Cuentas** | Ingresa con sus credenciales de `ADMINISTRADOR` en `🔐 Iniciar Sesión`. Es el único autorizado (en modo `Online`) para **crear cuentas de trabajadores**, asignarles cargo/rol, restablecer claves y suspender cuentas en `👥 Gestión de Usuarios y Roles`. | Ingresa en `🔐 Iniciar Sesión` con el usuario y PIN/contraseña que le creó el Administrador. Su sesión persiste localmente para trabajar sin señal en el potrero sellando cada registro con su nombre real. |
+| **Propósito del Teléfono** | Lectura ejecutiva inmediata de indicadores, gobierno administrativo/comercial, administración de personal y auditoría total de la finca. | Herramienta ergonómica y limpia de captura rápida de datos en vaquera, manga de pesaje y potrero. |
+| **Vistas Habilitadas** | `🗺️ Esquema de Procesos`, `📊 Vista Rápida (Admin)`, `⚙️ 1. Configuración` (incl. `👥 Usuarios y Roles`), `🐄 2. Inventario`, `⚖️ 3. Carne`, `🥛 4. Leche`, `🩺 Sanidad`, `🧬 Reproducción`, `💰 Financiero` e **`📜 Historial de Acciones`**. | **`📱 Terminal de Carga`** (4 botones gigantes + buscador rápido de corral + buzón offline) y formularios operativos limpios de `Ordeño`, `Pesaje`, `Sanidad`, `Reproducción/Parto` y consulta de `Padrón Activo`. |
+| **Operaciones Exclusivas 100% Online** | Configuración de finca, **creación y suspensión de trabajadores (`usuarios`)**, creación de nuevas razas, alta manual de animales (inventario inicial y compras), venta de leche del tanque, venta en canal y libro financiero. | *Ocultas y restringidas por seguridad.* El trabajador solo incorpora animales nuevos cuando nace un becerro/a al registrar un **Parto**. |
 | **Comportamiento Sin Señal (Offline)** | Modo lectura del último resumen descargado; las operaciones administrativas/comerciales solicitan conexión activa para evitar descuadres. | **100% Operativo en Campo:** Consulta la caché ligera del padrón activo (con semáforo de retiro sanitario) y guarda ordeños, pesajes, tratamientos y partos en una **Cola Local FIFO** que se sincroniza al recuperar señal. |
 
 [⬆ Volver al Índice](#indice)
@@ -138,7 +141,7 @@ El sistema incluye por defecto las razas más habituales en sistemas de doble pr
 3. *Impacto automático:* La raza se guarda en la Base de Datos Central, queda auditada en el **`📜 Historial de Acciones`** y se descarga en la caché de referencia de los teléfonos de los trabajadores para usarla en partos en campo.
 
 <a id="config-parametros-rbac"></a>
-### 1.3. Parámetros Productivos, Comerciales, Simulador de Red y Roles
+### 1.3. Parámetros Productivos, Comerciales, Inicio de Sesión y Gestión de Trabajadores por Rol
 1. En **Parámetros Generales de la Finca**, defina los valores comerciales y zootécnicos editables:
    * **Capacidad Tanque Leche (L) \*:** *Ej: `2000 L`*.
    * **Precio Ref. Leche (`$ / L`) \*:** *Ej: `$0.45`*.
@@ -146,10 +149,14 @@ El sistema incluye por defecto las razas más habituales en sistemas de doble pr
    * **Meta GDP Ceba (`kg/día`) \*:** *Ej: `0.70 kg/día`*.
    * *Nota zootécnica:* Los umbrales biológicos de **Gestación (283 días)** y **Alerta de Secado (60 días antes del parto)** vienen preconfigurados como estándares zootécnicos del sistema y se visualizan directamente en el módulo de Reproducción.
 2. Presione **"Guardar Configuración del Sistema"**.
-3. **Controles Superiores de Simulación (Propuesta A y Conectividad):** En la barra superior del prototipo puede probar en cualquier momento:
-   * **Píldora de Red (`En Línea (Servidor Central)` / `Sin Señal (Modo Campo)`):** Simula la pérdida y recuperación de internet.
-   * **Botón `🔄 Cola: X pend.`:** Envía en orden cronológico los registros capturados sin señal hacia el Servidor Central.
-   * **Selector de Rol (`👤 Rol: Administrador (Vista Rápida)` / `👷 Rol: Trabajador (Terminal de Carga)`):** Alterna en vivo entre las dos interfaces de la Propuesta A.
+3. **Inicio de Sesión (`🔐 Iniciar Sesión`) y Gestión de Usuarios y Trabajadores (`👥 Usuarios y Roles` — Exclusivo Admin Online):**
+   * **En la Aplicación en Uso Real:**
+     1. **Pestaña de Inicio de Sesión (`🔐 Iniciar Sesión`):** Al abrir la aplicación, el usuario ingresa su **`identificador_acceso`** y su **Contraseña o PIN**. Según el rol registrado en la tabla `usuarios`, el sistema lo dirige automáticamente a la vista **`Administrador`** (`Vista Rápida y Control`) o a la **`Terminal de Carga`** (`Trabajador / Operador`).
+     2. **Creación y Administración de Trabajadores por el Administrador (`👥 Gestión de Usuarios y Roles`):** Desde el panel de configuración administrativa (en línea), el Administrador da de alta las cuentas de sus trabajadores de campo (*Ordeñadores, Vaqueros de Corral, Encargados Sanitarios, Mayordomos*), asignándoles su usuario, PIN/contraseña inicial y rol (`OPERADOR`). Si un trabajador deja de laborar en la finca, el Administrador **desactiva/suspende su cuenta (`activo = FALSE`)** sin borrarla físicamente, impidiendo que vuelva a iniciar sesión pero conservando intactos todos sus registros históricos en el **`📜 Historial de Acciones`**.
+   * **Controles Superiores de Simulación en el Prototipo Interactivo:** Para facilitar la prueba rápida de ambos perfiles durante la validación sin tener que cerrar e iniciar sesión repetidamente, en la barra superior del prototipo web puede usar en cualquier momento:
+     * **Píldora de Red (`En Línea (Servidor Central)` / `Sin Señal (Modo Campo)`):** Simula la pérdida y recuperación de internet.
+     * **Botón `🔄 Cola: X pend.`:** Envía en orden cronológico los registros capturados sin señal hacia el Servidor Central.
+     * **Selector de Rol (`👤 Rol: Administrador (Vista Rápida)` / `👷 Rol: Trabajador (Terminal de Carga)`):** Simula en un clic el cambio entre una sesión autenticada de Administrador y una sesión de Trabajador.
 
 [⬆ Volver al Índice](#indice)
 

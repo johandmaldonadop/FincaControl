@@ -19,8 +19,9 @@ El modelo de datos de **FincaControl** se estructura bajo cuatro reglas fundamen
      1. Una **caché de lectura del padrón activo** (`cache_padron_activo`) para validar animales y alertas de retiro sanitario en el corral sin internet.
      2. Una **caché de catálogos y último resumen** (`cache_referencia_resumen`) con las razas disponibles, el hierro oficial y la última instantánea de lectura rápida vista por el Administrador.
      3. Una **cola de operaciones de campo** (`cola_envios_campo` / patrón *Outbox*) que almacena temporalmente ordeños, pesajes, eventos sanitarios y eventos reproductivos/partos capturados sin señal, enviándolos en orden cronológico (`FIFO`) hacia los endpoints Online apenas se recupera conectividad.
-3. **Separación de Operaciones por Rol y Conectividad (Propuesta A):**
-   * **Operaciones 100% Online (Exclusivas del `Administrador`):** Configuración del sistema, gestión del catálogo maestro de razas, carga inicial del inventario y altas manuales por compra, despacho/venta comercial de leche, liquidación de venta en canal y registro de transacciones financieras.
+3. **Autenticación Real, Gestión de Personal y Separación de Operaciones por Rol y Conectividad (Propuesta A):**
+   * **Inicio de Sesión (`🔐 Login`) y Sesión Persistente en Campo:** En producción (a diferencia del botón simulador de rol del prototipo académico), el acceso se realiza mediante una pantalla de **Inicio de Sesión** que valida `identificador_acceso`, `credencial_hash` y `activo = TRUE` contra la tabla `usuarios`. Según el rol autenticado (`ADMINISTRADOR` u `OPERADOR`), la aplicación enruta automáticamente al usuario a su experiencia correspondiente (**Propuesta A**: *Vista Rápida y Control* vs. *Terminal de Carga*, manteniendo una interfaz operativa limpia y sin los textos explicativos extensos de la Guía de Usuario). El perfil y token de sesión se conservan en el almacenamiento seguro del teléfono para permitir que el trabajador opere sin señal en campo sellando cada registro de `cola_envios_campo` con su `id_usuario` verificable.
+   * **Operaciones 100% Online (Exclusivas del `Administrador`):** Configuración del sistema, **gestión de usuarios y creación/suspensión de trabajadores (`usuarios`)**, gestión del catálogo maestro de razas, carga inicial del inventario y altas manuales por compra, despacho/venta comercial de leche, liquidación de venta en canal y registro de transacciones financieras.
    * **Operaciones con Soporte Online y Offline (Campo — `Operador` y `Administrador`):** Registro de ordeño diario, pesajes en báscula, eventos sanitarios/tratamientos, eventos reproductivos y **alta automática de crías nacidas en la finca mediante el evento de Parto**.
 4. **Trazabilidad Inmutable y Auditoría Total (`historial_acciones`):**
    * Cualquier acción o cambio realizado en el sistema —ya sea por el `Administrador` o por un `Trabajador (Operador)`— genera obligatoriamente un registro inmutable (*append-only*, sin edición ni borrado) en la entidad central `historial_acciones`, conservando tanto la **fecha/hora real en que ocurrió la acción en campo** como la **fecha/hora en que ingresó al servidor central**.
@@ -234,9 +235,11 @@ erDiagram
     USUARIOS {
         varchar id_usuario PK
         varchar nombre_completo
+        varchar cargo_finca
         varchar identificador_acceso UK
-        varchar rol
+        varchar rol "ADMINISTRADOR | OPERADOR"
         boolean activo
+        varchar creado_por_usuario FK
     }
 
     TRANSACCIONES_FINANCIERAS {
@@ -328,17 +331,23 @@ Almacena la parametrización maestra de la unidad de producción (registro únic
 ---
 
 ### Tabla 2: `usuarios`
-Gestiona las cuentas y el control de acceso basado en roles (`RBAC`), determinando qué experiencia carga la aplicación móvil (**Propuesta A**).
+Gestiona las cuentas del personal de la finca, el inicio de sesión y el control de acceso basado en roles (`RBAC`), determinando qué experiencia carga la aplicación móvil (**Propuesta A**). Solo un usuario con rol `ADMINISTRADOR` conectado en línea puede crear nuevos trabajadores (`OPERADOR`), editar sus datos, restablecer su PIN/contraseña o suspender su acceso (`activo = FALSE`).
+
+> **Regla de Integridad Histórica (Prohibición de Borrado Físico de Usuarios):** Cuando un trabajador deja de laborar en la finca, su registro en `usuarios` **jamás se elimina con `DELETE`**; en su lugar se marca `activo = FALSE`. Esto revoca de inmediato su acceso de inicio de sesión y sincronización, pero conserva intacta su autoría histórica en `registros_ordeno`, `registros_pesaje`, `eventos_sanitarios`, `eventos_reproductivos` e `historial_acciones`.
 
 | Columna | Tipo Lógico | Restricciones | Descripción Funcional |
 | :--- | :--- | :--- | :--- |
 | `id_usuario` | `VARCHAR(36)` | `PK` | Identificador único inmutable (`UUID`). |
-| `nombre_completo` | `VARCHAR(120)` | `NOT NULL` | Nombre visible en formularios y en el `historial_acciones`. |
-| `identificador_acceso` | `VARCHAR(100)` | `NOT NULL`, `UNIQUE` | Usuario o correo electrónico de inicio de sesión. |
-| `credencial_hash` | `VARCHAR(255)` | `NOT NULL` | Contraseña o PIN cifrado de forma irreversible (nunca viaja al SQLite del trabajador). |
-| `rol` | `VARCHAR(20)` | `NOT NULL`, `CHECK IN ('ADMINISTRADOR', 'OPERADOR')` | Define permisos y modo visual (*Vista Rápida* vs. *Terminal de Carga*). |
-| `activo` | `BOOLEAN` | `NOT NULL`, `DEFAULT TRUE` | Permite revocar el acceso a un trabajador sin borrar su historial auditado. |
-| `creado_en` | `TIMESTAMP` | `NOT NULL` | Fecha de alta del usuario. |
+| `nombre_completo` | `VARCHAR(120)` | `NOT NULL` | Nombre y apellido del administrador o trabajador (visible en formularios y en `historial_acciones`). |
+| `cedula_telefono` | `VARCHAR(40)` | `NULL` | Documento de identidad o teléfono de contacto laboral del trabajador en la finca. |
+| `cargo_finca` | `VARCHAR(60)` | `NOT NULL` | Función operativa en la unidad de producción (*Propietario / Administrador*, *Mayordomo*, *Ordeñador*, *Vaquero de Corral / Manga*, *Encargado Sanitario / Reproducción*). |
+| `identificador_acceso` | `VARCHAR(100)` | `NOT NULL`, `UNIQUE` | Nombre de usuario único (ej. `admin.johan`, `pedro.ordeno`) o correo para iniciar sesión en la pestaña de `Login`. |
+| `credencial_hash` | `VARCHAR(255)` | `NOT NULL` | Contraseña o PIN de acceso cifrado de forma irreversible (nunca viaja en texto plano ni al SQLite de otros usuarios). |
+| `rol` | `VARCHAR(20)` | `NOT NULL`, `CHECK IN ('ADMINISTRADOR', 'OPERADOR')` | Define permisos de negocio y modo visual (*Vista Rápida y Control* vs. *Terminal de Carga*). |
+| `activo` | `BOOLEAN` | `NOT NULL`, `DEFAULT TRUE` | `TRUE` permite iniciar sesión y sincronizar; `FALSE` revoca el acceso al trabajador retirado sin borrar su historial auditado. |
+| `creado_por_usuario` | `VARCHAR(36)` | `NULL`, `FK -> usuarios(id_usuario)` | Referencia al Administrador que dio de alta la cuenta del trabajador. |
+| `ultimo_acceso_en` | `TIMESTAMP` | `NULL` | Fecha y hora del último inicio de sesión o última sincronización de cola desde campo. |
+| `creado_en` | `TIMESTAMP` | `NOT NULL` | Fecha de alta del usuario en el sistema. |
 
 ---
 
@@ -550,10 +559,14 @@ CREATE TABLE configuracion_finca (
 CREATE TABLE usuarios (
     id_usuario VARCHAR(36) PRIMARY KEY,
     nombre_completo VARCHAR(120) NOT NULL,
+    cedula_telefono VARCHAR(40),
+    cargo_finca VARCHAR(60) NOT NULL,
     identificador_acceso VARCHAR(100) NOT NULL UNIQUE,
     credencial_hash VARCHAR(255) NOT NULL,
     rol VARCHAR(20) NOT NULL CHECK (rol IN ('ADMINISTRADOR', 'OPERADOR')),
     activo BOOLEAN NOT NULL DEFAULT TRUE,
+    creado_por_usuario VARCHAR(36) REFERENCES usuarios(id_usuario),
+    ultimo_acceso_en TIMESTAMP,
     creado_en TIMESTAMP NOT NULL
 );
 
@@ -755,8 +768,13 @@ CREATE INDEX idx_cola_orden_fifo ON cola_envios_campo (estado_envio, fecha_hora_
 
 Toda acción de escritura ejecutada en cualquiera de los endpoints siguientes inserta de manera atómica su asiento correspondiente en `historial_acciones`.
 
-### A. Autenticación y Sesión
-* `POST /api/v1/auth/login` — Autentica credenciales y devuelve el perfil (`ADMINISTRADOR` u `OPERADOR`) para activar el modo de interfaz correspondiente (**Propuesta A**).
+### A. Autenticación, Inicio de Sesión y Gestión de Usuarios y Roles (`RBAC`)
+* `POST /api/v1/auth/login` — Valida `identificador_acceso` y contraseña/PIN contra `usuarios`, verifica que `activo = TRUE`, actualiza `ultimo_acceso_en`, registra el ingreso en `historial_acciones` y devuelve el token de sesión junto al perfil (`id_usuario`, `nombre_completo`, `cargo_finca`, `rol` en `ADMINISTRADOR | OPERADOR`) para activar automáticamente la interfaz correspondiente (**Propuesta A**).
+* `POST /api/v1/auth/logout` — Cierra la sesión activa del dispositivo (previa verificación en el cliente móvil de que no queden registros pendientes sin sincronizar en `cola_envios_campo`).
+* `GET /api/v1/usuarios` *(100% Online — Exclusivo `Administrador`)* — Devuelve el listado completo de usuarios de la finca (administradores y trabajadores de campo) con su rol, cargo operativo, estado (`activo`) y fecha de último acceso/sincronización.
+* `POST /api/v1/usuarios` *(100% Online — Exclusivo `Administrador`)* — Permite al Administrador crear la cuenta de un nuevo trabajador (`OPERADOR`) o co-administrador (`ADMINISTRADOR`), registrando `nombre_completo`, `cedula_telefono`, `cargo_finca`, `identificador_acceso` único y contraseña/PIN inicial, e insertando el asiento de auditoría en `historial_acciones`.
+* `PUT /api/v1/usuarios/{id_usuario}` *(100% Online — Exclusivo `Administrador`)* — Actualiza datos laborales del trabajador, modifica su rol/cargo o restablece su contraseña/PIN en caso de olvido, dejando constancia en `historial_acciones`.
+* `PATCH /api/v1/usuarios/{id_usuario}/estado` *(100% Online — Exclusivo `Administrador`)* — Activa o suspende lógicamente (`activo = TRUE | FALSE`) la cuenta de un trabajador. Al pasar a `FALSE`, revoca inmediatamente sus sesiones activas e impide nuevos accesos sin eliminar sus registros históricos ni romper la trazabilidad en `historial_acciones`.
 
 ### B. Consulta Rápida y Auditoría del Administrador *(Online + respaldo de lectura)*
 * `GET /api/v1/admin/resumen-rapido` — Devuelve en un solo paquete consolidado: saldo real del tanque (`SUM(litros aptos) - SUM(ventas_leche)`), ordeño del día, semáforo de alertas sanitarias/reproductivas, conteo del rebaño por etapa fisiológica, utilidad de caja, costo por litro y últimas acciones de auditoría.

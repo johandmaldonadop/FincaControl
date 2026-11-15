@@ -16,7 +16,7 @@ Haga clic en cualquiera de las secciones para consultar su descripción técnica
    * [1.3. Objetivo General y Objetivos Específicos](#objetivos-proyecto)
    * [1.4. Alcance del Proyecto (Dentro y Fuera de Alcance)](#alcance-proyecto)
    * [1.5. Atributos de Calidad y Criterios Arquitectónicos](#criterios-calidad)
-2. [Módulo 1: Vista Rápida (Admin), Terminal de Carga (Trabajador) y Arquitectura Primero Online + Cola Campo](#modulo-1-dashboard)
+2. [Módulo 1: Inicio de Sesión, Gestión de Usuarios/Roles, Vista Rápida (Admin), Terminal de Carga (Trabajador) y Arquitectura Primero Online + Cola Campo](#modulo-1-dashboard)
 3. [Módulo 2: Censo e Inventario Bovino (`Animal`), Condiciones Fisiológicas y Beneficio en Canal](#modulo-2-censo-canal)
 4. [Módulo 3: Control de Ordeño y Gestión del Tanque de Leche (`RegistroOrdeno`)](#modulo-3-ordeno-tanque)
 5. [Módulo 4: Pesajes, Carne y Ganancia Diaria de Peso (`RegistroPesaje`)](#modulo-4-pesaje-carne)
@@ -98,10 +98,11 @@ Permitir que las fincas ganaderas de doble propósito transformen su recolecció
   * Libro de caja simplificado con acreditación automática de ventas de leche y ganado en canal.
   * Registro de egresos operacionales (concentrado, sal, medicamentos, jornales, combustible).
   * Cálculo en tiempo real de utilidad de caja, margen operativo y costo directo por litro de leche.
-* **Arquitectura Primero Online + Extensión Offline Táctica de Campo y Propuesta A:**
-  * **Base de Datos Relacional Central (12 tablas, tecnología/infraestructura a definir):** Fuente Única de Verdad para configuración, catálogo de razas, altas manuales de inventario, tanque de leche, ventas, finanzas e **Historial Inmutable de Acciones**.
+* **Arquitectura Primero Online + Extensión Offline Táctica de Campo, Autenticación y Propuesta A:**
+  * **Inicio de Sesión (`🔐 Login`) y Gestión de Usuarios/Trabajadores (`👥 Usuarios y Roles`):** Pestaña de inicio de sesión que autentica credenciales y dirige automáticamente al usuario según su rol (`ADMINISTRADOR` vs. `OPERADOR`), acompañada de un panel exclusivo para que el `Administrador` en línea cree cuentas de trabajadores, les asigne cargo en la finca, restablezca claves y active o suspenda su acceso (`activo = FALSE`) sin eliminar su trazabilidad histórica en el `Historial de Acciones`.
+  * **Base de Datos Relacional Central (12 tablas, tecnología/infraestructura a definir):** Fuente Única de Verdad para usuarios/roles, configuración, catálogo de razas, altas manuales de inventario, tanque de leche, ventas, finanzas e **Historial Inmutable de Acciones**.
   * **SQLite Ligero en el Teléfono de Campo (3 tablas):** Caché de padrón activo, caché de referencia y cola FIFO de envíos (`cola_envios_campo`) para garantizar captura sin señal en vaqueras y potreros.
-  * **Propuesta A (Experiencia Dual por Rol):** `📱 Terminal de Carga` simplificada para el `Trabajador` y `📊 Vista Rápida + Control Online + 📜 Historial de Acciones` para el `Administrador`.
+  * **Propuesta A (Experiencia Dual por Rol e Interfaz Limpia):** `📱 Terminal de Carga` simplificada para el `Trabajador` y `📊 Vista Rápida + Control Online + 📜 Historial de Acciones` para el `Administrador`. En uso real, la aplicación prescinde de textos explicativos extensos y no es un calco literal de la Guía de Usuario.
 
 #### 🚫 Fuera del Alcance (Out of Scope)
 * **Contabilidad Fiscal y Tributaria Compleja:** No incluye módulos de facturación electrónica bajo normativas de entes tributarios gubernamentales específicos (ej. SENIAT, DIAN, SAT) ni declaraciones de impuestos formales.
@@ -114,10 +115,10 @@ Permitir que las fincas ganaderas de doble propósito transformen su recolecció
 <a id="criterios-calidad"></a>
 ### 1.5. Atributos de Calidad y Criterios Arquitectónicos
 
-1. **Disponibilidad Continua (Enfoque Offline-First):** La aplicación debe funcionar sin degradación en ausencia de señal de red. Todas las escrituras y lecturas se resuelven contra la base de datos local.
-2. **Rendimiento y Usabilidad Ergonómica en Campo:** Pantallas con contraste optimizado para luz solar intensa, tipografía legible (`Inter`), controles táctiles mínimos de **48 px** e interfaces de captura rápida en menos de tres toques por animal.
+1. **Disponibilidad Continua (Primero Online + Extensión Offline de Campo):** La captura en campo funciona sin degradación en ausencia de señal de red resolviendo validaciones contra `cache_padron_activo` y encolando en `cola_envios_campo`, mientras que las operaciones maestras, comerciales y de gestión de personal se validan en línea contra el Servidor Central.
+2. **Rendimiento, Limpieza Visual y Usabilidad Ergonómica en Campo (No Calco de la Guía de Usuario):** Pantallas con contraste optimizado para luz solar intensa, tipografía legible (`Inter`), controles táctiles mínimos de **48–56 px** e interfaces de captura rápida en menos de tres toques por animal. **Aclaratoria de Diseño:** La aplicación en uso real **no tendrá tanto texto explicativo ni será un calco literal de la Guía de Usuario**; un trabajador o administrador en operación real no requiere párrafos instructivos en pantalla (los cuales solo se incluyeron en el prototipo web para orientar a los evaluadores académicos), reservando las explicaciones detalladas para el manual de usuario.
 3. **Integridad y Trazabilidad Sanitaria:** La lógica de negocio prioriza la inocuidad alimentaria, impidiendo que animales bajo tratamiento médico descarguen leche al tanque comercial o sean enviados a beneficio en canal.
-4. **Seguridad y Control de Acceso (RBAC):** Separación estricta de perfiles: el rol `Operador` registra datos técnicos de vaquería sin acceso a costos, ingresos o balances de dinero; el rol `Administrador` posee acceso total.
+4. **Seguridad, Inicio de Sesión y Control de Acceso Basado en Roles (`RBAC`):** El ingreso se realiza mediante una **Pestaña de Inicio de Sesión (`🔐 Login`)** que redirige según el rol autenticado: el perfil `Operador` (`Trabajador`) accede a la `Terminal de Carga` para registrar datos técnicos de vaquería sin acceso a costos, ventas, configuración ni altas manuales; el perfil `Administrador` posee acceso total y dispone de un submódulo exclusivo (`👥 Gestión de Usuarios y Roles`) para crear cuentas de trabajadores, asignarles cargo en la finca, restablecer credenciales y suspender su acceso (`activo = FALSE`) sin borrar su historial auditado.
 5. **Escalabilidad del Modelo de Datos:** Estructura modular relacional capaz de soportar el crecimiento del censo desde hatos pequeños (20 cabezas) hasta medianos y grandes productores (más de 1.000 cabezas).
 
 ---
@@ -127,24 +128,30 @@ Permitir que las fincas ganaderas de doble propósito transformen su recolecció
 ---
 
 <a id="modulo-1-dashboard"></a>
-## 2. Módulo 1: Vista Rápida (Admin), Terminal de Carga (Trabajador) y Arquitectura Primero Online + Cola Campo
+## 2. Módulo 1: Inicio de Sesión, Gestión de Usuarios/Roles, Vista Rápida (Admin), Terminal de Carga (Trabajador) y Arquitectura Primero Online + Cola Campo
 
 ### 🎯 Propósito
-Proveer en una sola aplicación **Flutter** dos experiencias optimizadas según el rol (**Propuesta A**): una **`📊 Vista Rápida Ejecutiva`** para que el Administrador supervise de inmediato los indicadores centrales de la finca y una **`📱 Terminal Ligera de Carga`** para que el Trabajador capture eventos de campo con o sin señal, respaldados por la arquitectura **Primero Online + Extensión Offline Táctica de Campo** ([`modelo_base_de_datos.md`](../modelo_base_de_datos.md)).
+Proveer en una sola aplicación **Flutter** un flujo formal de **Inicio de Sesión y Administración de Usuarios/Trabajadores (`RBAC`)** que habilite dos experiencias optimizadas según el rol (**Propuesta A**, manteniendo una interfaz operativa limpia y libre del texto explicativo extenso de la Guía de Usuario): una **`📊 Vista Rápida Ejecutiva`** para que el Administrador supervise los indicadores centrales y gestione al personal de la finca, y una **`📱 Terminal Ligera de Carga`** para que el Trabajador capture eventos de campo con o sin señal, respaldados por la arquitectura **Primero Online + Extensión Offline Táctica de Campo** ([`modelo_base_de_datos.md`](../modelo_base_de_datos.md)).
 
 ### ⚙️ Funcionamiento Operativo y Arquitectura de Datos
-1. **`📊 Vista Rápida (Admin)` — Lectura Ejecutiva desde la Base de Datos Central:**
+1. **Pestaña / Pantalla de Inicio de Sesión (`🔐 Iniciar Sesión`) y Gestión de Personal (`👥 Usuarios y Roles`):**
+   * **Inicio de Sesión y Redirección por Rol:** El usuario ingresa su `identificador_acceso` y contraseña/PIN (`POST /api/v1/auth/login`). Si la cuenta está activa (`activo = TRUE`), el sistema abre automáticamente la experiencia `Administrador` (`rol = 'ADMINISTRADOR'`) o la `Terminal de Carga` (`rol = 'OPERADOR'`). En el teléfono del trabajador, la sesión autenticada persiste localmente para permitir el trabajo sin señal en potreros sellando cada evento de `cola_envios_campo` con su `id_usuario` real.
+   * **Creación y Administración de Trabajadores (Exclusivo `Administrador Online`):** Desde la sección **`👥 Gestión de Usuarios y Roles`** (dentro de `⚙️ 1. Configuración`), el Administrador conectado en línea puede:
+     1. **Crear cuentas de Trabajadores (`OPERADOR`) o co-administradores:** Registrando nombre completo, cédula/teléfono, cargo operativo en la finca (*Ordeñador, Vaquero de Corral, Encargado Sanitario, Mayordomo*), usuario de acceso y PIN/contraseña inicial.
+     2. **Restablecer credenciales y editar cargos:** Asignar nueva clave/PIN si un trabajador la olvida o actualizar su función.
+     3. **Suspender / Desactivar Acceso (`activo = FALSE` — Sin Borrado Físico):** Cuando un trabajador deja de laborar en la finca, el Administrador desactiva su cuenta sin eliminarla de la base de datos, impidiendo que vuelva a iniciar sesión mientras se conserva intacta toda su trazabilidad histórica en `historial_acciones` y en los registros productivos.
+2. **`📊 Vista Rápida (Admin)` — Lectura Ejecutiva desde la Base de Datos Central:**
    * **Disponible en Tanque:** Volumen acumulado de leche apta para venta comercial.
    * **Rebaño Activo:** Censo vivo indicando hembras preñadas y animales vendidos en canal.
    * **Retiro Sanitario:** Contador rojo de reses con leche o carne bloqueada por tratamiento activo.
    * **Utilidad en Caja:** Saldo neto en efectivo (`Ingresos - Egresos`).
    * **Semáforo de Alertas y Últimas Acciones:** Muestra retiros activos, secados programados (~60 días) y las últimas 4 operaciones registradas por Administrador o Trabajadores.
-2. **`📱 Terminal de Carga` — Experiencia del Trabajador en Campo:**
+3. **`📱 Terminal de Carga` — Experiencia del Trabajador en Campo:**
    * **4 Tarjetas Táctiles Grandes:** Acceso en un toque a *Ordeño Diario*, *Pesaje en Manga*, *Evento Sanitario / Retiro* y *Reproducción y Parto (Alta Cría)*.
    * **Buscador Instantáneo en Corral:** Verifica por **N° Identificador** la ficha y el semáforo de retiro sanitario en vivo contra `cache_padron_activo`, incluso sin internet.
    * **Buzón Local FIFO (`cola_envios_campo`):** Cuando no hay señal, encola las capturas de campo conservando la hora real de ocurrencia y las sincroniza al Servidor Central en cuanto vuelve la cobertura.
-3. **Separación Estricta de Operaciones Online vs. Offline de Campo:**
-   * **100% Online (`Administrador`):** Configuración, creación de razas, carga inicial y compras manuales de animales, venta de leche del tanque, venta en canal y finanzas.
+4. **Separación Estricta de Operaciones Online vs. Offline de Campo:**
+   * **100% Online (`Administrador`):** Configuración, gestión y creación de usuarios/trabajadores, creación de razas, carga inicial y compras manuales de animales, venta de leche del tanque, venta en canal y finanzas.
    * **Online + Cola Offline de Campo (`Trabajador` y `Administrador`):** Ordeños, pesajes, eventos sanitarios y eventos reproductivos/partos (única vía por la que un trabajador incorpora nuevos animales al nacer una cría).
 
 [⬆ Volver al Índice](#indice)
@@ -383,6 +390,7 @@ flowchart TD
 ### 📋 Resumen de Integridad de Datos
 | Acción del Usuario | Módulo Origen | Módulos Impactados | Resultado |
 | :--- | :--- | :--- | :--- |
+| **Crear / Suspender Trabajador** | Configuración (`Usuarios y Roles`) | Autenticación (`usuarios`), Historial de Acciones | Habilita o revoca el inicio de sesión del trabajador conservando intacta su autoría histórica. |
 | **Registrar Nueva Raza** | Censo / Reproducción | Catálogo de Razas | Guarda la raza personalizada para futuros registros de animales. |
 | **Ordeñar Vaca Sana** | Ordeño | Dashboard, Tanque de Leche | Suma litros al stock disponible para venta. |
 | **Ordeñar Vaca en Retiro** | Ordeño | Dashboard | Marca la leche como descarte (no comercializable). |

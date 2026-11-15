@@ -10,7 +10,7 @@
 
 Haga clic en cualquiera de los módulos para consultar su desglose detallado de planificación:
 
-1. [Fase 1: Módulo 1 - Arquitectura Primero Online + Extensión Offline de Campo, Roles (Propuesta A) y Modelo de Datos](#modulo-1-arquitectura-base)
+1. [Fase 1: Módulo 1 - Arquitectura Primero Online + Extensión Offline de Campo, Inicio de Sesión, Gestión de Roles (Propuesta A) y Modelo de Datos](#modulo-1-arquitectura-base)
 2. [Fase 2: Módulo 2 - Gestión de Inventario Bovino, Condiciones Fisiológicas y Trazabilidad Genealógica](#modulo-2-inventario-genealogia)
 3. [Fase 3: Módulo 3 - Control de Producción de Doble Propósito (Leche y Carne)](#modulo-3-control-produccion)
 4. [Fase 4: Módulo 4 - Gestión Sanitaria, Tratamientos y Tiempos de Retiro](#modulo-4-gestion-sanitaria)
@@ -22,22 +22,39 @@ Haga clic en cualquiera de los módulos para consultar su desglose detallado de 
 ---
 
 <a id="modulo-1-arquitectura-base"></a>
-## 1. Módulo 1: Arquitectura Primero Online + Extensión Offline de Campo, Roles (Propuesta A) y Modelo de Datos
+## 1. Módulo 1: Arquitectura Primero Online + Extensión Offline de Campo, Inicio de Sesión, Gestión de Roles (Propuesta A) y Modelo de Datos
 
 ### 🎯 Propósito del Módulo
-Establecer la arquitectura base de **FincaControl** en **Flutter** bajo un enfoque **Primero Online con Extensión Offline Táctica de Campo** y una **Experiencia Dual por Rol (Propuesta A)**. En lugar de replicar toda la base de datos histórica y financiera en cada teléfono, la **Base de Datos Relacional Central** actúa como Fuente Única de Verdad para saldos, tanque de leche, inventario oficial, ventas, caja e **Historial Inmutable de Acciones**, mientras que el teléfono del trabajador en campo utiliza una base de datos **SQLite ligera de solo 3 tablas** (caché de padrón activo, caché de referencia y cola FIFO de envíos) para operar sin interrupciones en vaqueras o potreros sin señal.
+Establecer la arquitectura base de **FincaControl** en **Flutter** bajo un enfoque **Primero Online con Extensión Offline Táctica de Campo**, un sistema formal de **Inicio de Sesión y Gestión de Usuarios/Trabajadores (`RBAC`)** y una **Experiencia Dual por Rol (Propuesta A)**. En lugar de replicar toda la base de datos histórica y financiera en cada teléfono, la **Base de Datos Relacional Central** actúa como Fuente Única de Verdad para usuarios, saldos, tanque de leche, inventario oficial, ventas, caja e **Historial Inmutable de Acciones**, mientras que el teléfono del trabajador en campo utiliza una base de datos **SQLite ligera de solo 3 tablas** (caché de padrón activo, caché de referencia y cola FIFO de envíos) para operar sin interrupciones en vaqueras o potreros sin señal.
 
 > 📄 **Especificación Completa de Base de Datos y API Lógica:** Consultar el documento formal [`modelo_base_de_datos.md`](./modelo_base_de_datos.md) (12 tablas relacionales centrales + 3 tablas SQLite móviles + contrato REST `/api/v1`).
 
 ### 🛠️ Definiciones Arquitectónicas Aprobadas (Agnósticas de Proveedor Backend)
-* **Aplicación Móvil (Cross-Platform):** **Flutter (Dart 3+)** implementando la **Propuesta A** (una sola aplicación que adapta su interfaz a *Terminal Ligera de Carga* para el `Trabajador / Operador` y a *Vista Rápida, Control Online y Auditoría* para el `Administrador`).
+* **Aplicación Móvil (Cross-Platform) e Interfaz Limpia en Uso Real:** **Flutter (Dart 3+)** implementando la **Propuesta A** (una sola aplicación que tras iniciar sesión adapta su interfaz a *Terminal Ligera de Carga* para el `Trabajador / Operador` y a *Vista Rápida, Control Online y Auditoría* para el `Administrador`). **Principio de Limpieza Visual:** A diferencia del prototipo académico (que incluía bloques de texto explicativo para guiar a los evaluadores), **la aplicación en uso real no tendrá tanto texto explicativo ni será un calco literal de la Guía de Usuario**, presentando pantallas operativas limpias y directas, con micro-ayudas puntuales (*tooltips* `ℹ️`) únicamente en siglas técnicas (`GDP`, `Tiempo de Retiro`).
 * **Persistencia Local Táctica en el Móvil (Offline de Campo):** **SQLite** ligero (`cache_padron_activo`, `cache_referencia_resumen` y `cola_envios_campo` FIFO) exclusivamente para consulta rápida en corral y captura de *Ordeño, Pesaje, Sanidad y Reproducción/Parto* sin señal.
-* **Backend y Base de Datos Relacional Central (Tecnología e infraestructura a definir en fase posterior):** **API REST Lógica (`/api/v1`)** conectada a un esquema relacional estándar SQL de **12 tablas** que gobierna las operaciones **100% Online** (*Configuración, Catálogo de Razas, Carga Inicial y Compras Manuales de Animales, Venta de Leche, Venta en Canal, Finanzas e Historial de Acciones*).
+* **Backend y Base de Datos Relacional Central (Tecnología e infraestructura a definir en fase posterior):** **API REST Lógica (`/api/v1`)** conectada a un esquema relacional estándar SQL de **12 tablas** que gobierna la autenticación y las operaciones **100% Online** (*Inicio de Sesión, Gestión de Usuarios y Creación de Trabajadores, Configuración, Catálogo de Razas, Carga Inicial y Compras Manuales de Animales, Venta de Leche, Venta en Canal, Finanzas e Historial de Acciones*).
 
-### 🔄 Flujo Operativo: Servidor Central (Online) ➔ Terminal de Campo (Offline Táctico) ➔ Vista Rápida & Auditoría
-1. **Gobierno Online del Administrador:** El `Administrador` configura la finca, razas, precios e inventario inicial directamente en línea contra la Base de Datos Central.
-2. **Captura Rápida en Campo (En Línea o Sin Señal):** El `Trabajador` opera desde su `📱 Terminal de Carga`. Si hay señal, impacta directo el servidor; si no hay señal, valida el `N° Identificador` y el semáforo de retiro contra `cache_padron_activo` y guarda el evento en `cola_envios_campo` conservando la hora real de captura en campo. Al recuperar red, el lote se sincroniza en orden FIFO (`POST /api/v1/campo/sincronizar-lote`).
-3. **Vista Rápida e Historial Inmutable (`historial_acciones`):** El `Administrador` supervisa los KPIs al instante en su `📊 Vista Rápida` y audita cualquier acción realizada tanto por él como por los trabajadores en el **`📜 Historial de Acciones`** inmutable (con doble marca de tiempo: hora real de campo y hora de recepción en servidor).
+### 🔐 Especificación de Inicio de Sesión (`Login`) y Gestión de Usuarios y Roles (`RBAC`)
+En el prototipo web se empleó un botón superior para conmutar libremente entre roles con fines demostrativos; en la arquitectura real del proyecto, el control de acceso opera mediante los siguientes componentes:
+1. **Pestaña / Pantalla de Inicio de Sesión (`🔐 Iniciar Sesión`):**
+   * Solicita al usuario su **`identificador_acceso`** (usuario único o documento, ej. `admin.johan`, `pedro.ordeno`) y su **Contraseña o PIN numérico de acceso**.
+   * Valida contra la tabla central `usuarios` (`POST /api/v1/auth/login`) que las credenciales sean correctas y que la cuenta esté activa (`activo = TRUE`).
+   * **Enrutamiento Automático por Rol (Propuesta A):**
+     * Si `rol == 'ADMINISTRADOR'`: Abre la experiencia gerencial (`📊 Vista Rápida (Admin)`, Configuración, Gestión de Usuarios, Inventario, Ventas, Finanzas e `📜 Historial de Acciones`).
+     * Si `rol == 'OPERADOR'` (`Trabajador`): Abre directamente la **`📱 Terminal de Carga`** con las 4 tarjetas operativas y el buscador de corral, ocultando y bloqueando cualquier ruta administrativa o financiera.
+   * **Sesión Persistente en Campo (Soporte Offline):** Tras iniciar sesión en línea al comienzo de la jornada, el token y perfil del trabajador quedan almacenados de forma segura en el dispositivo, permitiéndole abrir la app en potreros sin cobertura y sellar cada captura en `cola_envios_campo` con su `id_usuario` y `nombre_completo` reales. Al cerrar sesión, el sistema verifica preventivamente si existen registros pendientes en la cola local para evitar pérdidas o confusión de autoría.
+2. **Pestaña / Submódulo de Gestión de Usuarios y Trabajadores (`👥 Gestión de Usuarios y Roles` — Exclusivo `Administrador Online`):**
+   * Disponible únicamente para el `Administrador` con conexión en línea dentro de `⚙️ 1. Configuración` / `👥 Usuarios y Roles`:
+     * **Alta de Trabajadores y Administradores (`POST /api/v1/usuarios`):** Permite al Administrador crear cuentas para los trabajadores de la finca registrando `nombre_completo`, `cedula_telefono`, `cargo_finca` (*Ordeñador*, *Vaquero de Corral / Manga*, *Encargado Sanitario / Reproducción*, *Mayordomo*), `identificador_acceso`, contraseña/PIN inicial y `rol` (`OPERADOR` o `ADMINISTRADOR`).
+     * **Directorio y Monitoreo de Accesos (`GET /api/v1/usuarios`):** Muestra la nómina de usuarios del sistema, su rol, cargo operativo, estado (`🟢 Activo` / `🔴 Suspendido`) y fecha/hora de su último acceso o sincronización (`ultimo_acceso_en`).
+     * **Restablecimiento de Credenciales y Edición (`PUT /api/v1/usuarios/{id}`):** Permite al Administrador cambiar el PIN/contraseña de un trabajador si lo olvida o actualizar su cargo/rol.
+     * **Suspensión / Desactivación Lógica sin Borrado Físico (`PATCH /api/v1/usuarios/{id}/estado`):** Cuando un trabajador deja de laborar en la finca, el Administrador cambia su estado a **`activo = FALSE`** (nunca se borra con `DELETE`). Esto bloquea inmediatamente su inicio de sesión y sincronización, pero **conserva intacta su autoría histórica** en todos los ordeños, pesajes, tratamientos, partos y en el `📜 Historial de Acciones`.
+   * Todo movimiento sobre cuentas de usuario queda auditado de forma inmutable en `historial_acciones`.
+
+### 🔄 Flujo Operativo: Inicio de Sesión ➔ Servidor Central (Online) ➔ Terminal de Campo (Offline Táctico) ➔ Vista Rápida & Auditoría
+1. **Autenticación y Gobierno Online del Administrador:** El `Administrador` inicia sesión, registra las cuentas de sus trabajadores (`OPERADOR`) y configura la finca, razas, precios e inventario inicial directamente en línea contra la Base de Datos Central.
+2. **Captura Rápida en Campo (En Línea o Sin Señal):** El `Trabajador` inicia sesión y opera desde su `📱 Terminal de Carga` (interfaz limpia sin textos explicativos extensos). Si hay señal, impacta directo el servidor; si no hay señal, valida el `N° Identificador` y el semáforo de retiro contra `cache_padron_activo` y guarda el evento en `cola_envios_campo` conservando su `id_usuario` y la hora real de captura en campo. Al recuperar red, el lote se sincroniza en orden FIFO (`POST /api/v1/campo/sincronizar-lote`).
+3. **Vista Rápida e Historial Inmutable (`historial_acciones`):** El `Administrador` supervisa los KPIs al instante en su `📊 Vista Rápida` y audita cualquier acción realizada tanto por él como por cada trabajador identificado nominalmente en el **`📜 Historial de Acciones`** inmutable (con doble marca de tiempo: hora real de campo y hora de recepción en servidor).
 
 
 ---
@@ -317,7 +334,7 @@ flowchart TD
 
 | Fase | Módulo | Entregable Clave | Dependencia Previa |
 | :--- | :--- | :--- | :--- |
-| **Fase 1 (Sprint 1)** | Módulo 1 (Arquitectura Base) | Esquema relacional central (12 tablas incl. `historial_acciones`), autenticación por rol (Propuesta A) y SQLite móvil ligero (3 tablas). | Ninguna |
+| **Fase 1 (Sprint 1)** | Módulo 1 (Arquitectura Base y Roles) | Esquema relacional central (12 tablas incl. `usuarios` e `historial_acciones`), pantalla de Inicio de Sesión (`Login`), gestión de trabajadores por el Admin Online (`RBAC` Propuesta A) y SQLite móvil ligero (3 tablas). | Ninguna |
 | **Fase 2 (Sprint 2)** | Módulo 2 (Inventario Bovino) | Altas manuales Online (`Admin`), N° Identificador vs. Hierro, catálogo maestro de razas, etapas fisiológicas, preñez, genealogía y venta en canal. | Módulo 1 |
 | **Fase 3 (Sprint 3)** | Módulo 3 (Producción) | Ordeño diario (Online/Cola Campo), despacho Online de tanque y pesajes con cálculo de GDP. | Módulo 2 |
 | **Fase 4 (Sprint 4)** | Módulo 4 (Sanidad) | Tratamientos sanitarios (Online/Cola Campo) y bloqueo inmediato por tiempos de retiro en leche y carne. | Módulo 2 |

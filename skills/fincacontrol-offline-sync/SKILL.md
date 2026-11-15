@@ -18,11 +18,13 @@ Esta guía define la arquitectura aprobada para **FincaControl** (detallada form
 ## 1. Principios Arquitectónicos Cerrados
 
 1. **Primero Online (Servidor Central = Fuente Única de Verdad):**
-   * Todos los saldos maestros (`leche_disponible_tanque`), inventario oficial, unicidad de `numero_identificador` activo, cálculo oficial de `GDP`, flujo de caja (`transacciones_financieras`) y bitácora de auditoría (`historial_acciones`) viven y se calculan en el Servidor Central.
-   * **Operaciones 100% Online (Exclusivas del `Administrador`):** Configuración de finca, creación de razas en el catálogo maestro, carga inicial de inventario y compras manuales de animales, venta/despacho de leche del tanque, venta/beneficio en canal y transacciones financieras.
-2. **Propuesta A — Una Sola App Flutter con Dos Experiencias por Rol:**
-   * **`OPERADOR` (Trabajador — *Terminal Ligera de Carga en Campo*):** Pantalla minimalista con 4 tarjetas táctiles grandes (*Ordeño, Pesaje, Sanidad, Reproducción/Parto*), buscador instantáneo de corral por `numero_identificador` con semáforo sanitario y monitor de su cola local de envíos. Oculta configuración, finanzas, ventas, creación manual de animales/razas e historial de auditoría.
-   * **`ADMIN` (Administrador — *Vista Rápida, Control Online y Auditoría*):** Tablero ejecutivo de lectura rápida en el móvil (*Tanque, Rebaño, Retiros, Caja y Últimas Acciones*), módulos administrativos/comerciales Online y acceso exclusivo al **`📜 Historial de Acciones`**.
+   * Todos los saldos maestros (`leche_disponible_tanque`), cuentas de usuario (`usuarios`), inventario oficial, unicidad de `numero_identificador` activo, cálculo oficial de `GDP`, flujo de caja (`transacciones_financieras`) y bitácora de auditoría (`historial_acciones`) viven y se calculan en el Servidor Central.
+   * **Operaciones 100% Online (Exclusivas del `Administrador`):** Configuración de finca, **creación y administración de cuentas de trabajadores (`usuarios`)**, creación de razas en el catálogo maestro, carga inicial de inventario y compras manuales de animales, venta/despacho de leche del tanque, venta/beneficio en canal y transacciones financieras.
+2. **Inicio de Sesión (`🔐 Login`), Gestión de Trabajadores y Propuesta A — Una Sola App Flutter con Dos Experiencias por Rol:**
+   * **Autenticación y Gestión de Personal (`RBAC`):** El usuario inicia sesión en `🔐 Iniciar Sesión` (`POST /api/v1/auth/login`) con su `identificador_acceso` y contraseña/PIN; el servidor valida `activo = TRUE` y activa automáticamente la experiencia correspondiente a su rol. El `Administrador` en línea gestiona al personal desde `👥 Gestión de Usuarios y Roles` (`GET / POST / PUT / PATCH /api/v1/usuarios`), creando trabajadores (`OPERADOR`), asignándoles cargo en la finca y desactivándolos lógicamente (`activo = FALSE`, sin `DELETE`) cuando se retiran para preservar intacta su trazabilidad en `historial_acciones`.
+   * **Principio de Interfaz Operativa Limpia (No Calco de la Guía de Usuario):** En uso real, la aplicación Flutter no incluye párrafos explicativos extensos ni es un calco literal de la Guía de Usuario; presenta formularios limpios y directos con micro-tooltips (`ℹ️`) solo en siglas puntuales (`GDP`, `Tiempo de Retiro`).
+   * **`OPERADOR` (Trabajador — *Terminal Ligera de Carga en Campo*):** Pantalla minimalista con 4 tarjetas táctiles grandes (*Ordeño, Pesaje, Sanidad, Reproducción/Parto*), buscador instantáneo de corral por `numero_identificador` con semáforo sanitario y monitor de su cola local de envíos. Oculta configuración, gestión de usuarios, finanzas, ventas, creación manual de animales/razas e historial de auditoría.
+   * **`ADMIN` (Administrador — *Vista Rápida, Control Online y Auditoría*):** Tablero ejecutivo de lectura rápida en el móvil (*Tanque, Rebaño, Retiros, Caja y Últimas Acciones*), módulos administrativos/comerciales Online, gestión de trabajadores y acceso exclusivo al **`📜 Historial de Acciones`**.
 3. **Extensión Offline Acotada Exclusivamente a Campo (3 Tablas Ligeras en SQLite Móvil):**
    * El teléfono **no** replica las 12 tablas históricas ni financieras de la finca. Solo almacena en SQLite local **3 tablas ligeras** para que el trabajador capture datos sin señal en vaqueras y potreros:
      1. `cache_padron_activo` (lectura rápida y validación de retiro sanitario en corral).
@@ -130,7 +132,8 @@ CREATE INDEX idx_cola_estado_fifo ON cola_envios_campo(estado_envio, orden_fifo 
 
 | Método | Ruta Lógica | Rol | Conectividad | Propósito y Auditoría |
 | :---: | :--- | :---: | :---: | :--- |
-| `POST` | `/api/v1/auth/sesion` | Todos | Online | Autentica y define la experiencia UI (`ADMIN` vs `OPERADOR`). |
+| `POST` | `/api/v1/auth/login` | Todos | Online | Autentica credenciales (`activo = TRUE`) y define la experiencia UI (`ADMINISTRADOR` vs `OPERADOR`). |
+| `GET` / `POST` / `PUT` / `PATCH` | `/api/v1/usuarios` | `ADMIN` | **100% Online** | Lista, crea trabajadores (`OPERADOR`), restablece claves o suspende cuentas (`activo = FALSE`) + audita. |
 | `GET` | `/api/v1/resumen-ejecutivo` | `ADMIN` | Online | Alimenta `Vista Rápida (Admin)` (KPIs, alertas, últimos ordeños y últimas 4 acciones). |
 | `GET` | `/api/v1/campo/cache-inicial` | Todos | Online | Descarga `cache_padron_activo` + `cache_referencia_resumen` al móvil. |
 | `POST` | `/api/v1/campo/sincronizar-lote` | `OPERADOR`, `ADMIN` | Al reconectar | Procesa en orden FIFO `cola_envios_campo` (idempotente por `id_cola_uuid`) y registra en `historial_acciones` (`OFFLINE_SINCRONIZADO`). |
